@@ -29,6 +29,8 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.Resource;
+import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.events.EventBus;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.ui.button.ButtonServerRpc;
 import com.vaadin.shared.ui.button.ButtonState;
@@ -64,6 +66,8 @@ public class Button extends AbstractFocusable implements
                     .put("enabled", false);
         }
     };
+
+    private EventBus eventBus = new EventBus();
 
     /**
      * Creates a new push button.
@@ -127,7 +131,8 @@ public class Button extends AbstractFocusable implements
      * @author Vaadin Ltd.
      * @since 3.0
      */
-    public static class ClickEvent extends Component.Event {
+    public static class ClickEvent extends Component.Event implements
+            com.vaadin.server.react.events.Event {
 
         private final MouseEventDetails details;
 
@@ -310,8 +315,7 @@ public class Button extends AbstractFocusable implements
      *            the Listener to be added.
      */
     public void addClickListener(ClickListener listener) {
-        addListener(ClickEvent.class, listener,
-                ClickListener.BUTTON_CLICK_METHOD);
+        eventBus.events(ClickEvent.class).subscribe(listener::buttonClick);
     }
 
     /**
@@ -330,8 +334,8 @@ public class Button extends AbstractFocusable implements
      *            the Listener to be removed.
      */
     public void removeClickListener(ClickListener listener) {
-        removeListener(ClickEvent.class, listener,
-                ClickListener.BUTTON_CLICK_METHOD);
+        throw new UnsupportedOperationException(
+                "Click listeners cannot currently be removed");
     }
 
     /**
@@ -354,6 +358,10 @@ public class Button extends AbstractFocusable implements
         }
     }
 
+    public Flow<ClickEvent> clicks() {
+        return eventBus.events(ClickEvent.class);
+    }
+
     /**
      * Fires a click event to all listeners without any event details.
      * 
@@ -361,7 +369,7 @@ public class Button extends AbstractFocusable implements
      * this method.
      */
     protected void fireClick() {
-        fireEvent(new Button.ClickEvent(this));
+        eventBus.fireEvent(new ClickEvent(this));
     }
 
     /**
@@ -374,7 +382,7 @@ public class Button extends AbstractFocusable implements
      *            be empty/undefined.
      */
     protected void fireClick(MouseEventDetails details) {
-        fireEvent(new Button.ClickEvent(this, details));
+        eventBus.fireEvent(new ClickEvent(this, details));
     }
 
     /*
