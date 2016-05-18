@@ -210,7 +210,7 @@ public interface Operator<T, U> extends
 /**
  * A helper subscriber wrapping another subscriber.
  * 
- * TODO consider moving elsewhere.
+ * TODO consider moving elsewhere and renaming.
  * 
  * @author johannesd@vaadin.com
  *
@@ -222,6 +222,12 @@ public interface Operator<T, U> extends
 abstract class Sub<T, U> implements Subscriber<T> {
     private Subscriber<? super U> wrapped;
 
+    /**
+     * Creates a new {@code Sub} wrapping the given subscriber.
+     * 
+     * @param wrapped
+     *            the subscriber to be wrapped
+     */
     Sub(Subscriber<? super U> wrapped) {
         this.wrapped = wrapped;
     }
