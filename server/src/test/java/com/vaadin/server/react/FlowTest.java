@@ -22,22 +22,28 @@ public class FlowTest {
 
     @Test
     public void testMap() {
+        verifyFlow(flow().map(o -> "" + o), expect());
         verifyFlow(flow(1, 2, 3, 4).map(i -> i * i), expect(1, 4, 9, 16));
+        verifyFlow(flow(1, 2, 3, 4).map(i -> "" + i),
+                expect("1", "2", "3", "4"));
     }
 
     @Test
     public void testFilter() {
+        verifyFlow(flow().filter(o -> true), expect());
         verifyFlow(flow(1, 2, 3, 4, 5, 6).filter(i -> i % 2 == 0),
                 expect(2, 4, 6));
     }
 
     @Test
     public void testReduce() {
+        verifyFlow(flow().reduce((a, b) -> "" + a + b, ""), expect(""));
         verifyFlow(flow(1, 2, 3, 4).reduce((i, j) -> i + j, 0), expect(10));
     }
 
     @Test
     public void testFlatmap() {
+        verifyFlow(flow().flatMap(i -> Flow.from('a', 'b')), expect());
         verifyFlow(flow(1, 2, 3, 4).flatMap(i -> Flow.from(i, 10 * i)),
                 expect(1, 10, 2, 20, 3, 30, 4, 40));
     }
