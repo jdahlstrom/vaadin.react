@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 Johannes Dahlström
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package com.vaadin.server.react;
 
 import java.io.Serializable;
@@ -28,7 +44,7 @@ import com.vaadin.server.react.impl.Operator;
  * signal. A flow may produce an unbounded number of values and never signal
  * completion.
  * <p>
- * Flows may be asynchronous; that is, its subscribers may be invoked from a
+ * A flow may be asynchronous; that is, its subscribers may be invoked from a
  * thread different from the one in which the subscription occurred; the
  * subscribe method may return before the flow completes. If the flow is
  * asynchronous, it is the responsibility of the subscriber to synchronize its
@@ -315,7 +331,8 @@ public interface Flow<T> extends Serializable {
      * subscribers to the new flow are passed to {@link Operator#apply(Object)
      * op.apply()} and the results subscribed to this flow.
      * 
-     * @param <U> the value type of the new flow
+     * @param <U>
+     *            the value type of the new flow
      * @param op
      *            the operator to adapt subscribers
      * @return a flow with adapted subscribers
