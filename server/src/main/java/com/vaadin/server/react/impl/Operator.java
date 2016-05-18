@@ -1,5 +1,6 @@
 package com.vaadin.server.react.impl;
 
+import java.io.Serializable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -20,7 +21,7 @@ import com.vaadin.server.react.Flow.Subscriber;
  * @param <U>
  */
 public interface Operator<T, U> extends
-        Function<Subscriber<? super U>, Subscriber<T>> {
+        Function<Subscriber<? super U>, Subscriber<T>>, Serializable {
 
     /**
      * Returns an operator that transforms a subscriber into one that passes

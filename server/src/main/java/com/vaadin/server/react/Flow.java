@@ -1,5 +1,6 @@
 package com.vaadin.server.react;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -43,7 +44,7 @@ import com.vaadin.server.react.impl.Operator;
  * @param <T>
  *            The type of the values in this flow.
  */
-public interface Flow<T> {
+public interface Flow<T> extends Serializable {
 
     /**
      * A subscriber to a flow.
@@ -51,7 +52,7 @@ public interface Flow<T> {
      * @param <T>
      *            the accepted value type
      */
-    public interface Subscriber<T> {
+    public interface Subscriber<T> extends Serializable {
 
         /**
          * Returns a new subscriber that invokes the {@code onNext} consumer for
@@ -138,7 +139,7 @@ public interface Flow<T> {
         public void onEnd();
     }
 
-    public interface Subscription {
+    public interface Subscription extends Serializable {
         public void unsubscribe();
     }
 
@@ -287,14 +288,7 @@ public interface Flow<T> {
      * @return a flow with the initial values
      */
     public default Flow<T> take(long n) {
-        return takeWhile(new Predicate<T>() {
-            private int count = 0;
-
-            @Override
-            public boolean test(T t) {
-                return count++ < n;
-            }
-        });
+        return takeWhile(new Counter(n));
     }
 
     /**
@@ -306,14 +300,7 @@ public interface Flow<T> {
      * @return a flow without the initial values
      */
     public default Flow<T> drop(long n) {
-        return dropWhile(new Predicate<T>() {
-            private int count = 0;
-
-            @Override
-            public boolean test(T t) {
-                return count++ < n;
-            }
-        });
+        return dropWhile(new Counter(n));
     }
 
     /*
@@ -328,11 +315,29 @@ public interface Flow<T> {
      * subscribers to the new flow are passed to {@link Operator#apply(Object)
      * op.apply()} and the results subscribed to this flow.
      * 
+     * @param <U> the value type of the new flow
      * @param op
-     *            the operator with which to adapt subscribers
+     *            the operator to adapt subscribers
      * @return a flow with adapted subscribers
      */
     public default <U> Flow<U> lift(Operator<? super T, ? extends U> op) {
         return new FlowImpl<>(s -> subscribe(op.apply(s)));
+    }
+
+    public class Counter implements Predicate<Object>, Serializable {
+        private long count = 0;
+
+        Counter(long n) {
+            count = n;
+        }
+
+        @Override
+        public boolean test(Object ignored) {
+            if (count > 0) {
+                count--;
+                return true;
+            }
+            return false;
+        }
     }
 }
