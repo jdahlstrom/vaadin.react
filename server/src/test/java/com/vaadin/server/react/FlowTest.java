@@ -49,6 +49,30 @@ public class FlowTest {
     }
 
     @Test
+    public void testAny() {
+        verifyFlow(flow().any(x -> false), expect(false));
+        verifyFlow(flow().any(x -> true), expect(false));
+
+        verifyFlow(flow(1).any(x -> false), expect(false));
+        verifyFlow(flow(1).any(x -> true), expect(true));
+
+        verifyFlow(flow(1, 2, 3).any(x -> x % 2 == 0), expect(true));
+        verifyFlow(flow(1, 2, 3).any(x -> x < 0), expect(false));
+    }
+
+    @Test
+    public void testAll() {
+        verifyFlow(flow().all(x -> false), expect(true));
+        verifyFlow(flow().all(x -> true), expect(true));
+
+        verifyFlow(flow(1).all(x -> false), expect(false));
+        verifyFlow(flow(1).all(x -> true), expect(true));
+
+        verifyFlow(flow(1, 2, 3).all(x -> x % 2 == 0), expect(false));
+        verifyFlow(flow(1, 2, 3).all(x -> x < 4), expect(true));
+    }
+
+    @Test
     public void testTakeWhile() throws Exception {
         verifyFlow(flow().takeWhile(x -> true), expect());
         verifyFlow(flow().takeWhile(x -> false), expect());

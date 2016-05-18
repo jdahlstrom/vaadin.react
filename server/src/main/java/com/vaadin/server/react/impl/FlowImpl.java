@@ -48,4 +48,9 @@ public class FlowImpl<T> implements Flow<T> {
         onSubscribe.accept(subscriber);
         return null;
     }
+
+    @Override
+    public <U> Flow<U> createFlow(Consumer<Subscriber<? super U>> onSubscribe) {
+        return new FlowImpl<U>(onSubscribe);
+    }
 }

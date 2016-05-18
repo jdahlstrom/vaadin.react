@@ -205,6 +205,76 @@ public interface Operator<T, U> extends
             }
         };
     }
+
+    /**
+     * Returns an operator that transforms a subscriber into one that passes a
+     * single boolean value to the input subscriber, indicating whether any of
+     * the values it receives satisfy a predicate. The subscriber is
+     * short-circuiting: the predicate is not invoked for values beyond the
+     * first one to pass it.
+     * 
+     * @param <T>
+     *            the value type
+     * @param predicate
+     *            the predicate to use
+     * @return an existential quantifier operator
+     */
+    public static <T> Operator<T, Boolean> any(Predicate<? super T> predicate) {
+        return to -> new Sub<T, Boolean>(to) {
+            private boolean done = false;
+
+            @Override
+            public void onNext(T value) {
+                if (!done && predicate.test(value)) {
+                    to.onNext(true);
+                    to.onEnd();
+                    done = true;
+                }
+            }
+
+            public void onEnd() {
+                if (!done) {
+                    to.onNext(false);
+                    to.onEnd();
+                }
+            };
+        };
+    }
+
+    /**
+     * Returns an operator that transforms a subscriber into one that passes a
+     * single boolean value to the input subscriber, indicating whether every
+     * value it receives satisfies a predicate. The subscriber is
+     * short-circuiting: the predicate is not invoked for values beyond the
+     * first one to fail it.
+     * 
+     * @param <T>
+     *            the value type
+     * @param predicate
+     *            the predicate to use
+     * @return a universal quantifier operator
+     */
+    public static <T> Operator<T, Boolean> all(Predicate<? super T> predicate) {
+        return to -> new Sub<T, Boolean>(to) {
+            private boolean done = false;
+
+            @Override
+            public void onNext(T value) {
+                if (!done && !predicate.test(value)) {
+                    to.onNext(false);
+                    to.onEnd();
+                    done = true;
+                }
+            }
+
+            public void onEnd() {
+                if (!done) {
+                    to.onNext(true);
+                    to.onEnd();
+                }
+            };
+        };
+    }
 }
 
 /**

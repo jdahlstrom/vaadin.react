@@ -18,10 +18,12 @@ package com.vaadin.server.react;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.vaadin.server.react.impl.FlowImpl;
@@ -194,6 +196,70 @@ public interface Flow<T> extends Serializable {
     }
 
     /**
+     * Returns a new cold flow that produces the given sequence of values and
+     * then completes.
+     * 
+     * @param <T>
+     *            the value type of the flow
+     * @param values
+     *            the sequence of values
+     * @return a flow producing the values.
+     */
+    public static <T> Flow<T> from(Iterable<T> values) {
+        return new FlowImpl<>(subscriber -> {
+            for (T t : values) {
+                subscriber.onNext(t);
+            }
+            subscriber.onEnd();
+        });
+    }
+
+    /**
+     * Returns a new flow drawing values from the given supplier. The supplier
+     * is invoked until it returns an empty {@code Optional}; at that point the
+     * flow completes. Any exception thrown by the supplier terminates the flow
+     * with an error signal.
+     * 
+     * @param <T>
+     *            the value type of the flow
+     * @param supplier
+     *            the producer of values
+     * @return a flow yielding values from the supplier
+     */
+    public static <T> Flow<T> from(Supplier<Optional<T>> supplier) {
+        return new FlowImpl<>(subscriber -> {
+            Optional<T> opt = Optional.empty();
+            Exception ex = null;
+            do {
+                try {
+                    opt = supplier.get();
+                } catch (Exception e) {
+                    ex = e;
+                }
+                opt.ifPresent(subscriber::onNext);
+            } while (ex == null && opt.isPresent());
+
+            if (ex != null) {
+                subscriber.onError(ex);
+            }
+            subscriber.onEnd();
+
+        });
+    }
+
+    /**
+     * Creates a new flow with the given subscription callback.
+     * 
+     * @param <U>
+     *            the value type of the new flow
+     * @param onSubscribe
+     *            the callback invoked on each subscription
+     * @return a new flow
+     */
+    public abstract <U> Flow<U> createFlow(
+            Consumer<Subscriber<? super U>> onSubscribe);
+
+    /**
      * Subscribes the given {@code Subscriber} to this flow. Its {@code onNext},
      * {@code onError}, and {@code onEnd} methods are invoked whenever this flow
      * produces a value, throws an error, or completes, respectively.
@@ -242,6 +308,17 @@ public interface Flow<T> extends Serializable {
      * transformation applied. Most of the methods are higher-order functions
      * accepting an user-provided callback to guide the transformation.
      */
+
+    /**
+     * Invokes the given consumer for each value in this flow. Error and end
+     * signals are ignored.
+     * 
+     * @param consumer
+     *            the function to invoke
+     */
+    public default void forEach(Consumer<? super T> consumer) {
+        subscribe(consumer);
+    }
 
     /**
      * Returns a new flow that constitutes the results of passing each value in
@@ -342,6 +419,38 @@ public interface Flow<T> extends Serializable {
         return lift(Operator.dropWhile(predicate));
     }
 
+    /**
+     * Returns a flow that yields at most a single boolean value, indicating
+     * whether any of the values in this flow satisfy the given predicate or
+     * not. The flow is short-circuiting: the first value to pass the predicate
+     * yields {@code true} and the predicate is not applied to any subsequent
+     * values. The flow yields {@code false} if and only if this flow completes
+     * before the predicate returns {@code true}.
+     * 
+     * @param predicate
+     *            the predicate to apply
+     * @return a flow indicating whether any values pass the predicate
+     */
+    public default Flow<Boolean> any(Predicate<? super T> predicate) {
+        return lift(Operator.any(predicate));
+    }
+
+    /**
+     * Returns a flow that yields at most a single boolean value, indicating
+     * whether every value in this flow satisfies the given predicate or not.
+     * The flow is short-circuiting: the first value to fail the predicate
+     * yields {@code false} and the predicate is not applied to any subsequent
+     * values. The flow yields {@code true} if and only if this flow completes
+     * before the predicate returns {@code false}.
+     * 
+     * @param predicate
+     *            the predicate to apply
+     * @return a flow indicating whether all values pass the predicate
+     */
+    public default Flow<Boolean> all(Predicate<? super T> predicate) {
+        return lift(Operator.all(predicate));
+    }
+
     /*
      * Combinators implemented in terms of other combinators.
      * 
@@ -406,7 +515,7 @@ public interface Flow<T> extends Serializable {
      * @return a flow with adapted subscribers
      */
     public default <U> Flow<U> lift(Operator<? super T, ? extends U> op) {
-        return new FlowImpl<>(s -> subscribe(op.apply(s)));
+        return createFlow(s -> subscribe(op.apply(s)));
     }
 
     /**
