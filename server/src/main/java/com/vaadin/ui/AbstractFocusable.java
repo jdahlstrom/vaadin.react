@@ -18,10 +18,12 @@ package com.vaadin.ui;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.event.FieldEvents.BlurNotifier;
-import com.vaadin.event.FieldEvents.FocusAndBlurServerRpcImpl;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.event.FieldEvents.FocusNotifier;
+import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.events.EventBus;
+import com.vaadin.shared.communication.FieldRpc.FocusAndBlurServerRpc;
 import com.vaadin.shared.ui.TabIndexState;
 import com.vaadin.ui.Component.Focusable;
 
@@ -35,19 +37,35 @@ import com.vaadin.ui.Component.Focusable;
 public abstract class AbstractFocusable extends AbstractComponent implements
         Focusable, FocusNotifier, BlurNotifier {
 
+    private EventBus eventBus = new EventBus();
+
     protected AbstractFocusable() {
-        registerRpc(new FocusAndBlurServerRpcImpl(this) {
+        registerRpc(new FocusAndBlurServerRpc() {
+
             @Override
-            protected void fireEvent(Event event) {
-                AbstractFocusable.this.fireEvent(event);
+            public void blur() {
+                getEventBus().fireEvent(new BlurEvent(AbstractFocusable.this));
+            }
+
+            @Override
+            public void focus() {
+                getEventBus().fireEvent(new FocusEvent(AbstractFocusable.this));
             }
         });
     }
 
+    /**
+     * Returns the flow of blur events emitted by this component.
+     * 
+     * @return blur events
+     */
+    public Flow<BlurEvent> blurs() {
+        return getEvents(BlurEvent.class);
+    }
+
     @Override
     public void addBlurListener(BlurListener listener) {
-        addListener(BlurEvent.EVENT_ID, BlurEvent.class, listener,
-                BlurListener.blurMethod);
+        blurs().subscribe(listener::blur);
     }
 
     /**
@@ -61,7 +79,8 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     @Override
     public void removeBlurListener(BlurListener listener) {
-        removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
+        throw new UnsupportedOperationException(
+                "Click listeners cannot currently be removed");
     }
 
     /**
@@ -75,11 +94,18 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     }
 
+    /**
+     * Returns the flow of focus events emitted by this component.
+     * 
+     * @return focus events
+     */
+    public Flow<FocusEvent> focuses() {
+        return getEvents(FocusEvent.class);
+    }
+
     @Override
     public void addFocusListener(FocusListener listener) {
-        addListener(FocusEvent.EVENT_ID, FocusEvent.class, listener,
-                FocusListener.focusMethod);
-
+        getEvents(FocusEvent.class).subscribe(listener::focus);
     }
 
     /**
@@ -94,7 +120,8 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     @Override
     public void removeFocusListener(FocusListener listener) {
-        removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
+        throw new UnsupportedOperationException(
+                "Focus listeners cannot currently be removed");
     }
 
     /**
@@ -120,6 +147,29 @@ public abstract class AbstractFocusable extends AbstractComponent implements
     @Override
     public void setTabIndex(int tabIndex) {
         getState().tabIndex = tabIndex;
+    }
+
+    /**
+     * Returns the event bus used by this component.
+     * 
+     * @return the event bus
+     */
+    protected EventBus getEventBus() {
+        return eventBus;
+    }
+
+    /**
+     * Returns the flow of events of the given type.
+     * 
+     * @param <E>
+     *            the event type
+     * @param klass
+     *            the event class instance
+     * @return the event flow
+     */
+    protected <E extends com.vaadin.server.react.events.Event> Flow<E> getEvents(
+            Class<E> klass) {
+        return getEventBus().events(klass);
     }
 
     @Override

@@ -50,6 +50,7 @@ public interface FieldEvents {
      * @see FocusListener
      * @see FocusEvent
      */
+    @Deprecated
     public interface FocusNotifier extends Serializable {
         /**
          * Adds a <code>FocusListener</code> to the Component which gets fired
@@ -102,6 +103,7 @@ public interface FieldEvents {
      * @see BlurListener
      * @see BlurEvent
      */
+    @Deprecated
     public interface BlurNotifier extends Serializable {
         /**
          * Adds a <code>BlurListener</code> to the Component which gets fired
@@ -144,11 +146,13 @@ public interface FieldEvents {
      * @since 6.2
      */
     @SuppressWarnings("serial")
-    public static class FocusEvent extends Component.Event {
+    public static class FocusEvent extends Component.Event implements
+            com.vaadin.server.react.events.Event {
 
         /**
          * Identifier for event that can be used in {@link EventRouter}
          */
+        @Deprecated
         public static final String EVENT_ID = EventId.FOCUS;
 
         public FocusEvent(Component source) {
@@ -165,6 +169,7 @@ public interface FieldEvents {
      */
     public interface FocusListener extends ConnectorEventListener {
 
+        @Deprecated
         public static final Method focusMethod = ReflectTools.findMethod(
                 FocusListener.class, "focus", FocusEvent.class);
 
@@ -184,11 +189,13 @@ public interface FieldEvents {
      * @since 6.2
      */
     @SuppressWarnings("serial")
-    public static class BlurEvent extends Component.Event {
+    public static class BlurEvent extends Component.Event implements
+            com.vaadin.server.react.events.Event {
 
         /**
          * Identifier for event that can be used in {@link EventRouter}
          */
+        @Deprecated
         public static final String EVENT_ID = EventId.BLUR;
 
         public BlurEvent(Component source) {
@@ -205,6 +212,7 @@ public interface FieldEvents {
      */
     public interface BlurListener extends ConnectorEventListener {
 
+        @Deprecated
         public static final Method blurMethod = ReflectTools.findMethod(
                 BlurListener.class, "blur", BlurEvent.class);
 
