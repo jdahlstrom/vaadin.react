@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import com.vaadin.server.react.impl.FlowImpl;
 import com.vaadin.server.react.impl.Operator;
+import com.vaadin.server.react.impl.SubscriberImpl;
 
 /**
  * A subscribable, possibly asynchronous sequence of values.
@@ -58,7 +59,7 @@ import com.vaadin.server.react.impl.Operator;
  * regardless of the time the subscription occurred.
  * 
  * @author johannesd@vaadin.com
- *
+ * 
  * @param <T>
  *            The type of the values in this flow.
  */
@@ -66,7 +67,7 @@ public interface Flow<T> extends Serializable {
 
     /**
      * A subscriber to a flow.
-     *
+     * 
      * @param <T>
      *            the accepted value type
      */
@@ -83,7 +84,7 @@ public interface Flow<T> extends Serializable {
          * @return a subscriber delegating to the given consumer
          */
         public static <T> Subscriber<T> from(Consumer<? super T> onNext) {
-            return new Subscriber<T>() {
+            return new SubscriberImpl<T>() {
 
                 @Override
                 public void onNext(T value) {
@@ -117,7 +118,7 @@ public interface Flow<T> extends Serializable {
          */
         public static <T> Subscriber<T> from(Consumer<? super T> onNext,
                 Consumer<? super Exception> onError, Runnable onEnd) {
-            return new Subscriber<T>() {
+            return new SubscriberImpl<T>() {
 
                 @Override
                 public void onNext(T value) {
@@ -136,6 +137,30 @@ public interface Flow<T> extends Serializable {
                 }
             };
         }
+
+        /**
+         * Invoked when subscribing to a flow. Storing the given subscription
+         * token allows for later unsubscribing from the flow.
+         * 
+         * @param sub
+         *            the subscription token
+         */
+        public void onSubscribe(Subscription sub);
+
+        /**
+         * Unsubscribes this subscriber if currently subscribed to a flow,
+         * otherwise does nothing.
+         * 
+         * @see Subscription#unsubscribe()
+         */
+        public void unsubscribe();
+
+        /**
+         * @see Subscription#isSubscribed()
+         * 
+         * @return whether this subscriber is subscribed to a flow
+         */
+        public boolean isSubscribed();
 
         /**
          * Invoked for each value in the subscribed flow.
@@ -163,16 +188,31 @@ public interface Flow<T> extends Serializable {
 
     /**
      * A subscription token.
-     *
+     * 
      * TODO: Figure out how this should work
      */
-    public interface Subscription extends Serializable {
+    public class Subscription implements Serializable {
+        private volatile boolean subscribed = true;
+
         /**
          * Ends this subscription. After calling this method, the associated
          * subscriber will not receive any more notifications from the
-         * respective flow.
+         * respective flow. If already unsubscribed, does nothing.
          */
-        public void unsubscribe();
+        public void unsubscribe() {
+            subscribed = false;
+        }
+
+        /**
+         * Returns whether this subscription is still active, that is,
+         * {@code true} if {@link #unsubscribe()} has not been called,
+         * {@code false} otherwise.
+         * 
+         * @return the status of this subscription.
+         */
+        public boolean isSubscribed() {
+            return subscribed;
+        }
     }
 
     /**
@@ -187,11 +227,16 @@ public interface Flow<T> extends Serializable {
      */
     @SafeVarargs
     public static <T> Flow<T> from(T... values) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             for (T t : values) {
-                subscriber.onNext(t);
+                if (!sub.isSubscribed()) {
+                    return;
+                }
+                sub.onNext(t);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -206,11 +251,16 @@ public interface Flow<T> extends Serializable {
      * @return a flow producing the values.
      */
     public static <T> Flow<T> from(Iterable<T> values) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             for (T t : values) {
-                subscriber.onNext(t);
+                if (!sub.isSubscribed()) {
+                    return;
+                }
+                sub.onNext(t);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -227,23 +277,27 @@ public interface Flow<T> extends Serializable {
      * @return a flow yielding values from the supplier
      */
     public static <T> Flow<T> from(Supplier<Optional<T>> supplier) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             Optional<T> opt = Optional.empty();
             Exception ex = null;
             do {
+                if (!sub.isSubscribed()) {
+                    return;
+                }
                 try {
                     opt = supplier.get();
                 } catch (Exception e) {
                     ex = e;
                 }
-                opt.ifPresent(subscriber::onNext);
+                opt.ifPresent(sub::onNext);
             } while (ex == null && opt.isPresent());
 
-            if (ex != null) {
-                subscriber.onError(ex);
+            if (ex != null && sub.isSubscribed()) {
+                sub.onError(ex);
             }
-            subscriber.onEnd();
-
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -262,7 +316,8 @@ public interface Flow<T> extends Serializable {
     /**
      * Subscribes the given {@code Subscriber} to this flow. Its {@code onNext},
      * {@code onError}, and {@code onEnd} methods are invoked whenever this flow
-     * produces a value, throws an error, or completes, respectively.
+     * produces a value, throws an error, or completes, respectively. The
+     * subscriber cannot be already subscribed.
      * 
      * @param subscriber
      *            the subscriber to subscribe
@@ -521,7 +576,6 @@ public interface Flow<T> extends Serializable {
     /**
      * A predicate that returns {@code true} for the first {@code n} times it is
      * invoked, and {@code false} afterwards.
-     *
      */
     public class Counter implements Predicate<Object>, Serializable {
         private long count = 0;

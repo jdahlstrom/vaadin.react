@@ -4,6 +4,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.vaadin.server.react.Flow.Subscriber;
+import com.vaadin.server.react.Flow.Subscription;
 
 public class FlowTest {
 
@@ -131,6 +132,12 @@ public class FlowTest {
     protected <T> Subscriber<T> expect(T... expected) {
 
         Subscriber<T> s = EasyMock.createStrictMock(Subscriber.class);
+
+        EasyMock.expect(s.isSubscribed()).andReturn(false).anyTimes();
+        s.onSubscribe(EasyMock.anyObject(Subscription.class));
+
+        EasyMock.expect(s.isSubscribed()).andStubReturn(true);
+
         for (T t : expected) {
             s.onNext(t);
         }
