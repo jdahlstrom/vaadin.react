@@ -39,7 +39,7 @@ import com.vaadin.server.react.Flow.Subscriber;
  *            the value type of the input subscriber
  */
 public interface Operator<T, U> extends
-Function<Subscriber<? super U>, Subscriber<T>>, Serializable {
+        Function<Subscriber<? super U>, Subscriber<T>>, Serializable {
 
     /**
      * Returns an operator that transforms a subscriber into one that passes
