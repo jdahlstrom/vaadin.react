@@ -22,7 +22,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.vaadin.server.react.Flow;
-import com.vaadin.server.react.Flow.Subscriber;
+import com.vaadin.server.react.Subscriber;
 
 /**
  * Transforms a {@link Subscriber} into another. Given a subscriber, returns a

@@ -5,7 +5,6 @@ import java.util.TimerTask;
 
 import org.easymock.EasyMock;
 
-import com.vaadin.server.react.Flow.Subscriber;
 import com.vaadin.server.react.impl.FlowImpl;
 
 public class ColdAsyncFlowTest extends FlowTest {

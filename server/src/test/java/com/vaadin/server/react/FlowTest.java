@@ -3,8 +3,6 @@ package com.vaadin.server.react;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.vaadin.server.react.Flow.Subscriber;
-
 public class FlowTest {
 
     @Test
