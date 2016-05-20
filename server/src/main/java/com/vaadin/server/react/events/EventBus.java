@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import com.vaadin.server.react.Flow;
 import com.vaadin.server.react.Flow.Subscriber;
@@ -34,29 +35,59 @@ import com.vaadin.server.react.impl.FlowImpl;
  */
 public class EventBus {
 
-    private class FlowSubscribers<E extends Event> {
+    private class HotFlow<T> extends FlowImpl<T> {
 
-        private Set<Subscriber<? super E>> subscribers = new LinkedHashSet<>();
-        private Flow<E> events = new FlowImpl<>(s -> subscribers.add(s));
+        private Set<Subscriber<? super T>> subscribers = new LinkedHashSet<>();
+
+        private Consumer<Subscriber<? super T>> onSubscribe;
+
+        HotFlow() {
+            super.onSubscribe = sub -> {
+                subscribers.add(sub);
+                if (this.onSubscribe != null) {
+                    this.onSubscribe.accept(sub);
+                }
+            };
+        }
+
+        void next(T value) {
+            subscribers.forEach(s -> s.onNext(value));
+        }
     }
 
-    private Map<Class<? extends Event>, FlowSubscribers<? extends Event>> flows = new LinkedHashMap<>();
+    @SuppressWarnings("rawtypes")
+    private Map<Class, HotFlow> flows = new LinkedHashMap<>();
+
+    public <E extends Event> void onSubscribe(Class<E> eventType,
+            Consumer<Subscriber<? super E>> onSubscribe) {
+        ((HotFlow<E>) events(eventType)).onSubscribe = onSubscribe;
+    }
 
     /**
      * Returns the event flow of the given type. If no such flow exist, one is
      * created.
      * 
-     * @param klass
+     * @param eventType
      *            the type of the events
      * @return the flow
      */
-    public <E extends Event> Flow<E> events(Class<E> klass) {
-        // TODO: Get rid of unchecked cast if possible
-        @SuppressWarnings("unchecked")
-        Flow<E> flow = (Flow<E>) flows.computeIfAbsent(klass,
-                k -> new FlowSubscribers<E>()).events;
+    public <E extends Event> Flow<E> events(Class<E> eventType) {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        Flow<E> flow = flows.computeIfAbsent(eventType, type -> new HotFlow());
         return flow;
+    }
 
+    /**
+     * Returns whether this event bus has any subscribers to events of the given
+     * type.
+     * 
+     * @param eventType
+     *            the event class literal
+     * @return {@code true} if there are subscribers, {@code false} otherwise.
+     */
+    public boolean hasSubscribers(Class<? extends Event> eventType) {
+        return flows.containsKey(eventType)
+                && !flows.get(eventType).subscribers.isEmpty();
     }
 
     /**
@@ -64,12 +95,21 @@ public class EventBus {
      * subscribers to that flow are notified of the event. If no such flow
      * exists, does nothing.
      * 
+     * @param <E>
+     *            the event type
+     * @param type
+     *            the event Class instance
      * @param event
+     *            the event to be fired
      */
-    public <E extends Event> void fireEvent(E event) {
-        flows.computeIfPresent(event.getClass(), (k, flow) -> {
-            flow.subscribers.forEach(sub -> sub.onNext(event));
+    public <E extends Event> void fireEvent(Class<? extends E> type, E event) {
+        flows.computeIfPresent(type, (t, flow) -> {
+            flow.next(event);
             return flow;
         });
+    }
+
+    public <E extends Event> void fireEvent(E event) {
+        fireEvent(event.getClass(), event);
     }
 }

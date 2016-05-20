@@ -30,7 +30,10 @@ import com.vaadin.server.react.Flow;
  */
 public class FlowImpl<T> implements Flow<T> {
 
-    private Consumer<Subscriber<? super T>> onSubscribe;
+    protected Consumer<Subscriber<? super T>> onSubscribe;
+
+    protected FlowImpl() {
+    }
 
     /**
      * Creates a new flow that invokes the given callback for each subscription

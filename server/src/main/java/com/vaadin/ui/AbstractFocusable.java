@@ -23,7 +23,9 @@ import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.event.FieldEvents.FocusNotifier;
 import com.vaadin.server.react.Flow;
 import com.vaadin.server.react.events.EventBus;
+import com.vaadin.shared.EventId;
 import com.vaadin.shared.communication.FieldRpc.FocusAndBlurServerRpc;
+import com.vaadin.shared.ui.ComponentStateUtil;
 import com.vaadin.shared.ui.TabIndexState;
 import com.vaadin.ui.Component.Focusable;
 
@@ -44,13 +46,27 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
             @Override
             public void blur() {
-                getEventBus().fireEvent(new BlurEvent(AbstractFocusable.this));
+                System.out.println("GOT BLUR RPC");
+                getEventBus().fireEvent(BlurEvent.class,
+                        new BlurEvent(AbstractFocusable.this));
             }
 
             @Override
             public void focus() {
-                getEventBus().fireEvent(new FocusEvent(AbstractFocusable.this));
+                System.out.println("GOT FOCUS RPC");
+                getEventBus().fireEvent(FocusEvent.class,
+                        new FocusEvent(AbstractFocusable.this));
             }
+        });
+
+        eventBus.onSubscribe(BlurEvent.class, sub -> {
+            ComponentStateUtil.addRegisteredEventListener(getState(),
+                    EventId.BLUR);
+        });
+
+        eventBus.onSubscribe(FocusEvent.class, sub -> {
+            ComponentStateUtil.addRegisteredEventListener(getState(),
+                    EventId.FOCUS);
         });
     }
 
