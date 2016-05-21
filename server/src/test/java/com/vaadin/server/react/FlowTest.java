@@ -77,6 +77,18 @@ public class FlowTest {
     }
 
     @Test
+    public void testNone() {
+        verifyFlow(flow().none(x -> false), expect(true));
+        verifyFlow(flow().none(x -> true), expect(true));
+
+        verifyFlow(flow(1).none(x -> false), expect(true));
+        verifyFlow(flow(1).none(x -> true), expect(false));
+
+        verifyFlow(flow(1, 2, 3).none(x -> x % 2 == 0), expect(false));
+        verifyFlow(flow(1, 2, 3).none(x -> x < 0), expect(true));
+    }
+
+    @Test
     public void testTakeWhile() throws Exception {
         verifyFlow(flow().takeWhile(x -> true), expect());
         verifyFlow(flow().takeWhile(x -> false), expect());

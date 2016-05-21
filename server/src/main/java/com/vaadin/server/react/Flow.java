@@ -354,6 +354,10 @@ public interface Flow<T> extends Serializable {
         return lift(Operator.all(predicate));
     }
 
+    public default Flow<Boolean> none(Predicate<? super T> predicate) {
+        return lift(Operator.all(t -> !predicate.test(t)));
+    }
+
     /*
      * Combinators implemented in terms of other combinators.
      * 
