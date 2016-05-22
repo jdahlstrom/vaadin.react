@@ -93,7 +93,7 @@ public interface Flow<T> extends Serializable {
      * @return a flow producing the values
      */
     @SafeVarargs
-    public static <T> Flow<T> from(T... values) {
+    public static <T> Flow<T> of(T... values) {
         return new FlowImpl<>(subscriber -> {
             for (T t : values) {
                 subscriber.onNext(t);
@@ -133,7 +133,7 @@ public interface Flow<T> extends Serializable {
      *            the producer of values
      * @return a flow yielding values from the supplier
      */
-    public static <T> Flow<T> from(Supplier<Optional<T>> supplier) {
+    public static <T> Flow<T> generate(Supplier<Optional<T>> supplier) {
         return new FlowImpl<>(subscriber -> {
             Optional<T> opt = Optional.empty();
             Exception ex = null;
@@ -318,8 +318,8 @@ public interface Flow<T> extends Serializable {
      *            the number of initial values to drop
      * @return a flow without the initial values
      */
-    public default Flow<T> drop(long n) {
-        return lift(Operator.drop(n));
+    public default Flow<T> skip(long n) {
+        return lift(Operator.skip(n));
     }
 
     /**
@@ -348,8 +348,8 @@ public interface Flow<T> extends Serializable {
      *            the predicate to apply
      * @return a flow excluding the initial values that satisfy the predicate
      */
-    public default Flow<T> dropWhile(Predicate<? super T> predicate) {
-        return lift(Operator.dropWhile(predicate));
+    public default Flow<T> skipWhile(Predicate<? super T> predicate) {
+        return lift(Operator.skipWhile(predicate));
     }
 
     /**
@@ -364,8 +364,8 @@ public interface Flow<T> extends Serializable {
      *            the predicate to apply
      * @return a flow indicating whether any values pass the predicate
      */
-    public default Flow<Boolean> any(Predicate<? super T> predicate) {
-        return lift(Operator.any(predicate));
+    public default Flow<Boolean> anyMatch(Predicate<? super T> predicate) {
+        return lift(Operator.anyMatch(predicate));
     }
 
     /**
@@ -380,12 +380,24 @@ public interface Flow<T> extends Serializable {
      *            the predicate to apply
      * @return a flow indicating whether all values pass the predicate
      */
-    public default Flow<Boolean> all(Predicate<? super T> predicate) {
-        return lift(Operator.all(predicate));
+    public default Flow<Boolean> allMatch(Predicate<? super T> predicate) {
+        return lift(Operator.allMatch(predicate));
     }
 
-    public default Flow<Boolean> none(Predicate<? super T> predicate) {
-        return lift(Operator.all(t -> !predicate.test(t)));
+    /**
+     * Returns a flow that yields at most a single boolean value, indicating
+     * whether every value in this flow fails the given predicate or not. The
+     * flow is short-circuiting: the first value to match the predicate yields
+     * {@code false} and the predicate is not applied to any subsequent values.
+     * The flow yields {@code true} if and only if this flow completes before
+     * the predicate returns {@code false}.
+     * 
+     * @param predicate
+     *            the predicate to apply
+     * @return a flow indicating whether none of the values pass the predicate
+     */
+    public default Flow<Boolean> noneMatch(Predicate<? super T> predicate) {
+        return lift(Operator.allMatch(t -> !predicate.test(t)));
     }
 
     /**

@@ -145,6 +145,16 @@ public interface Operator<T, U> extends
         };
     }
 
+    /**
+     * Returns an operator that transforms a subscriber into one that only
+     * accepts an initial subsequence of {@code n} values.
+     * 
+     * @param <T>
+     *            the value type
+     * @param n
+     *            the number of values to accept
+     * @return a prefix sequence operator
+     */
     public static <T> Operator<T, T> take(long n) {
         return to -> new Sub<T, T>(to) {
             private long i = 0;
@@ -163,11 +173,22 @@ public interface Operator<T, U> extends
                 if (i < n) {
                     to.onEnd();
                 }
-            };
+            }
         };
     }
 
-    public static <T> Operator<T, T> drop(long n) {
+    /**
+     * Returns an operator that transforms a subscriber into one that skips an
+     * initial subsequence of {@code n} values.
+     * 
+     * @param <T>
+     *            the value type
+     * @param n
+     *            the number of values to skip
+     * @return a prefix sequence skipping operator
+     */
+
+    public static <T> Operator<T, T> skip(long n) {
         return to -> new Sub<T, T>(to) {
             private long i = 0;
 
@@ -219,7 +240,7 @@ public interface Operator<T, U> extends
     }
 
     /**
-     * Returns an operator that transforms a subscriber into one that drops an
+     * Returns an operator that transforms a subscriber into one that skips an
      * initial subsequence of values satisfying the given predicate.
      * 
      * @param <T>
@@ -228,7 +249,7 @@ public interface Operator<T, U> extends
      *            the predicate used to drop the prefix sequence
      * @return a prefix-dropping operator
      */
-    public static <T> Operator<T, T> dropWhile(Predicate<? super T> predicate) {
+    public static <T> Operator<T, T> skipWhile(Predicate<? super T> predicate) {
         return to -> new Sub<T, T>(to) {
             private boolean dropping = true;
 
@@ -257,7 +278,8 @@ public interface Operator<T, U> extends
      *            the predicate to use
      * @return an existential quantifier operator
      */
-    public static <T> Operator<T, Boolean> any(Predicate<? super T> predicate) {
+    public static <T> Operator<T, Boolean> anyMatch(
+            Predicate<? super T> predicate) {
         return to -> new Sub<T, Boolean>(to) {
             private boolean done = false;
 
@@ -293,7 +315,8 @@ public interface Operator<T, U> extends
      *            the predicate to use
      * @return a universal quantifier operator
      */
-    public static <T> Operator<T, Boolean> all(Predicate<? super T> predicate) {
+    public static <T> Operator<T, Boolean> allMatch(
+            Predicate<? super T> predicate) {
         return to -> new Sub<T, Boolean>(to) {
             private boolean done = false;
 
