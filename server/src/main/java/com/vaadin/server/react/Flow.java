@@ -56,6 +56,10 @@ import com.vaadin.server.react.impl.Operator;
  * will only receive the values that are computed after the subscription. A cold
  * flow, on the other hand, provides all its values to each of its subscribers
  * regardless of the time the subscription occurred.
+ * <p>
+ * Unless otherwise specified, the functional objects passed to any flow methods
+ * should be <i>pure</i>: their output should only depend on their input.
+ * Depending on mutable state may yield unexpected results.
  * 
  * @author johannesd@vaadin.com
  *
@@ -293,6 +297,32 @@ public interface Flow<T> extends Serializable {
     }
 
     /**
+     * Returns a flow with the first {@code n} values in this flow. If this flow
+     * terminates before yielding {@code n} values, the new flow terminates as
+     * well.
+     * 
+     * @param n
+     *            the number of initial values to pick
+     * @return a flow with the initial values
+     */
+    public default Flow<T> take(long n) {
+        return lift(Operator.take(n));
+    }
+
+    /**
+     * Returns a flow with all the values beyond the initial {@code n} values in
+     * this flow. If this flow terminates before yielding {@code n} values, the
+     * new flow terminates as well without producing any values.
+     * 
+     * @param n
+     *            the number of initial values to drop
+     * @return a flow without the initial values
+     */
+    public default Flow<T> drop(long n) {
+        return lift(Operator.drop(n));
+    }
+
+    /**
      * Returns a flow constituting all the values in this flow up to, but
      * excluding, the first value for which the given predicate returns
      * {@code false}. At that point, the flow completes and the predicate is not
@@ -358,14 +388,6 @@ public interface Flow<T> extends Serializable {
         return lift(Operator.all(t -> !predicate.test(t)));
     }
 
-    /*
-     * Combinators implemented in terms of other combinators.
-     * 
-     * TODO: The default implementations of the more fundamental combinators
-     * above should probably be moved to a concrete implementing class at some
-     * point.
-     */
-
     /**
      * Returns a flow with at most a single value: the number of values in this
      * flow. The returned flow provides a value, and completes, if and only if
@@ -376,31 +398,6 @@ public interface Flow<T> extends Serializable {
      */
     public default Flow<Long> count() {
         return reduce((count, x) -> count + 1L, 0L);
-    }
-
-    /**
-     * Returns a flow with the first {@code n} values in this flow. If this flow
-     * terminates prematurely, the new flow terminates as well.
-     * 
-     * @param n
-     *            the number of initial values to pick
-     * @return a flow with the initial values
-     */
-    public default Flow<T> take(long n) {
-        return takeWhile(new Counter(n));
-    }
-
-    /**
-     * Returns a flow with all the values beyond the initial {@code n} values in
-     * this flow. If this flow terminates prematurely, the new flow terminates
-     * as well without producing any values.
-     * 
-     * @param n
-     *            the number of initial values to drop
-     * @return a flow without the initial values
-     */
-    public default Flow<T> drop(long n) {
-        return dropWhile(new Counter(n));
     }
 
     /*
@@ -423,31 +420,5 @@ public interface Flow<T> extends Serializable {
      */
     public default <U> Flow<U> lift(Operator<? super T, ? extends U> op) {
         return createFlow(s -> subscribe(op.apply(s)));
-    }
-
-    /**
-     * A predicate that returns {@code true} for the first {@code n} times it is
-     * invoked, and {@code false} afterwards.
-     *
-     */
-    public class Counter implements Predicate<Object>, Serializable {
-        private long count = 0;
-
-        /**
-         * @param n
-         *            the number of times this counter returns {@code true}
-         */
-        public Counter(long n) {
-            count = n;
-        }
-
-        @Override
-        public boolean test(Object ignored) {
-            if (count > 0) {
-                count--;
-                return true;
-            }
-            return false;
-        }
     }
 }
