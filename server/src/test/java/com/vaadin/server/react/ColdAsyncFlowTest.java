@@ -2,6 +2,7 @@ package com.vaadin.server.react;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Supplier;
 
 import org.easymock.EasyMock;
 
@@ -13,7 +14,11 @@ public class ColdAsyncFlowTest extends FlowTest {
     private volatile boolean ended = false;
 
     @Override
-    protected <T> void verifyFlow(Flow<T> flow, Subscriber<? super T> sub) {
+    protected <T> void verifyFlow(Flow<T> flow,
+            Supplier<Subscriber<? super T>> subSup) {
+
+        Subscriber<? super T> sub = subSup.get();
+
         EasyMock.replay(sub);
         flow.subscribe(sub);
 
@@ -24,6 +29,7 @@ public class ColdAsyncFlowTest extends FlowTest {
         EasyMock.verify(sub);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     protected <T> Flow<T> flow(T... actual) {
         return new FlowImpl<T>(s -> {

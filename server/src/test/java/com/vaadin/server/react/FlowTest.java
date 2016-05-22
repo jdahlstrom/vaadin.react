@@ -1,5 +1,7 @@
 package com.vaadin.server.react;
 
+import java.util.function.Supplier;
+
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -126,10 +128,15 @@ public class FlowTest {
         verifyFlow(flow(1, 2, 3, 4).drop(5), expect());
     }
 
-    protected <T> void verifyFlow(Flow<T> flow, Subscriber<? super T> sub) {
-        EasyMock.replay(sub);
-        flow.subscribe(sub);
-        EasyMock.verify(sub);
+    protected <T> void verifyFlow(Flow<T> flow,
+            Supplier<Subscriber<? super T>> subSup) {
+
+        for (int i = 0; i < 2; i++) {
+            Subscriber<? super T> sub = subSup.get();
+            EasyMock.replay(sub);
+            flow.subscribe(sub);
+            EasyMock.verify(sub);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -138,14 +145,14 @@ public class FlowTest {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> Subscriber<T> expect(T... expected) {
-
-        Subscriber<T> s = EasyMock.createStrictMock(Subscriber.class);
-        for (T t : expected) {
-            s.onNext(t);
-        }
-        s.onEnd();
-
-        return s;
+    protected <T> Supplier<Subscriber<? super T>> expect(T... expected) {
+        return () -> {
+            Subscriber<T> s = EasyMock.createStrictMock(Subscriber.class);
+            for (T t : expected) {
+                s.onNext(t);
+            }
+            s.onEnd();
+            return s;
+        };
     }
 }
