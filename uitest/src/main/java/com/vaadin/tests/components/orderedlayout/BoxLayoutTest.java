@@ -128,7 +128,8 @@ public class BoxLayoutTest extends AbstractTestUI {
                                 new Button.ClickListener() {
                                     @Override
                                     public void buttonClick(ClickEvent event) {
-                                        if (event.getButton().getWidth() == -1) {
+                                        if (event.getButton()
+                                                .getWidth() == -1) {
                                             event.getButton().setHeight("50px");
                                             event.getButton().setWidth("200px");
                                         } else {
@@ -151,7 +152,8 @@ public class BoxLayoutTest extends AbstractTestUI {
                 new Button.ClickListener() {
                     @Override
                     public void buttonClick(ClickEvent event) {
-                        Component last = l.getComponent(l.getComponentCount() - 1);
+                        Component last = l
+                                .getComponent(l.getComponentCount() - 1);
                         l.removeComponent(last);
                     }
                 });
@@ -238,7 +240,8 @@ public class BoxLayoutTest extends AbstractTestUI {
         align = new NativeSelect(null, alignments);
         for (Alignment a : alignments) {
             align.setItemCaption(a,
-                    a.getVerticalAlignment() + "-" + a.getHorizontalAlignment());
+                    a.getVerticalAlignment() + "-"
+                            + a.getHorizontalAlignment());
         }
         align.setImmediate(true);
         align.setEnabled(false);
@@ -329,7 +332,8 @@ public class BoxLayoutTest extends AbstractTestUI {
         component.addComponent(componentCaption);
 
         componentIcon = new NativeSelect("Icon", Arrays.asList(
-                "../runo/icons/16/folder.png", "../runo/icons/32/document.png"));
+                "../runo/icons/16/folder.png",
+                "../runo/icons/32/document.png"));
         componentIcon.setImmediate(true);
         componentIcon.setEnabled(false);
         componentIcon.addListener(new ValueChangeListener() {
@@ -363,8 +367,9 @@ public class BoxLayoutTest extends AbstractTestUI {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (target != null) {
-                    target.setComponentError(componentError.getValue() ? new UserError(
-                            "Error message") : null);
+                    target.setComponentError(
+                            componentError.getValue() ? new UserError(
+                                    "Error message") : null);
                 }
             }
         });
@@ -401,7 +406,7 @@ public class BoxLayoutTest extends AbstractTestUI {
         l.addComponent(label);
         l.addComponent(new Button("Component 2"));
 
-        l.addListener(new LayoutClickListener() {
+        l.addLayoutClickListener(new LayoutClickListener() {
             @Override
             public void layoutClick(LayoutClickEvent event) {
                 if (event.getChildComponent() == null

@@ -71,7 +71,7 @@ public class CommitInvalid extends TestBase {
          */
         Button validate = new Button("Validate");
         validate.setId("_validate");
-        validate.addListener(new Button.ClickListener() {
+        validate.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 try {
@@ -88,7 +88,7 @@ public class CommitInvalid extends TestBase {
 
         Button commit = new Button("Commit");
         commit.setId("_commit");
-        commit.addListener(new Button.ClickListener() {
+        commit.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 try {
@@ -104,7 +104,7 @@ public class CommitInvalid extends TestBase {
 
         form.getFooter().addComponent(commit);
         Button printState = new Button("printState");
-        printState.addListener(new Button.ClickListener() {
+        printState.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 printState();

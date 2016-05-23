@@ -103,7 +103,8 @@ public class AbsoluteLayout extends AbstractLayout implements
      * old components position.
      */
     @Override
-    public void replaceComponent(Component oldComponent, Component newComponent) {
+    public void replaceComponent(Component oldComponent,
+            Component newComponent) {
         ComponentPosition position = getPosition(oldComponent);
         removeComponent(oldComponent);
         addComponent(newComponent, position);
@@ -112,9 +113,8 @@ public class AbsoluteLayout extends AbstractLayout implements
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * com.vaadin.ui.AbstractComponentContainer#addComponent(com.vaadin.ui.Component
-     * )
+     * @see com.vaadin.ui.AbstractComponentContainer#addComponent(com.vaadin.ui.
+     * Component )
      */
     @Override
     public void addComponent(Component c) {
@@ -649,30 +649,10 @@ public class AbsoluteLayout extends AbstractLayout implements
                 LayoutClickListener.clickMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addLayoutClickListener(LayoutClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(LayoutClickListener listener) {
-        addLayoutClickListener(listener);
-    }
-
     @Override
     public void removeLayoutClickListener(LayoutClickListener listener) {
         removeListener(EventId.LAYOUT_CLICK_EVENT_IDENTIFIER,
                 LayoutClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeLayoutClickListener(LayoutClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(LayoutClickListener listener) {
-        removeLayoutClickListener(listener);
     }
 
     /*

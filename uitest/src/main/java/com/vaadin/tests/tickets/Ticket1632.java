@@ -42,7 +42,7 @@ public class Ticket1632 extends LegacyApplication {
         mainWin.addComponent(t);
 
         Button b = new Button("Toggle col3");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             boolean visible = false;
 
             @Override

@@ -83,7 +83,7 @@ public class Ticket2119 extends LegacyApplication {
         });
 
         final Button changeValueButton = new Button("Change Value to 2");
-        changeValueButton.addListener(new Button.ClickListener() {
+        changeValueButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 globalValue.setValue("2");

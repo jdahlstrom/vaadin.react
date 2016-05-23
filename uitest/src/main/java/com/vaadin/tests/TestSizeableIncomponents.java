@@ -69,7 +69,7 @@ public class TestSizeableIncomponents extends LegacyApplication {
         select.setWidth("400px");
 
         prev = new Button("<<-|");
-        prev.addListener(new Button.ClickListener() {
+        prev.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 Object cur = select.getValue();
@@ -85,7 +85,7 @@ public class TestSizeableIncomponents extends LegacyApplication {
             }
         });
         next = new Button("|->>");
-        next.addListener(new Button.ClickListener() {
+        next.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 Object cur = select.getValue();

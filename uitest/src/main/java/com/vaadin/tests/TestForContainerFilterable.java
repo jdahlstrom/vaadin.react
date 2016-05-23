@@ -72,7 +72,7 @@ public class TestForContainerFilterable extends CustomComponent {
         t.setContainerDataSource(ic);
 
         // Handler
-        filterButton.addListener(new Button.ClickListener() {
+        filterButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 ic.removeAllContainerFilters();

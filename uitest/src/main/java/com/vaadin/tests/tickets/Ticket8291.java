@@ -62,7 +62,7 @@ public class Ticket8291 extends UI {
             table.setContainerDataSource(container);
             addComponent(table);
             Button button = new Button("Click");
-            button.addListener(new Button.ClickListener() {
+            button.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     reduceData = !reduceData;
@@ -71,7 +71,7 @@ public class Ticket8291 extends UI {
             });
             addComponent(button);
             Button button2 = new Button("Filter");
-            button2.addListener(new Button.ClickListener() {
+            button2.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     if (filter != null) {

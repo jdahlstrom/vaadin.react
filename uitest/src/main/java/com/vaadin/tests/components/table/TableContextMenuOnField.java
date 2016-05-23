@@ -23,7 +23,8 @@ public class TableContextMenuOnField extends TestBase {
 
         table.addActionHandler(new Action.Handler() {
             @Override
-            public void handleAction(Action action, Object sender, Object target) {
+            public void handleAction(Action action, Object sender,
+                    Object target) {
                 // TODO Auto-generated method stub
 
             }
@@ -43,7 +44,7 @@ public class TableContextMenuOnField extends TestBase {
                 VerticalLayout layout = new VerticalLayout();
                 layout.addComponent(new TextField());
 
-                layout.addListener(new LayoutClickListener() {
+                layout.addLayoutClickListener(new LayoutClickListener() {
 
                     @Override
                     public void layoutClick(LayoutClickEvent event) {

@@ -918,15 +918,6 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addClickListener(ClickListener)}
-     **/
-    @Deprecated
-    public void addListener(ClickListener listener) {
-        addClickListener(listener);
-    }
-
-    /**
      * Remove a click listener from the UI. The listener should earlier have
      * been added using {@link #addListener(ClickListener)}.
      * 
@@ -936,15 +927,6 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     public void removeClickListener(ClickListener listener) {
         removeListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class,
                 listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeClickListener(ClickListener)}
-     **/
-    @Deprecated
-    public void removeListener(ClickListener listener) {
-        removeClickListener(listener);
     }
 
     @Override
@@ -1093,7 +1075,8 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     @Deprecated
     public void showNotification(String caption, String description,
             Notification.Type type) {
-        Notification notification = new Notification(caption, description, type);
+        Notification notification = new Notification(caption, description,
+                type);
         notification.setHtmlContentAllowed(true);// Backwards compatibility
         getPage().showNotification(notification);
     }
@@ -1235,7 +1218,8 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     public void close() {
         closing = true;
 
-        boolean sessionExpired = (session == null || session.getState() != State.OPEN);
+        boolean sessionExpired = (session == null
+                || session.getState() != State.OPEN);
         getRpcProxy(UIClientRpc.class).uiClosed(sessionExpired);
         if (getPushConnection() != null) {
             // Push the Rpc to the client. The connection will be closed when
@@ -1563,7 +1547,8 @@ public abstract class UI extends AbstractSingleComponentContainer implements
      *         not available.
      */
     public PushConnection getPushConnection() {
-        assert !(getPushConfiguration().getPushMode().isEnabled() && pushConnection == null);
+        assert !(getPushConfiguration().getPushMode().isEnabled()
+                && pushConnection == null);
         return pushConnection;
     }
 

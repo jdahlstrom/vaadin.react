@@ -24,7 +24,7 @@ public class Ticket2289 extends LegacyApplication {
         VerticalLayout ol = new VerticalLayout();
         w.setContent(ol);
         Button b = new Button("close current tab");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 closeCurrentTab();
@@ -34,7 +34,7 @@ public class Ticket2289 extends LegacyApplication {
         ol.addComponent(b);
 
         b = new Button("close first tab");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 closeFirstTab();

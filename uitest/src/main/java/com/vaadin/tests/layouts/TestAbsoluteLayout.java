@@ -130,7 +130,7 @@ public class TestAbsoluteLayout extends TestBase {
             setHeight("600px");
 
             Button componentChooser = new Button("choose component to edit");
-            componentChooser.addListener(new Button.ClickListener() {
+            componentChooser.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     VerticalLayout layout = new VerticalLayout();
@@ -190,7 +190,7 @@ public class TestAbsoluteLayout extends TestBase {
             addComponent(componentChooser);
 
             Button addComp = new Button("add component");
-            addComp.addListener(new Button.ClickListener() {
+            addComp.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     VerticalLayout layout = new VerticalLayout();

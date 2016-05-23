@@ -61,7 +61,7 @@ public class Ticket1982 extends LegacyApplication {
             addComponent(min);
             min.setVisible(false);
 
-            max.addListener(new ClickListener() {
+            max.addClickListener(new ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     min.setVisible(true);
@@ -71,7 +71,7 @@ public class Ticket1982 extends LegacyApplication {
                             .addComponent(TitleBar.this, 0, 0, 1, 1);
                 }
             });
-            min.addListener(new ClickListener() {
+            min.addClickListener(new ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     min.setVisible(false);

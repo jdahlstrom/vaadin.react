@@ -72,7 +72,7 @@ public class FocusAndBlurListeners extends TestBase {
         ogm.setMultiSelect(true);
         l.addComponent(ogm);
 
-        btn.addListener(new ClickListener() {
+        btn.addClickListener(new ClickListener() {
 
             private int i;
 

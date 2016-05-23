@@ -91,7 +91,7 @@ public class Ticket34 extends LegacyApplication {
             pl.addComponent(tf);
             Button b = new Button("Go!");
             pl.addComponent(b);
-            b.addListener(new Button.ClickListener() {
+            b.addClickListener(new Button.ClickListener() {
 
                 @Override
                 public void buttonClick(ClickEvent event) {

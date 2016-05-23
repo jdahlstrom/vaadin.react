@@ -123,7 +123,7 @@ public class Ticket2009 extends com.vaadin.server.LegacyApplication {
 
             getMainWindow().addWindow(this);
 
-            done.addListener(new Button.ClickListener() {
+            done.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     getMainWindow().removeWindow(PropertyEditor.this);

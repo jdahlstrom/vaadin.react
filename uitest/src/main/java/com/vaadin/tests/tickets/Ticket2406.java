@@ -31,7 +31,7 @@ public class Ticket2406 extends LegacyApplication {
 
         Button b = new Button("Button 1");
         b.setSizeFull();
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

@@ -96,7 +96,7 @@ public class OutOfSyncIssueWithKeyboardShortcut extends TestBase {
                 }
             });
 
-            saveButton.addListener(new ClickListener() {
+            saveButton.addClickListener(new ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     form.commit();

@@ -128,7 +128,7 @@ public class TestForStyledUpload extends LegacyApplication implements
         main.addComponent(status);
 
         Button cancel = new Button("Cancel current upload");
-        cancel.addListener(new Button.ClickListener() {
+        cancel.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 buffer.cancel();
@@ -138,7 +138,7 @@ public class TestForStyledUpload extends LegacyApplication implements
         main.addComponent(cancel);
 
         final Button restart = new Button("Restart demo application");
-        restart.addListener(new Button.ClickListener() {
+        restart.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

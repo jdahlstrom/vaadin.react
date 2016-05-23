@@ -67,7 +67,7 @@ public class ForceSubmit extends TestBase implements Receiver {
 
         Button button = new Button(
                 "I'm an external button (not the uploads builtin), hit me to start upload.");
-        button.addListener(new ClickListener() {
+        button.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 u.submitUpload();

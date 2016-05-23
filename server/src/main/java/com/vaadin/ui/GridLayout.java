@@ -36,8 +36,6 @@ import org.jsoup.select.Elements;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.LayoutEvents.LayoutClickNotifier;
-import com.vaadin.server.PaintException;
-import com.vaadin.server.PaintTarget;
 import com.vaadin.shared.Connector;
 import com.vaadin.shared.EventId;
 import com.vaadin.shared.MouseEventDetails;
@@ -413,7 +411,8 @@ public class GridLayout extends AbstractLayout implements
     public void removeComponent(int column, int row) {
 
         // Finds the area
-        for (final Iterator<Component> i = components.iterator(); i.hasNext();) {
+        for (final Iterator<Component> i = components.iterator(); i
+                .hasNext();) {
             final Component component = i.next();
             final ChildComponentData childData = getState().childData
                     .get(component);
@@ -446,6 +445,7 @@ public class GridLayout extends AbstractLayout implements
         return components.size();
     }
 
+    @Override
     public void beforeClientResponse(boolean initial) {
         super.beforeClientResponse(initial);
 
@@ -870,7 +870,8 @@ public class GridLayout extends AbstractLayout implements
 
     /* Documented in superclass */
     @Override
-    public void replaceComponent(Component oldComponent, Component newComponent) {
+    public void replaceComponent(Component oldComponent,
+            Component newComponent) {
 
         // Gets the locations
         ChildComponentData oldLocation = getState().childData.get(oldComponent);
@@ -1132,8 +1133,9 @@ public class GridLayout extends AbstractLayout implements
      * @return Component in given cell or null if empty
      */
     public Component getComponent(int x, int y) {
-        for (Entry<Connector, ChildComponentData> entry : getState(false).childData
-                .entrySet()) {
+        for (Entry<Connector, ChildComponentData> entry : getState(
+                false).childData
+                        .entrySet()) {
             ChildComponentData childData = entry.getValue();
             if (childData.column1 <= x && x <= childData.column2
                     && childData.row1 <= y && y <= childData.row2) {
@@ -1169,30 +1171,10 @@ public class GridLayout extends AbstractLayout implements
                 LayoutClickListener.clickMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addLayoutClickListener(LayoutClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(LayoutClickListener listener) {
-        addLayoutClickListener(listener);
-    }
-
     @Override
     public void removeLayoutClickListener(LayoutClickListener listener) {
         removeListener(EventId.LAYOUT_CLICK_EVENT_IDENTIFIER,
                 LayoutClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeLayoutClickListener(LayoutClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(LayoutClickListener listener) {
-        removeLayoutClickListener(listener);
     }
 
     /*
@@ -1208,9 +1190,8 @@ public class GridLayout extends AbstractLayout implements
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * com.vaadin.ui.Layout.MarginHandler#setMargin(com.vaadin.shared.ui.MarginInfo
-     * )
+     * @see com.vaadin.ui.Layout.MarginHandler#setMargin(com.vaadin.shared.ui.
+     * MarginInfo )
      */
     @Override
     public void setMargin(MarginInfo marginInfo) {
@@ -1345,7 +1326,8 @@ public class GridLayout extends AbstractLayout implements
                         attr, 1, int.class);
 
                 for (int rowIndex = row; rowIndex < row + rowspan; ++rowIndex) {
-                    for (int colIndex = column; colIndex < column + colspan; ++colIndex) {
+                    for (int colIndex = column; colIndex < column
+                            + colspan; ++colIndex) {
                         if (rowIndex == rows.size()) {
                             // Rowspan with not enough rows. Fix by adding rows.
                             rows.add(new HashMap<Integer, Component>());
@@ -1504,7 +1486,8 @@ public class GridLayout extends AbstractLayout implements
                 } else {
                     boolean hasExpands = false;
                     if (i == 0
-                            && lastComponentOnRow(componentMap[i], j, visited)) {
+                            && lastComponentOnRow(componentMap[i], j,
+                                    visited)) {
                         // A column with expand and no content in the end of
                         // first row needs to be present.
                         for (int c = j; c < componentMap[i].length; ++c) {
@@ -1528,7 +1511,8 @@ public class GridLayout extends AbstractLayout implements
                         ++colspan;
                     }
 
-                    int rowspan = getRowSpan(componentMap, i, j, colspan, child);
+                    int rowspan = getRowSpan(componentMap, i, j, colspan,
+                            child);
                     if (colspan > 1) {
                         col.attr("colspan", "" + colspan);
                     }
@@ -1596,7 +1580,8 @@ public class GridLayout extends AbstractLayout implements
     private int getRowSpan(Component[][] compMap, int i, int j, int colspan,
             Component child) {
         int rowspan = 1;
-        while (i + rowspan < compMap.length && compMap[i + rowspan][j] == child) {
+        while (i + rowspan < compMap.length
+                && compMap[i + rowspan][j] == child) {
             for (int k = 0; k < colspan; ++k) {
                 if (compMap[i + rowspan][j + k] != child) {
                     return rowspan;

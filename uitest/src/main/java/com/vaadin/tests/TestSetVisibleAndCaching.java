@@ -63,7 +63,7 @@ public class TestSetVisibleAndCaching extends
 
         selectPanel(selectedPanel);
 
-        buttonNextPanel.addListener(new ClickListener() {
+        buttonNextPanel.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 selectedPanel++;

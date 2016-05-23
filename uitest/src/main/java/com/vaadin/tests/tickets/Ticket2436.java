@@ -26,7 +26,7 @@ public class Ticket2436 extends LegacyApplication {
             }
         });
 
-        remover.addListener(new Button.ClickListener() {
+        remover.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 main.removeComponent(pv);

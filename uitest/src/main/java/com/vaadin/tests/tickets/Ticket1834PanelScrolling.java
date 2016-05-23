@@ -30,7 +30,7 @@ public class Ticket1834PanelScrolling extends
         currentState.addComponent(state);
         Button b = new Button("update");
         currentState.addComponent(b);
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 state.setValue("ScrollTop: " + p.getScrollTop()
@@ -40,7 +40,7 @@ public class Ticket1834PanelScrolling extends
         main.addComponent(currentState);
 
         b = new Button("ScrollBy 50px");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 p.setScrollLeft(p.getScrollLeft() + 50);
@@ -53,7 +53,7 @@ public class Ticket1834PanelScrolling extends
         main.addComponent(b);
 
         b = new Button("Add row");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             int i = 0;
 
             @Override
@@ -65,7 +65,7 @@ public class Ticket1834PanelScrolling extends
         main.addComponent(b);
 
         b = new Button("Repaint Panel");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 p.markAsDirty();

@@ -18,7 +18,7 @@ public class Ticket695 extends LegacyApplication {
         setMainWindow(w);
         Button b = new Button("Serialize ApplicationContext");
         w.addComponent(b);
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

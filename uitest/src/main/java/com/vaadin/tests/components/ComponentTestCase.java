@@ -136,7 +136,7 @@ public abstract class ComponentTestCase<T extends AbstractComponent> extends
 
         Button button = new Button(caption);
         button.setData(Boolean.FALSE);
-        button.addListener(new Button.ClickListener() {
+        button.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 Button b = event.getButton();

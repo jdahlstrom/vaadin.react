@@ -45,7 +45,7 @@ public class Ticket1819 extends com.vaadin.server.LegacyApplication {
 
         Button checkValidity = new Button("Check validity of the fields");
         main.addComponent(checkValidity);
-        checkValidity.addListener(new Button.ClickListener() {
+        checkValidity.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

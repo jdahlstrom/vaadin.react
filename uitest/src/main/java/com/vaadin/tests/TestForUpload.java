@@ -202,7 +202,7 @@ public class TestForUpload extends CustomComponent implements
         main.addComponent(beSluggish);
         main.addComponent(throwExecption);
         main.addComponent(interrupt);
-        interrupt.addListener(new Button.ClickListener() {
+        interrupt.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 up.interruptUpload();
@@ -243,7 +243,7 @@ public class TestForUpload extends CustomComponent implements
         main.addComponent(status);
 
         final Button restart = new Button("R");
-        restart.addListener(new Button.ClickListener() {
+        restart.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
