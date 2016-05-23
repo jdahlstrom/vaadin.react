@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.vaadin.server.react.Flow;
-import com.vaadin.server.react.Flow.Subscriber;
+import com.vaadin.server.react.Subscriber;
 import com.vaadin.server.react.impl.FlowImpl;
 
 /**
