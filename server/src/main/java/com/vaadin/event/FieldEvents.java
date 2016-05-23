@@ -268,21 +268,7 @@ public interface FieldEvents {
     public interface TextChangeNotifier extends Serializable {
         public void addTextChangeListener(TextChangeListener listener);
 
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #addTextChangeListener(TextChangeListener)}
-         **/
-        @Deprecated
-        public void addListener(TextChangeListener listener);
-
         public void removeTextChangeListener(TextChangeListener listener);
-
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #removeTextChangeListener(TextChangeListener)}
-         **/
-        @Deprecated
-        public void removeListener(TextChangeListener listener);
     }
 
     public static abstract class FocusAndBlurServerRpcImpl implements

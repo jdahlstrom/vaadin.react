@@ -540,30 +540,10 @@ public abstract class AbstractTextField extends AbstractField<String> implements
                 listener, TextChangeListener.EVENT_METHOD);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addTextChangeListener(TextChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(TextChangeListener listener) {
-        addTextChangeListener(listener);
-    }
-
     @Override
     public void removeTextChangeListener(TextChangeListener listener) {
         removeListener(TextChangeListener.EVENT_ID, TextChangeEvent.class,
                 listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeTextChangeListener(TextChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(TextChangeListener listener) {
-        removeTextChangeListener(listener);
     }
 
     /**
