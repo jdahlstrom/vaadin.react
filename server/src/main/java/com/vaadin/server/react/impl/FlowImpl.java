@@ -19,6 +19,7 @@ package com.vaadin.server.react.impl;
 import java.util.function.Consumer;
 
 import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.Subscriber;
 
 /**
  * A basic concrete implementation of a Flow.

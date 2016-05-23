@@ -16,8 +16,8 @@
 
 package com.vaadin.server.react.impl;
 
-import com.vaadin.server.react.Flow.Subscriber;
 import com.vaadin.server.react.Flow.Subscription;
+import com.vaadin.server.react.Subscriber;
 
 /**
  * 

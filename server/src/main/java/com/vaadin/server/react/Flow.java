@@ -19,16 +19,17 @@ package com.vaadin.server.react;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 import java.util.stream.Stream;
 
 import com.vaadin.server.react.impl.FlowImpl;
 import com.vaadin.server.react.impl.Operator;
-import com.vaadin.server.react.impl.SubscriberImpl;
 
 /**
  * A subscribable, possibly asynchronous sequence of values.
@@ -57,6 +58,10 @@ import com.vaadin.server.react.impl.SubscriberImpl;
  * will only receive the values that are computed after the subscription. A cold
  * flow, on the other hand, provides all its values to each of its subscribers
  * regardless of the time the subscription occurred.
+ * <p>
+ * Unless otherwise specified, the functional objects passed to any flow methods
+ * should be <i>pure</i>: their output should only depend on their input.
+ * Depending on mutable state may yield unexpected results.
  * 
  * @author johannesd@vaadin.com
  * 
@@ -64,127 +69,6 @@ import com.vaadin.server.react.impl.SubscriberImpl;
  *            The type of the values in this flow.
  */
 public interface Flow<T> extends Serializable {
-
-    /**
-     * A subscriber to a flow.
-     * 
-     * @param <T>
-     *            the accepted value type
-     */
-    public interface Subscriber<T> extends Serializable {
-
-        /**
-         * Returns a new subscriber that invokes the {@code onNext} consumer for
-         * each value received. Error and end signals are ignored.
-         * 
-         * @param <T>
-         *            the value type
-         * @param onNext
-         *            the value consumer
-         * @return a subscriber delegating to the given consumer
-         */
-        public static <T> Subscriber<T> from(Consumer<? super T> onNext) {
-            return new SubscriberImpl<T>() {
-
-                @Override
-                public void onNext(T value) {
-                    onNext.accept(value);
-                }
-
-                @Override
-                public void onError(Exception e) {
-                }
-
-                @Override
-                public void onEnd() {
-                }
-            };
-        }
-
-        /**
-         * Returns a new subscriber that invokes the {@code onNext} consumer for
-         * each value received; the {@code onError} consumer for any error
-         * received; and the {@code onEnd} function when the flow completes.
-         * 
-         * @param <T>
-         *            the value type
-         * @param onNext
-         *            the value consumer
-         * @param onError
-         *            the error consumer
-         * @param onEnd
-         *            the end listener
-         * @return a subscriber delegating to the given functions
-         */
-        public static <T> Subscriber<T> from(Consumer<? super T> onNext,
-                Consumer<? super Exception> onError, Runnable onEnd) {
-            return new SubscriberImpl<T>() {
-
-                @Override
-                public void onNext(T value) {
-                    onNext.accept(value);
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    onError.accept(e);
-
-                }
-
-                @Override
-                public void onEnd() {
-                    onEnd.run();
-                }
-            };
-        }
-
-        /**
-         * Invoked when subscribing to a flow. Storing the given subscription
-         * token allows for later unsubscribing from the flow.
-         * 
-         * @param sub
-         *            the subscription token
-         */
-        public void onSubscribe(Subscription sub);
-
-        /**
-         * Unsubscribes this subscriber if currently subscribed to a flow,
-         * otherwise does nothing.
-         * 
-         * @see Subscription#unsubscribe()
-         */
-        public void unsubscribe();
-
-        /**
-         * @see Subscription#isSubscribed()
-         * 
-         * @return whether this subscriber is subscribed to a flow
-         */
-        public boolean isSubscribed();
-
-        /**
-         * Invoked for each value in the subscribed flow.
-         * 
-         * @param value
-         *            the next value in the flow
-         */
-        public void onNext(T value);
-
-        /**
-         * Invoked in case of an error condition. This can happen at most once
-         * for a given flow.
-         * 
-         * @param e
-         *            the exception thrown
-         */
-        public void onError(Exception e);
-
-        /**
-         * Invoked when the flow completes. This can happen at most once for a
-         * given flow, but will not occur if the flow never completes.
-         */
-        public void onEnd();
-    }
 
     /**
      * A subscription token.
@@ -216,6 +100,21 @@ public interface Flow<T> extends Serializable {
     }
 
     /**
+     * Returns a new cold flow that produces the given values in sequence and
+     * completes.
+     * 
+     * @param <T>
+     *            the value type of the flow
+     * @param values
+     *            the values to produce
+     * @return a flow producing the values
+     */
+    @SafeVarargs
+    public static <T> Flow<T> of(T... values) {
+        return from(values);
+    }
+
+    /**
      * Returns a new cold flow that produces the given sequence of values and
      * then completes.
      * 
@@ -225,8 +124,7 @@ public interface Flow<T> extends Serializable {
      *            the sequence of values
      * @return a flow producing the values
      */
-    @SafeVarargs
-    public static <T> Flow<T> from(T... values) {
+    public static <T> Flow<T> from(T[] values) {
         return new FlowImpl<>(sub -> {
             for (T t : values) {
                 if (!sub.isSubscribed()) {
@@ -265,6 +163,71 @@ public interface Flow<T> extends Serializable {
     }
 
     /**
+     * Returns a new hot flow, yielding values from the given {@code Stream}.
+     * The first subscriber to subscribe will consume the stream; any subsequent
+     * subscribers will get an empty (immediately completing) flow.
+     * 
+     * @param <T>
+     *            the value type of the flow
+     * @param <S>
+     *            the type of the stream
+     * @param stream
+     *            the stream to consume
+     * @return a flow yielding the values from the stream
+     */
+    public static <T, S extends BaseStream<T, S>> Flow<T> from(
+            BaseStream<T, S> stream) {
+        return new FlowImpl<>(new Consumer<Subscriber<? super T>>() {
+            boolean done = false;
+
+            @Override
+            public void accept(Subscriber<? super T> subscriber) {
+                try {
+                    if (!done) {
+                        Iterator<T> i = stream.iterator();
+                        while (i.hasNext()) {
+                            subscriber.onNext(i.next());
+                        }
+                    }
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                } finally {
+                    subscriber.onEnd();
+                    done = true;
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a new flow that produces the value of the given future when it
+     * completes, or the error if the future completes exceptionally.
+     * 
+     * @param <T>
+     *            the value type of the flow
+     * @param future
+     *            the future whose result to produce
+     * @return a flow yielding a future result
+     */
+    public static <T> Flow<T> from(CompletableFuture<T> future) {
+        return new FlowImpl<>(sub -> {
+
+            future.whenComplete((value, e) -> {
+                if (value != null) {
+                    sub.onNext(value);
+                } else if (e instanceof Exception) {
+                    sub.onError((Exception) e);
+                } else if (e instanceof Error) {
+                    throw (Error) e;
+                } else {
+                    throw new Error(e);
+                }
+                sub.onEnd();
+            });
+        });
+    }
+
+    /**
      * Returns a new flow drawing values from the given supplier. The supplier
      * is invoked until it returns an empty {@code Optional}; at that point the
      * flow completes. Any exception thrown by the supplier terminates the flow
@@ -276,7 +239,8 @@ public interface Flow<T> extends Serializable {
      *            the producer of values
      * @return a flow yielding values from the supplier
      */
-    public static <T> Flow<T> from(Supplier<Optional<T>> supplier) {
+
+    public static <T> Flow<T> generate(Supplier<Optional<T>> supplier) {
         return new FlowImpl<>(sub -> {
             Optional<T> opt = Optional.empty();
             Exception ex = null;
@@ -298,6 +262,40 @@ public interface Flow<T> extends Serializable {
             if (sub.isSubscribed()) {
                 sub.onEnd();
             }
+        });
+    }
+
+    /**
+     * Returns a flow producing values by iteratively applying the given
+     * function to the previous value.
+     * 
+     * @param <T>
+     *            the value type of the flow
+     * @param initial
+     *            the initial value yielded, not null
+     * @param generator
+     *            the function to produce subsequent values
+     * @return a flow yielding values from the function
+     */
+    public static <T> Flow<T> iterate(T initial,
+            Function<T, Optional<T>> generator) {
+        return new FlowImpl<>(subscriber -> {
+            Optional<T> opt = Optional.of(initial);
+            Exception ex = null;
+            do {
+                T next = opt.get(); // provably safe
+                subscriber.onNext(next);
+                try {
+                    opt = generator.apply(next);
+                } catch (Exception e) {
+                    ex = e;
+                }
+            } while (ex == null && opt.isPresent());
+
+            if (ex != null) {
+                subscriber.onError(ex);
+            }
+            subscriber.onEnd();
         });
     }
 
@@ -445,8 +443,34 @@ public interface Flow<T> extends Serializable {
     }
 
     /**
-     * Returns a flow constituting all the values in this flow up to, but
-     * excluding, the first value for which the given predicate returns
+     * Returns a flow with the first {@code n} values in this flow. If this flow
+     * terminates before yielding {@code n} values, the new flow terminates as
+     * well.
+     * 
+     * @param n
+     *            the number of initial values to pick
+     * @return a flow with the initial values
+     */
+    public default Flow<T> take(long n) {
+        return lift(Operator.take(n));
+    }
+
+    /**
+     * Returns a flow with all the values except the initial {@code n} values in
+     * this flow. If this flow terminates before yielding {@code n} values, the
+     * new flow terminates as well without producing any values.
+     * 
+     * @param n
+     *            the number of initial values to drop
+     * @return a flow without the initial values
+     */
+    public default Flow<T> skip(long n) {
+        return lift(Operator.skip(n));
+    }
+
+    /**
+     * Returns a flow constituting all the values in this flow up to, but not
+     * including, the first value for which the given predicate returns
      * {@code false}. At that point, the flow completes and the predicate is not
      * applied to any subsequent values. If this flow terminates before the
      * predicate fails, the returned flow terminates as well.
@@ -470,8 +494,8 @@ public interface Flow<T> extends Serializable {
      *            the predicate to apply
      * @return a flow excluding the initial values that satisfy the predicate
      */
-    public default Flow<T> dropWhile(Predicate<? super T> predicate) {
-        return lift(Operator.dropWhile(predicate));
+    public default Flow<T> skipWhile(Predicate<? super T> predicate) {
+        return lift(Operator.skipWhile(predicate));
     }
 
     /**
@@ -486,8 +510,8 @@ public interface Flow<T> extends Serializable {
      *            the predicate to apply
      * @return a flow indicating whether any values pass the predicate
      */
-    public default Flow<Boolean> any(Predicate<? super T> predicate) {
-        return lift(Operator.any(predicate));
+    public default Flow<Boolean> anyMatch(Predicate<? super T> predicate) {
+        return lift(Operator.anyMatch(predicate));
     }
 
     /**
@@ -502,17 +526,25 @@ public interface Flow<T> extends Serializable {
      *            the predicate to apply
      * @return a flow indicating whether all values pass the predicate
      */
-    public default Flow<Boolean> all(Predicate<? super T> predicate) {
-        return lift(Operator.all(predicate));
+    public default Flow<Boolean> allMatch(Predicate<? super T> predicate) {
+        return lift(Operator.allMatch(predicate));
     }
 
-    /*
-     * Combinators implemented in terms of other combinators.
+    /**
+     * Returns a flow that yields at most a single boolean value, indicating
+     * whether every value in this flow fails the given predicate or not. The
+     * flow is short-circuiting: the first value to match the predicate yields
+     * {@code false} and the predicate is not applied to any subsequent values.
+     * The flow yields {@code true} if and only if this flow completes before
+     * the predicate returns {@code false}.
      * 
-     * TODO: The default implementations of the more fundamental combinators
-     * above should probably be moved to a concrete implementing class at some
-     * point.
+     * @param predicate
+     *            the predicate to apply
+     * @return a flow indicating whether none of the values pass the predicate
      */
+    public default Flow<Boolean> noneMatch(Predicate<? super T> predicate) {
+        return lift(Operator.allMatch(t -> !predicate.test(t)));
+    }
 
     /**
      * Returns a flow with at most a single value: the number of values in this
@@ -524,31 +556,6 @@ public interface Flow<T> extends Serializable {
      */
     public default Flow<Long> count() {
         return reduce((count, x) -> count + 1L, 0L);
-    }
-
-    /**
-     * Returns a flow with the first {@code n} values in this flow. If this flow
-     * terminates prematurely, the new flow terminates as well.
-     * 
-     * @param n
-     *            the number of initial values to pick
-     * @return a flow with the initial values
-     */
-    public default Flow<T> take(long n) {
-        return takeWhile(new Counter(n));
-    }
-
-    /**
-     * Returns a flow with all the values beyond the initial {@code n} values in
-     * this flow. If this flow terminates prematurely, the new flow terminates
-     * as well without producing any values.
-     * 
-     * @param n
-     *            the number of initial values to drop
-     * @return a flow without the initial values
-     */
-    public default Flow<T> drop(long n) {
-        return dropWhile(new Counter(n));
     }
 
     /*
@@ -571,30 +578,5 @@ public interface Flow<T> extends Serializable {
      */
     public default <U> Flow<U> lift(Operator<? super T, ? extends U> op) {
         return createFlow(s -> subscribe(op.apply(s)));
-    }
-
-    /**
-     * A predicate that returns {@code true} for the first {@code n} times it is
-     * invoked, and {@code false} afterwards.
-     */
-    public class Counter implements Predicate<Object>, Serializable {
-        private long count = 0;
-
-        /**
-         * @param n
-         *            the number of times this counter returns {@code true}
-         */
-        public Counter(long n) {
-            count = n;
-        }
-
-        @Override
-        public boolean test(Object ignored) {
-            if (count > 0) {
-                count--;
-                return true;
-            }
-            return false;
-        }
     }
 }

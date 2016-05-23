@@ -5,10 +5,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import org.easymock.EasyMock;
 
-import com.vaadin.server.react.Flow.Subscriber;
 import com.vaadin.server.react.impl.FlowImpl;
 
 public class ColdAsyncFlowTest extends FlowTest {
@@ -17,12 +17,18 @@ public class ColdAsyncFlowTest extends FlowTest {
     private ScheduledFuture<?> future;
 
     @Override
-    protected <T> void verifyFlow(Flow<T> flow, Subscriber<? super T> sub) {
+    protected <T> void verifyFlow(Flow<T> flow,
+            Supplier<Subscriber<? super T>> subSup) {
+
+        Subscriber<? super T> sub = subSup.get();
+
         EasyMock.replay(sub);
         flow.subscribe(sub);
 
         try {
-            future.get(1, TimeUnit.SECONDS);
+            if (future != null) {
+                future.get(1, TimeUnit.SECONDS);
+            }
         } catch (CancellationException e) {
             // expected
         } catch (Error | RuntimeException e) {
@@ -35,6 +41,7 @@ public class ColdAsyncFlowTest extends FlowTest {
         EasyMock.verify(sub);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     protected <T> Flow<T> flow(T... actual) {
         return new FlowImpl<T>(sub -> {
