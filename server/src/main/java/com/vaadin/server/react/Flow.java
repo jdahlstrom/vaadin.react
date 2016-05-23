@@ -64,7 +64,7 @@ import com.vaadin.server.react.impl.Operator;
  * Depending on mutable state may yield unexpected results.
  * 
  * @author johannesd@vaadin.com
- *
+ * 
  * @param <T>
  *            The type of the values in this flow.
  */
@@ -72,16 +72,31 @@ public interface Flow<T> extends Serializable {
 
     /**
      * A subscription token.
-     *
+     * 
      * TODO: Figure out how this should work
      */
-    public interface Subscription extends Serializable {
+    public class Subscription implements Serializable {
+        private volatile boolean subscribed = true;
+
         /**
          * Ends this subscription. After calling this method, the associated
          * subscriber will not receive any more notifications from the
-         * respective flow.
+         * respective flow. If already unsubscribed, does nothing.
          */
-        public void unsubscribe();
+        public void unsubscribe() {
+            subscribed = false;
+        }
+
+        /**
+         * Returns whether this subscription is still active, that is,
+         * {@code true} if {@link #unsubscribe()} has not been called,
+         * {@code false} otherwise.
+         * 
+         * @return the status of this subscription.
+         */
+        public boolean isSubscribed() {
+            return subscribed;
+        }
     }
 
     /**
@@ -92,7 +107,7 @@ public interface Flow<T> extends Serializable {
      *            the value type of the flow
      * @param values
      *            the values to produce
-     * @return a flow produing the values
+     * @return a flow producing the values
      */
     @SafeVarargs
     public static <T> Flow<T> of(T... values) {
@@ -110,11 +125,16 @@ public interface Flow<T> extends Serializable {
      * @return a flow producing the values
      */
     public static <T> Flow<T> from(T[] values) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             for (T t : values) {
-                subscriber.onNext(t);
+                if (!sub.isSubscribed()) {
+                    return;
+                }
+                sub.onNext(t);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -129,11 +149,16 @@ public interface Flow<T> extends Serializable {
      * @return a flow producing the values.
      */
     public static <T> Flow<T> from(Iterable<T> values) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             for (T t : values) {
-                subscriber.onNext(t);
+                if (!sub.isSubscribed()) {
+                    return;
+                }
+                sub.onNext(t);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -156,18 +181,22 @@ public interface Flow<T> extends Serializable {
             boolean done = false;
 
             @Override
-            public void accept(Subscriber<? super T> subscriber) {
+            public void accept(Subscriber<? super T> sub) {
                 try {
                     if (!done) {
                         Iterator<T> i = stream.iterator();
-                        while (i.hasNext()) {
-                            subscriber.onNext(i.next());
+                        while (i.hasNext() && sub.isSubscribed()) {
+                            sub.onNext(i.next());
                         }
                     }
                 } catch (Exception e) {
-                    subscriber.onError(e);
+                    if (sub.isSubscribed()) {
+                        sub.onError(e);
+                    }
                 } finally {
-                    subscriber.onEnd();
+                    if (sub.isSubscribed()) {
+                        sub.onEnd();
+                    }
                     done = true;
                 }
             }
@@ -186,8 +215,10 @@ public interface Flow<T> extends Serializable {
      */
     public static <T> Flow<T> from(CompletableFuture<T> future) {
         return new FlowImpl<>(sub -> {
-
             future.whenComplete((value, e) -> {
+                if (!sub.isSubscribed()) {
+                    return;
+                }
                 if (value != null) {
                     sub.onNext(value);
                 } else if (e instanceof Exception) {
@@ -197,7 +228,9 @@ public interface Flow<T> extends Serializable {
                 } else {
                     throw new Error(e);
                 }
-                sub.onEnd();
+                if (sub.isSubscribed()) {
+                    sub.onEnd();
+                }
             });
         });
     }
@@ -215,22 +248,27 @@ public interface Flow<T> extends Serializable {
      * @return a flow yielding values from the supplier
      */
     public static <T> Flow<T> generate(Supplier<Optional<T>> supplier) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             Optional<T> opt = Optional.empty();
             Exception ex = null;
             do {
+                if (!sub.isSubscribed()) {
+                    return;
+                }
                 try {
                     opt = supplier.get();
                 } catch (Exception e) {
                     ex = e;
                 }
-                opt.ifPresent(subscriber::onNext);
+                opt.ifPresent(sub::onNext);
             } while (ex == null && opt.isPresent());
 
-            if (ex != null) {
-                subscriber.onError(ex);
+            if (ex != null && sub.isSubscribed()) {
+                sub.onError(ex);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -248,12 +286,15 @@ public interface Flow<T> extends Serializable {
      */
     public static <T> Flow<T> iterate(T initial,
             Function<T, Optional<T>> generator) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             Optional<T> opt = Optional.of(initial);
             Exception ex = null;
             do {
+                if (!sub.isSubscribed()) {
+                    return;
+                }
                 T next = opt.get(); // provably safe
-                subscriber.onNext(next);
+                sub.onNext(next);
                 try {
                     opt = generator.apply(next);
                 } catch (Exception e) {
@@ -261,10 +302,12 @@ public interface Flow<T> extends Serializable {
                 }
             } while (ex == null && opt.isPresent());
 
-            if (ex != null) {
-                subscriber.onError(ex);
+            if (ex != null && sub.isSubscribed()) {
+                sub.onError(ex);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 
@@ -283,7 +326,8 @@ public interface Flow<T> extends Serializable {
     /**
      * Subscribes the given {@code Subscriber} to this flow. Its {@code onNext},
      * {@code onError}, and {@code onEnd} methods are invoked whenever this flow
-     * produces a value, throws an error, or completes, respectively.
+     * produces a value, throws an error, or completes, respectively. The
+     * subscriber cannot be already subscribed.
      * 
      * @param subscriber
      *            the subscriber to subscribe

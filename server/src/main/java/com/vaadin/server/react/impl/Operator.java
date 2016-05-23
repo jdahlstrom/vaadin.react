@@ -32,7 +32,7 @@ import com.vaadin.server.react.Subscriber;
  * transforming the values or more.
  * 
  * @author johannesd@vaadin.com
- *
+ * 
  * @param <T>
  *            the value type of the output subscriber
  * @param <U>
@@ -58,7 +58,7 @@ public interface Operator<T, U> extends
 
         return to -> new Sub<T, U>(to) {
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 to.onNext(mapper.apply(value));
             }
         };
@@ -78,7 +78,7 @@ public interface Operator<T, U> extends
 
         return to -> new Sub<T, T>(to) {
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 if (predicate.test(value)) {
                     to.onNext(value);
                 }
@@ -107,14 +107,16 @@ public interface Operator<T, U> extends
             private U accum = initial;
 
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 accum = reducer.apply(accum, value);
             }
 
             @Override
-            public void onEnd() {
+            protected void doEnd() {
                 to.onNext(accum);
-                super.onEnd();
+                if (to.isSubscribed()) {
+                    to.onEnd();
+                }
             }
         };
     }
@@ -135,7 +137,7 @@ public interface Operator<T, U> extends
             Function<? super T, Flow<? extends U>> mapper) {
         return to -> new Sub<T, U>(to) {
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 mapper.apply(value).subscribe(//
                         to::onNext, //
                         to::onError, //
@@ -160,16 +162,17 @@ public interface Operator<T, U> extends
             private long i = 0;
 
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 if (i < n) {
                     to.onNext(value);
-                } else if(i == n) {
+                } else if (i == n) {
                     to.onEnd();
                 }
                 i++;
             }
 
-            public void onEnd() {
+            @Override
+            protected void doEnd() {
                 if (i < n) {
                     to.onEnd();
                 }
@@ -193,13 +196,12 @@ public interface Operator<T, U> extends
             private long i = 0;
 
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 if (i < n) {
                     i++;
                 } else {
                     to.onNext(value);
                 }
-
             }
         };
     }
@@ -219,19 +221,20 @@ public interface Operator<T, U> extends
             private boolean taking = true;
 
             @Override
-            public void onNext(T value) {
-                if (!taking) {
-                    return;
-                } else if (predicate.test(value)) {
+            protected void doNext(T value) {
+                assert taking;
+
+                if (predicate.test(value)) {
                     to.onNext(value);
                 } else {
                     to.onEnd();
                     taking = false;
+                    unsubscribe();
                 }
             }
 
             @Override
-            public void onEnd() {
+            protected void doEnd() {
                 if (taking) {
                     to.onEnd();
                 }
@@ -254,7 +257,7 @@ public interface Operator<T, U> extends
             private boolean dropping = true;
 
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 if (dropping) {
                     dropping = predicate.test(value);
                 }
@@ -284,19 +287,24 @@ public interface Operator<T, U> extends
             private boolean done = false;
 
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 if (!done && predicate.test(value)) {
                     to.onNext(true);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                     done = true;
+                    unsubscribe();
                 }
             }
 
             @Override
-            public void onEnd() {
+            protected void doEnd() {
                 if (!done) {
                     to.onNext(false);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                 }
             };
         };
@@ -321,19 +329,24 @@ public interface Operator<T, U> extends
             private boolean done = false;
 
             @Override
-            public void onNext(T value) {
+            protected void doNext(T value) {
                 if (!done && !predicate.test(value)) {
                     to.onNext(false);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                     done = true;
+                    unsubscribe();
                 }
             }
 
             @Override
-            public void onEnd() {
+            protected void doEnd() {
                 if (!done) {
                     to.onNext(true);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                 }
             };
         };
@@ -346,13 +359,13 @@ public interface Operator<T, U> extends
  * TODO consider moving elsewhere and renaming.
  * 
  * @author johannesd@vaadin.com
- *
+ * 
  * @param <T>
  *            the value type of this subscriber
  * @param <U>
  *            the value type of the wrapped subscriber
  */
-abstract class Sub<T, U> implements Subscriber<T> {
+abstract class Sub<T, U> extends SubscriberImpl<T> {
     private Subscriber<? super U> wrapped;
 
     /**
@@ -366,12 +379,60 @@ abstract class Sub<T, U> implements Subscriber<T> {
     }
 
     @Override
+    public void onNext(T value) {
+        assert isSubscribed();
+        if (wrapped.isSubscribed()) {
+            doNext(value);
+        } else {
+            unsubscribe();
+        }
+    }
+
+    @Override
     public void onError(Exception e) {
-        wrapped.onError(e);
+        assert isSubscribed();
+        if (wrapped.isSubscribed()) {
+            doError(e);
+        } else {
+            unsubscribe();
+        }
     }
 
     @Override
     public void onEnd() {
+        assert isSubscribed();
+        if (wrapped.isSubscribed()) {
+            doEnd();
+        } else {
+            unsubscribe();
+        }
+    }
+
+    /**
+     * Invoked by {@link #onNext(Object) onNext} but only if the wrapped
+     * subscriber is still subscribed.
+     * 
+     * @param value
+     *            the next value in the flow
+     */
+    protected abstract void doNext(T value);
+
+    /**
+     * Invoked by {@link #onError(Exception) onError} but only if the wrapped
+     * subscriber is still subscribed.
+     * 
+     * @param e
+     *            the error
+     */
+    protected void doError(Exception e) {
+        wrapped.onError(e);
+    }
+
+    /**
+     * Invoked by {@link #onEnd() onEnd} but only if the wrapped subscriber is
+     * still subscribed.
+     */
+    protected void doEnd() {
         wrapped.onEnd();
     }
 }

@@ -19,6 +19,9 @@ package com.vaadin.server.react;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
+import com.vaadin.server.react.Flow.Subscription;
+import com.vaadin.server.react.impl.SubscriberImpl;
+
 /**
  * A subscriber to a flow.
  *
@@ -38,7 +41,7 @@ public interface Subscriber<T> extends Serializable {
      * @return a subscriber delegating to the given consumer
      */
     public static <T> Subscriber<T> from(Consumer<? super T> onNext) {
-        return new Subscriber<T>() {
+        return new SubscriberImpl<T>() {
 
             @Override
             public void onNext(T value) {
@@ -72,7 +75,7 @@ public interface Subscriber<T> extends Serializable {
      */
     public static <T> Subscriber<T> from(Consumer<? super T> onNext,
             Consumer<? super Exception> onError, Runnable onEnd) {
-        return new Subscriber<T>() {
+        return new SubscriberImpl<T>() {
 
             @Override
             public void onNext(T value) {
@@ -91,6 +94,30 @@ public interface Subscriber<T> extends Serializable {
             }
         };
     }
+
+    /**
+     * Invoked when subscribing to a flow. Storing the given subscription token
+     * allows for later unsubscribing from the flow.
+     * 
+     * @param sub
+     *            the subscription token
+     */
+    public void onSubscribe(Subscription sub);
+
+    /**
+     * Unsubscribes this subscriber if currently subscribed to a flow, otherwise
+     * does nothing.
+     * 
+     * @see Subscription#unsubscribe()
+     */
+    public void unsubscribe();
+
+    /**
+     * @see Subscription#isSubscribed()
+     * 
+     * @return whether this subscriber is subscribed to a flow
+     */
+    public boolean isSubscribed();
 
     /**
      * Invoked for each value in the subscribed flow.
