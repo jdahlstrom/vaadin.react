@@ -290,7 +290,9 @@ public interface Operator<T, U> extends
             protected void doNext(T value) {
                 if (!done && predicate.test(value)) {
                     to.onNext(true);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                     done = true;
                     unsubscribe();
                 }
@@ -300,7 +302,9 @@ public interface Operator<T, U> extends
             protected void doEnd() {
                 if (!done) {
                     to.onNext(false);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                 }
             };
         };
@@ -328,7 +332,9 @@ public interface Operator<T, U> extends
             protected void doNext(T value) {
                 if (!done && !predicate.test(value)) {
                     to.onNext(false);
-                    to.onEnd();
+                    if (to.isSubscribed()) {
+                        to.onEnd();
+                    }
                     done = true;
                     unsubscribe();
                 }

@@ -181,18 +181,22 @@ public interface Flow<T> extends Serializable {
             boolean done = false;
 
             @Override
-            public void accept(Subscriber<? super T> subscriber) {
+            public void accept(Subscriber<? super T> sub) {
                 try {
                     if (!done) {
                         Iterator<T> i = stream.iterator();
-                        while (i.hasNext()) {
-                            subscriber.onNext(i.next());
+                        while (i.hasNext() && sub.isSubscribed()) {
+                            sub.onNext(i.next());
                         }
                     }
                 } catch (Exception e) {
-                    subscriber.onError(e);
+                    if (sub.isSubscribed()) {
+                        sub.onError(e);
+                    }
                 } finally {
-                    subscriber.onEnd();
+                    if (sub.isSubscribed()) {
+                        sub.onEnd();
+                    }
                     done = true;
                 }
             }
@@ -211,8 +215,10 @@ public interface Flow<T> extends Serializable {
      */
     public static <T> Flow<T> from(CompletableFuture<T> future) {
         return new FlowImpl<>(sub -> {
-
             future.whenComplete((value, e) -> {
+                if (!sub.isSubscribed()) {
+                    return;
+                }
                 if (value != null) {
                     sub.onNext(value);
                 } else if (e instanceof Exception) {
@@ -222,7 +228,9 @@ public interface Flow<T> extends Serializable {
                 } else {
                     throw new Error(e);
                 }
-                sub.onEnd();
+                if (sub.isSubscribed()) {
+                    sub.onEnd();
+                }
             });
         });
     }
@@ -279,12 +287,15 @@ public interface Flow<T> extends Serializable {
      */
     public static <T> Flow<T> iterate(T initial,
             Function<T, Optional<T>> generator) {
-        return new FlowImpl<>(subscriber -> {
+        return new FlowImpl<>(sub -> {
             Optional<T> opt = Optional.of(initial);
             Exception ex = null;
             do {
+                if (!sub.isSubscribed()) {
+                    return;
+                }
                 T next = opt.get(); // provably safe
-                subscriber.onNext(next);
+                sub.onNext(next);
                 try {
                     opt = generator.apply(next);
                 } catch (Exception e) {
@@ -292,10 +303,12 @@ public interface Flow<T> extends Serializable {
                 }
             } while (ex == null && opt.isPresent());
 
-            if (ex != null) {
-                subscriber.onError(ex);
+            if (ex != null && sub.isSubscribed()) {
+                sub.onError(ex);
             }
-            subscriber.onEnd();
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
         });
     }
 

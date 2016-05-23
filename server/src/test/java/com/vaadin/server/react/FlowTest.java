@@ -26,6 +26,7 @@ public class FlowTest {
     public void testSubscriber() {
         verifyFlow(flow(), expect());
         verifyFlow(flow(1, 2, 3, 4), expect(1, 2, 3, 4));
+        verifyFlow(flow(1, 2, 3), expectAndUnsubscribe(1));
     }
 
     @Test
@@ -43,6 +44,12 @@ public class FlowTest {
         verifyFlow(flow, expect(1, 2, 3).get());
         // Stream can only be consumed once
         verifyFlow(flow, expect().get());
+
+        flow = Flow
+                .from(Arrays.stream(new int[] { 1, 2, 3 }));
+
+        verifyFlow(flow, expectAndUnsubscribe(1).get());
+        verifyFlow(flow, expectAndUnsubscribe().get());
     }
 
     @Test
@@ -51,6 +58,7 @@ public class FlowTest {
         Flow<Integer> flow = Flow.from(future);
         future.complete(42);
         verifyFlow(flow, expect(42));
+        verifyFlow(flow, expectAndUnsubscribe(42));
 
         future = new CompletableFuture<>();
         flow = Flow.from(future);
@@ -69,6 +77,9 @@ public class FlowTest {
 
         verifyFlow(flow, expect(0, 1, 2, 3, 4).get());
         verifyFlow(flow, expect().get());
+
+        flow = Flow.generate(() -> Optional.of(42));
+        verifyFlow(flow, expectAndUnsubscribe(42, 42, 42).get());
     }
 
     @Test
@@ -78,40 +89,57 @@ public class FlowTest {
         });
 
         verifyFlow(flow, expect(1, 2, 4, 8));
+
+        verifyFlow(flow, expectAndUnsubscribe(1, 2));
     }
 
     @Test
     public void testMap() {
         verifyFlow(flow().map(o -> "" + o), expect());
+
         verifyFlow(flow(1, 2, 3, 4).map(i -> i * i), expect(1, 4, 9, 16));
         verifyFlow(flow(1, 2, 3, 4).map(i -> "" + i),
                 expect("1", "2", "3", "4"));
+
+        verifyFlow(flow(1, 2, 3).map(i -> i + 2), expectAndUnsubscribe(3));
     }
 
     @Test
     public void testFilter() {
         verifyFlow(flow().filter(o -> true), expect());
+
         verifyFlow(flow(1, 2, 3, 4, 5, 6).filter(i -> i % 2 == 0),
                 expect(2, 4, 6));
+
+        verifyFlow(flow(1, 2, 3).filter(i -> i < 3), expectAndUnsubscribe(1));
     }
 
     @Test
     public void testReduce() {
         verifyFlow(flow().reduce((a, b) -> "" + a + b, ""), expect(""));
+
         verifyFlow(flow(1, 2, 3, 4).reduce((i, j) -> i + j, 0), expect(10));
+
+        verifyFlow(flow(1, 2, 3).reduce((i, j) -> i + j, 0),
+                expectAndUnsubscribe(6));
     }
 
     @Test
     public void testFlatmap() {
         verifyFlow(flow().flatMap(i -> Flow.of('a', 'b')), expect());
+
         verifyFlow(flow(1, 2, 3, 4).flatMap(i -> Flow.of(i, 10 * i)),
                 expect(1, 10, 2, 20, 3, 30, 4, 40));
+
+        verifyFlow(flow(1, 2, 3).flatMap(i -> Flow.of(i + 2)),
+                expectAndUnsubscribe(3));
     }
 
     @Test
     public void testCount() {
         verifyFlow(flow().count(), expect(0L));
         verifyFlow(flow(2, 4, 6).count(), expect(3L));
+        verifyFlow(flow(1, 2).count(), expectAndUnsubscribe(2L));
     }
 
     @Test
@@ -124,6 +152,9 @@ public class FlowTest {
 
         verifyFlow(flow(1, 2, 3).anyMatch(x -> x % 2 == 0), expect(true));
         verifyFlow(flow(1, 2, 3).anyMatch(x -> x < 0), expect(false));
+
+        verifyFlow(flow(1, 2, 3).anyMatch(x -> x < 2),
+                expectAndUnsubscribe(true));
     }
 
     @Test
@@ -136,6 +167,9 @@ public class FlowTest {
 
         verifyFlow(flow(1, 2, 3).allMatch(x -> x % 2 == 0), expect(false));
         verifyFlow(flow(1, 2, 3).allMatch(x -> x < 4), expect(true));
+
+        verifyFlow(flow(1, 2, 3).allMatch(x -> x < 0),
+                expectAndUnsubscribe(false));
     }
 
     @Test
@@ -148,6 +182,9 @@ public class FlowTest {
 
         verifyFlow(flow(1, 2, 3).noneMatch(x -> x % 2 == 0), expect(false));
         verifyFlow(flow(1, 2, 3).noneMatch(x -> x < 0), expect(true));
+
+        verifyFlow(flow(1, 2, 3).noneMatch(x -> x < 2),
+                expectAndUnsubscribe(false));
     }
 
     @Test
@@ -159,6 +196,9 @@ public class FlowTest {
         verifyFlow(flow(1, 2, 3).takeWhile(x -> false), expect());
 
         verifyFlow(flow(1, 2, 3).takeWhile(x -> x % 2 != 0), expect(1));
+
+        verifyFlow(flow(1, 2, 3).takeWhile(x -> x < 3),
+                expectAndUnsubscribe(1));
     }
 
     @Test
@@ -170,22 +210,31 @@ public class FlowTest {
         verifyFlow(flow(1, 2, 3).skipWhile(x -> false), expect(1, 2, 3));
 
         verifyFlow(flow(1, 2, 3).skipWhile(x -> x % 2 != 0), expect(2, 3));
+
+        verifyFlow(flow(1, 2, 3).skipWhile(x -> x < 2),
+                expectAndUnsubscribe(2));
     }
 
     @Test
     public void testTake() {
         verifyFlow(flow().take(3), expect());
+
         verifyFlow(flow(1, 2, 3, 4).take(0), expect());
         verifyFlow(flow(1, 2, 3, 4).take(3), expect(1, 2, 3));
         verifyFlow(flow(1, 2, 3, 4).take(5), expect(1, 2, 3, 4));
+
+        verifyFlow(flow(1, 2, 3).take(2), expectAndUnsubscribe(1));
     }
 
     @Test
     public void testSkip() {
         verifyFlow(flow().skip(3), expect());
+
         verifyFlow(flow(1, 2, 3, 4).skip(0), expect(1, 2, 3, 4));
         verifyFlow(flow(1, 2, 3, 4).skip(3), expect(4));
         verifyFlow(flow(1, 2, 3, 4).skip(5), expect());
+
+        verifyFlow(flow(1, 2, 3).skip(1), expectAndUnsubscribe(2));
     }
 
     protected <T> void verifyFlow(Flow<T> flow,
@@ -211,11 +260,7 @@ public class FlowTest {
     @SuppressWarnings("unchecked")
     protected <T> Supplier<Subscriber<? super T>> expect(T... expected) {
         return () -> {
-            Subscriber<T> s = createStrictMock(Subscriber.class);
-            EasyMock.expect(s.isSubscribed()).andReturn(false).anyTimes();
-            s.onSubscribe(anyObject(Subscription.class));
-
-            EasyMock.expect(s.isSubscribed()).andStubReturn(true);
+            Subscriber<T> s = subscriber();
             for (T t : expected) {
                 s.onNext(t);
             }
@@ -225,7 +270,32 @@ public class FlowTest {
     }
 
     @SuppressWarnings("unchecked")
+    protected <T> Supplier<Subscriber<? super T>> expectAndUnsubscribe(
+            T... expected) {
+        return () -> {
+            Subscriber<T> s = subscriber();
+            for (T t : expected) {
+                s.onNext(t);
+            }
+            // Unsubscribe, verify no subsequent calls are made
+            EasyMock.expect(s.isSubscribed()).andReturn(false).atLeastOnce();
+            return s;
+        };
+    }
 
+    /**
+     * @return a mock Subscriber
+     */
+    protected <T> Subscriber<T> subscriber() {
+        @SuppressWarnings("unchecked")
+        Subscriber<T> s = createStrictMock(Subscriber.class);
+        EasyMock.expect(s.isSubscribed()).andReturn(false).anyTimes();
+        s.onSubscribe(anyObject(Subscription.class));
+        EasyMock.expect(s.isSubscribed()).andStubReturn(true);
+        return s;
+    }
+
+    @SuppressWarnings("unchecked")
     protected <T> Supplier<Subscriber<? super T>> expectError(Exception e) {
         return () -> {
             Subscriber<T> s = createStrictMock(Subscriber.class);
