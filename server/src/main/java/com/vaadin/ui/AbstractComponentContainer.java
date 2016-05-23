@@ -65,7 +65,8 @@ public abstract class AbstractComponentContainer extends AbstractComponent
         final LinkedList<Component> l = new LinkedList<Component>();
 
         // Adds all components
-        for (final Iterator<Component> i = getComponentIterator(); i.hasNext();) {
+        for (final Iterator<Component> i = getComponentIterator(); i
+                .hasNext();) {
             l.add(i.next());
         }
 
@@ -88,7 +89,8 @@ public abstract class AbstractComponentContainer extends AbstractComponent
             components.add(i.next());
         }
 
-        for (final Iterator<Component> i = components.iterator(); i.hasNext();) {
+        for (final Iterator<Component> i = components.iterator(); i
+                .hasNext();) {
             final Component c = i.next();
             source.removeComponent(c);
             addComponent(c);
@@ -102,31 +104,12 @@ public abstract class AbstractComponentContainer extends AbstractComponent
                 ComponentAttachListener.attachMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addComponentAttachListener(com.vaadin.ui.ComponentContainer.ComponentAttachListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(ComponentAttachListener listener) {
-        addComponentAttachListener(listener);
-    }
-
     /* documented in interface */
     @Override
-    public void removeComponentAttachListener(ComponentAttachListener listener) {
+    public void removeComponentAttachListener(
+            ComponentAttachListener listener) {
         removeListener(ComponentAttachEvent.class, listener,
                 ComponentAttachListener.attachMethod);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addComponentDetachListener(com.vaadin.ui.ComponentContainer.ComponentDetachListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(ComponentDetachListener listener) {
-        addComponentDetachListener(listener);
     }
 
     /* documented in interface */
@@ -136,31 +119,12 @@ public abstract class AbstractComponentContainer extends AbstractComponent
                 ComponentDetachListener.detachMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeComponentAttachListener(com.vaadin.ui.ComponentContainer.ComponentAttachListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(ComponentAttachListener listener) {
-        removeComponentAttachListener(listener);
-    }
-
     /* documented in interface */
     @Override
-    public void removeComponentDetachListener(ComponentDetachListener listener) {
+    public void removeComponentDetachListener(
+            ComponentDetachListener listener) {
         removeListener(ComponentDetachEvent.class, listener,
                 ComponentDetachListener.detachMethod);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeComponentDetachListener(com.vaadin.ui.ComponentContainer.ComponentDetachListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(ComponentDetachListener listener) {
-        removeComponentDetachListener(listener);
     }
 
     /**
@@ -241,8 +205,9 @@ public abstract class AbstractComponentContainer extends AbstractComponent
             dirtyChildren = getInvalidSizedChildren(false);
         } else if ((width == SIZE_UNDEFINED && getWidth() != SIZE_UNDEFINED)
                 || (unit == Unit.PERCENTAGE
-                        && getWidthUnits() != Unit.PERCENTAGE && !ComponentSizeValidator
-                            .parentCanDefineWidth(this))) {
+                        && getWidthUnits() != Unit.PERCENTAGE
+                        && !ComponentSizeValidator
+                                .parentCanDefineWidth(this))) {
             /*
              * relative width children may get to invalid state if width becomes
              * invalid. Width may also become invalid if units become percentage
@@ -262,9 +227,11 @@ public abstract class AbstractComponentContainer extends AbstractComponent
         if (childrenMayBecomeUndefined) {
             Collection<Component> previouslyInvalidComponents = invalidChildren;
             invalidChildren = getInvalidSizedChildren(vertical);
-            if (previouslyInvalidComponents != null && invalidChildren != null) {
-                for (Iterator<Component> iterator = invalidChildren.iterator(); iterator
-                        .hasNext();) {
+            if (previouslyInvalidComponents != null
+                    && invalidChildren != null) {
+                for (Iterator<Component> iterator = invalidChildren
+                        .iterator(); iterator
+                                .hasNext();) {
                     Component component = iterator.next();
                     if (previouslyInvalidComponents.contains(component)) {
                         // still invalid don't repaint
@@ -273,7 +240,8 @@ public abstract class AbstractComponentContainer extends AbstractComponent
                 }
             }
         } else if (invalidChildren != null) {
-            Collection<Component> stillInvalidChildren = getInvalidSizedChildren(vertical);
+            Collection<Component> stillInvalidChildren = getInvalidSizedChildren(
+                    vertical);
             if (stillInvalidChildren != null) {
                 for (Component component : stillInvalidChildren) {
                     // didn't become valid
@@ -286,12 +254,13 @@ public abstract class AbstractComponentContainer extends AbstractComponent
         }
     }
 
-    private Collection<Component> getInvalidSizedChildren(final boolean vertical) {
+    private Collection<Component> getInvalidSizedChildren(
+            final boolean vertical) {
         HashSet<Component> components = null;
         for (Component component : this) {
             boolean valid = vertical ? ComponentSizeValidator
                     .checkHeights(component) : ComponentSizeValidator
-                    .checkWidths(component);
+                            .checkWidths(component);
             if (!valid) {
                 if (components == null) {
                     components = new HashSet<Component>();
@@ -321,8 +290,9 @@ public abstract class AbstractComponentContainer extends AbstractComponent
             dirtyChildren = getInvalidSizedChildren(true);
         } else if ((height == SIZE_UNDEFINED && getHeight() != SIZE_UNDEFINED)
                 || (unit == Unit.PERCENTAGE
-                        && getHeightUnits() != Unit.PERCENTAGE && !ComponentSizeValidator
-                            .parentCanDefineHeight(this))) {
+                        && getHeightUnits() != Unit.PERCENTAGE
+                        && !ComponentSizeValidator
+                                .parentCanDefineHeight(this))) {
             /*
              * relative height children may get to invalid state if height
              * becomes invalid. Height may also become invalid if units become
