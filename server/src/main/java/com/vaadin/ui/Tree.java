@@ -1084,15 +1084,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addExpandListener(ExpandListener)}
-     **/
-    @Deprecated
-    public void addListener(ExpandListener listener) {
-        addExpandListener(listener);
-    }
-
-    /**
      * Removes the expand listener.
      * 
      * @param listener
@@ -1101,15 +1092,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     public void removeExpandListener(ExpandListener listener) {
         removeListener(ExpandEvent.class, listener,
                 ExpandListener.EXPAND_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeExpandListener(ExpandListener)}
-     **/
-    @Deprecated
-    public void removeListener(ExpandListener listener) {
-        removeExpandListener(listener);
     }
 
     /**
@@ -1188,15 +1170,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addCollapseListener(CollapseListener)}
-     **/
-    @Deprecated
-    public void addListener(CollapseListener listener) {
-        addCollapseListener(listener);
-    }
-
-    /**
      * Removes the collapse listener.
      * 
      * @param listener
@@ -1205,15 +1178,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     public void removeCollapseListener(CollapseListener listener) {
         removeListener(CollapseEvent.class, listener,
                 CollapseListener.COLLAPSE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeCollapseListener(CollapseListener)}
-     **/
-    @Deprecated
-    public void removeListener(CollapseListener listener) {
-        removeCollapseListener(listener);
     }
 
     /**

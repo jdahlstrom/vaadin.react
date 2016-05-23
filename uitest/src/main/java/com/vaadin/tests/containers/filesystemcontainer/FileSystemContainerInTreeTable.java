@@ -49,7 +49,7 @@ public class FileSystemContainerInTreeTable extends TestBase {
             treeTable.setItemIconPropertyId(FilesystemContainer.PROPERTY_ICON);
             treeTable.setVisibleColumns(new String[] { "Name" });
             treeTable.setColumnWidth("Name", 400);
-            treeTable.addListener(new ExpandListener() {
+            treeTable.addExpandListener(new ExpandListener() {
 
                 @Override
                 public void nodeExpand(ExpandEvent event) {
@@ -57,7 +57,7 @@ public class FileSystemContainerInTreeTable extends TestBase {
 
                 }
             });
-            treeTable.addListener(new CollapseListener() {
+            treeTable.addCollapseListener(new CollapseListener() {
 
                 @Override
                 public void nodeCollapse(CollapseEvent event) {

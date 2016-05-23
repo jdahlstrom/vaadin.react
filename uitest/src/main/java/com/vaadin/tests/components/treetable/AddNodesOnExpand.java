@@ -17,7 +17,7 @@ public class AddNodesOnExpand extends TestBase {
         treetable.setHeight(null);
         treetable.setPageLength(0);
         treetable.addContainerProperty("foo", String.class, "");
-        treetable.addListener(new Tree.ExpandListener() {
+        treetable.addExpandListener(new Tree.ExpandListener() {
             @Override
             public void nodeExpand(ExpandEvent event) {
                 Object openedItemId = event.getItemId();
@@ -31,7 +31,7 @@ public class AddNodesOnExpand extends TestBase {
                 }
             }
         });
-        treetable.addListener(new Tree.CollapseListener() {
+        treetable.addCollapseListener(new Tree.CollapseListener() {
             @Override
             public void nodeCollapse(CollapseEvent event) {
                 /* Uncomment this to "fix" the TreeTable */

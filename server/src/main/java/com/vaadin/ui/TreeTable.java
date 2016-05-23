@@ -408,7 +408,8 @@ public class TreeTable extends Table implements Hierarchical {
             int indexInRowbuffer) throws PaintException {
         // always paint if present (in parent only if row headers visible)
         if (getRowHeaderMode() == ROW_HEADER_MODE_HIDDEN) {
-            Resource itemIcon = getItemIcon(cells[CELL_ITEMID][indexInRowbuffer]);
+            Resource itemIcon = getItemIcon(
+                    cells[CELL_ITEMID][indexInRowbuffer]);
             if (itemIcon != null) {
                 target.addAttribute("icon", itemIcon);
             }
@@ -531,7 +532,8 @@ public class TreeTable extends Table implements Hierarchical {
 
     @Override
     protected int getAddedRowCount() {
-        return countSubNodesRecursively(getContainerDataSource(), toggledItemId);
+        return countSubNodesRecursively(getContainerDataSource(),
+                toggledItemId);
     }
 
     private int countSubNodesRecursively(Hierarchical hc, Object itemId) {
@@ -567,7 +569,8 @@ public class TreeTable extends Table implements Hierarchical {
         return !getContainerStrategy().isNodeOpen(toggledItemId);
     }
 
-    private void toggleChildVisibility(Object itemId, boolean forceFullRefresh) {
+    private void toggleChildVisibility(Object itemId,
+            boolean forceFullRefresh) {
         getContainerStrategy().toggleChildVisibility(itemId);
         // ensure that page still has first item in page, DON'T clear the
         // caches.
@@ -604,7 +607,8 @@ public class TreeTable extends Table implements Hierarchical {
 
         // FIXME: This disables partial updates until TreeTable is fixed so it
         // does not change component hierarchy during paint
-        containerSupportsPartialUpdates = (newDataSource instanceof ItemSetChangeNotifier) && false;
+        containerSupportsPartialUpdates = (newDataSource instanceof ItemSetChangeNotifier)
+                && false;
 
         if (newDataSource != null && !(newDataSource instanceof Hierarchical)) {
             newDataSource = new ContainerHierarchicalWrapper(newDataSource);
@@ -776,15 +780,6 @@ public class TreeTable extends Table implements Hierarchical {
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addExpandListener(ExpandListener)}
-     **/
-    @Deprecated
-    public void addListener(ExpandListener listener) {
-        addExpandListener(listener);
-    }
-
-    /**
      * Removes an expand listener.
      * 
      * @param listener
@@ -793,15 +788,6 @@ public class TreeTable extends Table implements Hierarchical {
     public void removeExpandListener(ExpandListener listener) {
         removeListener(ExpandEvent.class, listener,
                 ExpandListener.EXPAND_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeExpandListener(ExpandListener)}
-     **/
-    @Deprecated
-    public void removeListener(ExpandListener listener) {
-        removeExpandListener(listener);
     }
 
     /**
@@ -826,15 +812,6 @@ public class TreeTable extends Table implements Hierarchical {
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addCollapseListener(CollapseListener)}
-     **/
-    @Deprecated
-    public void addListener(CollapseListener listener) {
-        addCollapseListener(listener);
-    }
-
-    /**
      * Removes a collapse listener.
      * 
      * @param listener
@@ -843,15 +820,6 @@ public class TreeTable extends Table implements Hierarchical {
     public void removeCollapseListener(CollapseListener listener) {
         removeListener(CollapseEvent.class, listener,
                 CollapseListener.COLLAPSE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeCollapseListener(CollapseListener)}
-     **/
-    @Deprecated
-    public void removeListener(CollapseListener listener) {
-        removeCollapseListener(listener);
     }
 
     /**

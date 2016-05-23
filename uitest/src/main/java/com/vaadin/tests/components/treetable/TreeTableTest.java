@@ -274,9 +274,9 @@ public class TreeTableTest extends Tables<TreeTable> implements
         @Override
         public void execute(TreeTable c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ExpandListener) TreeTableTest.this);
+                c.addExpandListener(TreeTableTest.this);
             } else {
-                c.removeListener((ExpandListener) TreeTableTest.this);
+                c.removeExpandListener(TreeTableTest.this);
             }
         }
     };
@@ -285,9 +285,9 @@ public class TreeTableTest extends Tables<TreeTable> implements
         @Override
         public void execute(TreeTable c, Boolean value, Object data) {
             if (value) {
-                c.addListener((CollapseListener) TreeTableTest.this);
+                c.addCollapseListener(TreeTableTest.this);
             } else {
-                c.removeListener((CollapseListener) TreeTableTest.this);
+                c.removeCollapseListener(TreeTableTest.this);
             }
         }
     };

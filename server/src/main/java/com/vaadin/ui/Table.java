@@ -5487,15 +5487,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addHeaderClickListener(HeaderClickListener)}
-     **/
-    @Deprecated
-    public void addListener(HeaderClickListener listener) {
-        addHeaderClickListener(listener);
-    }
-
-    /**
      * Removes a header click listener
      * 
      * @param listener
@@ -5504,15 +5495,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeHeaderClickListener(HeaderClickListener listener) {
         removeListener(TableConstants.HEADER_CLICK_EVENT_ID,
                 HeaderClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeHeaderClickListener(HeaderClickListener)}
-     **/
-    @Deprecated
-    public void removeListener(HeaderClickListener listener) {
-        removeHeaderClickListener(listener);
     }
 
     /**
@@ -5533,15 +5515,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFooterClickListener(FooterClickListener)}
-     **/
-    @Deprecated
-    public void addListener(FooterClickListener listener) {
-        addFooterClickListener(listener);
-    }
-
-    /**
      * Removes a footer click listener
      * 
      * @param listener
@@ -5550,15 +5523,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeFooterClickListener(FooterClickListener listener) {
         removeListener(TableConstants.FOOTER_CLICK_EVENT_ID,
                 FooterClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFooterClickListener(FooterClickListener)}
-     **/
-    @Deprecated
-    public void removeListener(FooterClickListener listener) {
-        removeFooterClickListener(listener);
     }
 
     /**
@@ -5719,15 +5683,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addColumnResizeListener(ColumnResizeListener)}
-     **/
-    @Deprecated
-    public void addListener(ColumnResizeListener listener) {
-        addColumnResizeListener(listener);
-    }
-
-    /**
      * Removes a column resize listener from the Table.
      * 
      * @param listener
@@ -5736,15 +5691,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeColumnResizeListener(ColumnResizeListener listener) {
         removeListener(TableConstants.COLUMN_RESIZE_EVENT_ID,
                 ColumnResizeEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeColumnResizeListener(ColumnResizeListener)}
-     **/
-    @Deprecated
-    public void removeListener(ColumnResizeListener listener) {
-        removeColumnResizeListener(listener);
     }
 
     /**
@@ -5853,15 +5799,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addColumnReorderListener(ColumnReorderListener)}
-     **/
-    @Deprecated
-    public void addListener(ColumnReorderListener listener) {
-        addColumnReorderListener(listener);
-    }
-
-    /**
      * Removes a column reorder listener from the Table.
      * 
      * @param listener
@@ -5870,15 +5807,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeColumnReorderListener(ColumnReorderListener listener) {
         removeListener(TableConstants.COLUMN_REORDER_EVENT_ID,
                 ColumnReorderEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeColumnReorderListener(ColumnReorderListener)}
-     **/
-    @Deprecated
-    public void removeListener(ColumnReorderListener listener) {
-        removeColumnReorderListener(listener);
     }
 
     /**

@@ -28,7 +28,7 @@ public class ListenersTest implements ExpandListener, CollapseListener {
     @Test
     public void testExpandListener() {
         Tree tree = createTree(10, 20, false);
-        tree.addListener((ExpandListener) this);
+        tree.addExpandListener(this);
         List<Object> rootIds = new ArrayList<Object>(tree.rootItemIds());
 
         assertEquals(10, rootIds.size());
@@ -44,7 +44,8 @@ public class ListenersTest implements ExpandListener, CollapseListener {
         expandCalled = 0;
         tree.expandItemsRecursively(rootIds.get(1));
         assertEquals(2, expandCalled);
-        List<Object> c = new ArrayList<Object>(tree.getChildren(rootIds.get(1)));
+        List<Object> c = new ArrayList<Object>(
+                tree.getChildren(rootIds.get(1)));
 
         assertEquals(c.get(4), lastExpanded);
 
@@ -99,7 +100,7 @@ public class ListenersTest implements ExpandListener, CollapseListener {
     @Test
     public void testCollapseListener() {
         Tree tree = createTree(7, 15, true);
-        tree.addListener((CollapseListener) this);
+        tree.addCollapseListener(this);
 
         List<Object> rootIds = new ArrayList<Object>(tree.rootItemIds());
 
@@ -116,7 +117,8 @@ public class ListenersTest implements ExpandListener, CollapseListener {
         collapseCalled = 0;
         tree.collapseItemsRecursively(rootIds.get(1));
         assertEquals(2, collapseCalled);
-        List<Object> c = new ArrayList<Object>(tree.getChildren(rootIds.get(1)));
+        List<Object> c = new ArrayList<Object>(
+                tree.getChildren(rootIds.get(1)));
         assertEquals(c.get(4), lastCollapsed);
 
         // Collapsing an already expanded item should send no expand event
