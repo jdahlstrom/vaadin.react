@@ -41,7 +41,7 @@ public class Ticket2009 extends com.vaadin.server.LegacyApplication {
 
         final VerticalLayout events = new VerticalLayout();
 
-        t.addListener(new ItemClickEvent.ItemClickListener() {
+        t.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 events.addComponent(new Label(new Label("Click:"
@@ -66,7 +66,7 @@ public class Ticket2009 extends com.vaadin.server.LegacyApplication {
         Table table = TestForTablesInitialColumnWidthLogicRendering
                 .getTestTable(5, 100);
         table.setRowHeaderMode(Table.ROW_HEADER_MODE_ID);
-        table.addListener(new ItemClickEvent.ItemClickListener() {
+        table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 events2.addComponent(new Label("Click:"

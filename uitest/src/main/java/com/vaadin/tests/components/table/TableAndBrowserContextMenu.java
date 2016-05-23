@@ -28,9 +28,10 @@ public class TableAndBrowserContextMenu extends TestBase implements
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (((Boolean) event.getProperty().getValue())) {
-                    table.addListener(TableAndBrowserContextMenu.this);
+                    table.addItemClickListener(TableAndBrowserContextMenu.this);
                 } else {
-                    table.removeListener(TableAndBrowserContextMenu.this);
+                    table.removeItemClickListener(
+                            TableAndBrowserContextMenu.this);
                 }
 
             }
@@ -53,7 +54,8 @@ public class TableAndBrowserContextMenu extends TestBase implements
         });
         addComponent(cbActionHandler);
 
-        CheckBox cbActionHasActions = new CheckBox("Action handler has actions");
+        CheckBox cbActionHasActions = new CheckBox(
+                "Action handler has actions");
         cbActionHasActions.setImmediate(true);
         cbActionHasActions.addListener(new ValueChangeListener() {
 

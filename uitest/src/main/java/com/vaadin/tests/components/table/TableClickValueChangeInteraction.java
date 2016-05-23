@@ -59,7 +59,7 @@ public class TableClickValueChangeInteraction extends TestBase {
         table.setWidth("100px");
         table.setHeight("100px");
         if (listenClicks) {
-            table.addListener(new ItemClickListener() {
+            table.addItemClickListener(new ItemClickListener() {
 
                 @Override
                 public void itemClick(ItemClickEvent event) {

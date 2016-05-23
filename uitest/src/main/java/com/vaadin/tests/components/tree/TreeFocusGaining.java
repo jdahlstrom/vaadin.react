@@ -40,7 +40,7 @@ public class TreeFocusGaining extends TestBase {
 
         tree = new Tree("Simple tree with itemm click listener");
         tree.addItem("Item1");
-        tree.addListener(new ItemClickEvent.ItemClickListener() {
+        tree.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 log.log("Item click event");

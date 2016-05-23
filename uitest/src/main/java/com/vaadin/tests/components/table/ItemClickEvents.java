@@ -64,7 +64,7 @@ public class ItemClickEvents extends AbstractTestUI {
                 new ExternalResource(
                         "https://vaadin.com/vaadin-theme/images/vaadin-logo.png"));
 
-        tree.addListener(new ItemClickListener() {
+        tree.addItemClickListener(new ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 logEvent(event, "tree");
@@ -83,7 +83,7 @@ public class ItemClickEvents extends AbstractTestUI {
             item.getItemProperty("Column").setValue("Row " + i);
 
         }
-        table.addListener(new ItemClickListener() {
+        table.addItemClickListener(new ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 logEvent(event, "table");
@@ -149,7 +149,8 @@ public class ItemClickEvents extends AbstractTestUI {
                 "nullSelectionAllowed"));
         b.setImmediate(true);
         layout.addComponent(b);
-        b = new CheckBox("multi", new MethodProperty<Boolean>(c, "multiSelect"));
+        b = new CheckBox("multi",
+                new MethodProperty<Boolean>(c, "multiSelect"));
         b.setImmediate(true);
         layout.addComponent(b);
         return layout;

@@ -17,7 +17,8 @@ public class TableFocusOnRefreshRowCache extends TestBase {
         }
 
         table.setSelectable(true);
-        table.addListener(new ItemClickListener() {
+        table.addItemClickListener(new ItemClickListener() {
+            @Override
             public void itemClick(ItemClickEvent event) {
                 table.refreshRowCache();
             }

@@ -20,7 +20,7 @@ public class MultiClickingItemThatDetachesTable extends TestBase {
             item.getItemProperty("p2").setValue(i + "");
             item.getItemProperty("p1").setValue(i + "");
         }
-        table.addListener(new ItemClickListener() {
+        table.addItemClickListener(new ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 if (event.isDoubleClick()) {

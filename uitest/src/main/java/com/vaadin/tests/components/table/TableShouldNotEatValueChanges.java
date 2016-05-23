@@ -12,7 +12,8 @@ public class TableShouldNotEatValueChanges extends TestBase {
 
     @Override
     protected void setup() {
-        Table t = new Table("Table with multiselection and item click listener");
+        Table t = new Table(
+                "Table with multiselection and item click listener");
         t.focus();
         t.setPageLength(3);
         t.addContainerProperty("foo", String.class, "bar");
@@ -32,7 +33,7 @@ public class TableShouldNotEatValueChanges extends TestBase {
                         Notification.TYPE_WARNING_MESSAGE);
             }
         };
-        t.addListener(l);
+        t.addItemClickListener(l);
         addComponent(tf);
         addComponent(t);
         t = new Table("Table with drag and drop and item click listener");
@@ -43,7 +44,7 @@ public class TableShouldNotEatValueChanges extends TestBase {
         t.setSelectable(true);
         t.setMultiSelect(true);
 
-        t.addListener(l);
+        t.addItemClickListener(l);
         addComponent(t);
 
     }
