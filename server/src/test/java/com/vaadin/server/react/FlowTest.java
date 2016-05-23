@@ -1,11 +1,22 @@
 package com.vaadin.server.react;
 
+import static org.easymock.EasyMock.createStrictMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import org.easymock.EasyMock;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 public class FlowTest {
+
+    @Rule
+    public Timeout timeout = new Timeout(1000);
 
     @Test
     public void testSubscriber() {
@@ -18,6 +29,51 @@ public class FlowTest {
         Flow<Integer> flow = flow(1, 2, 3, 4);
         verifyFlow(flow, expect(1, 2, 3, 4));
         verifyFlow(flow, expect(1, 2, 3, 4));
+    }
+
+    @Test
+    public void testFromStream() {
+        Flow<Integer> flow = Flow
+                .from(Arrays.stream(new int[] { 1, 2, 3 }));
+
+        verifyFlow(flow, expect(1, 2, 3).get());
+        // Stream can only be consumed once
+        verifyFlow(flow, expect().get());
+    }
+
+    @Test
+    public void testFromFuture() {
+        CompletableFuture<Integer> future = new CompletableFuture<>();
+        Flow<Integer> flow = Flow.from(future);
+        future.complete(42);
+        verifyFlow(flow, expect(42));
+
+        future = new CompletableFuture<>();
+        flow = Flow.from(future);
+        Exception e = new Exception();
+        future.completeExceptionally(e);
+        verifyFlow(flow, expectError(e));
+    }
+
+    @Test
+    public void testGenerate() {
+        int[] counter = new int[] { 0 };
+        Flow<Integer> flow = Flow.generate(() -> {
+            return counter[0] < 5 ? Optional.of(counter[0]++) : Optional
+                    .empty();
+        });
+
+        verifyFlow(flow, expect(0, 1, 2, 3, 4).get());
+        verifyFlow(flow, expect().get());
+    }
+
+    @Test
+    public void testIterate() {
+        Flow<Integer> flow = Flow.iterate(1, i -> {
+            return i < 5 ? Optional.of(2 * i) : Optional.empty();
+        });
+
+        verifyFlow(flow, expect(1, 2, 4, 8));
     }
 
     @Test
@@ -102,7 +158,7 @@ public class FlowTest {
     }
 
     @Test
-    public void testDropWhile() throws Exception {
+    public void testSkipWhile() {
         verifyFlow(flow().skipWhile(x -> true), expect());
         verifyFlow(flow().skipWhile(x -> false), expect());
 
@@ -121,7 +177,7 @@ public class FlowTest {
     }
 
     @Test
-    public void testDrop() {
+    public void testSkip() {
         verifyFlow(flow().skip(3), expect());
         verifyFlow(flow(1, 2, 3, 4).skip(0), expect(1, 2, 3, 4));
         verifyFlow(flow(1, 2, 3, 4).skip(3), expect(4));
@@ -130,9 +186,9 @@ public class FlowTest {
 
     protected <T> void verifyFlow(Flow<T> flow,
             Subscriber<? super T> sub) {
-        EasyMock.replay(sub);
+        replay(sub);
         flow.subscribe(sub);
-        EasyMock.verify(sub);
+        verify(sub);
     }
 
     protected <T> void verifyFlow(Flow<T> flow,
@@ -151,10 +207,20 @@ public class FlowTest {
     @SuppressWarnings("unchecked")
     protected <T> Supplier<Subscriber<? super T>> expect(T... expected) {
         return () -> {
-            Subscriber<T> s = EasyMock.createStrictMock(Subscriber.class);
+            Subscriber<T> s = createStrictMock(Subscriber.class);
             for (T t : expected) {
                 s.onNext(t);
             }
+            s.onEnd();
+            return s;
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> Supplier<Subscriber<? super T>> expectError(Exception e) {
+        return () -> {
+            Subscriber<T> s = createStrictMock(Subscriber.class);
+            s.onError(e);
             s.onEnd();
             return s;
         };

@@ -11,7 +11,7 @@ import com.vaadin.server.react.impl.FlowImpl;
 public class ColdAsyncFlowTest extends FlowTest {
 
     private Timer timer = new Timer();
-    private volatile boolean ended = false;
+    private volatile boolean ended = true;
 
     @Override
     protected <T> void verifyFlow(Flow<T> flow,
@@ -24,7 +24,6 @@ public class ColdAsyncFlowTest extends FlowTest {
 
         while (!ended) {
         }
-        ended = false;
 
         EasyMock.verify(sub);
     }
@@ -33,6 +32,7 @@ public class ColdAsyncFlowTest extends FlowTest {
     @SuppressWarnings("unchecked")
     protected <T> Flow<T> flow(T... actual) {
         return new FlowImpl<T>(s -> {
+            ended = false;
             timer.schedule(new TimerTask() {
                 int i = 0;
 
