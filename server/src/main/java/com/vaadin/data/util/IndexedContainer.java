@@ -502,30 +502,10 @@ public class IndexedContainer extends
         super.addPropertySetChangeListener(listener);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addPropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Deprecated
-    @Override
-    public void addListener(Container.PropertySetChangeListener listener) {
-        addPropertySetChangeListener(listener);
-    }
-
     @Override
     public void removePropertySetChangeListener(
             Container.PropertySetChangeListener listener) {
         super.removePropertySetChangeListener(listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removePropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Deprecated
-    @Override
-    public void removeListener(Container.PropertySetChangeListener listener) {
-        removePropertySetChangeListener(listener);
     }
 
     /*

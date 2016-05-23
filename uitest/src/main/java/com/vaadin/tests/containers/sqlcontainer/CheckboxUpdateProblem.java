@@ -36,10 +36,11 @@ public class CheckboxUpdateProblem extends LegacyApplication implements
         testList.setImmediate(true);
         testList.addValueChangeListener(this);
 
-        databaseHelper.getTestContainer().addListener(
+        databaseHelper.getTestContainer().addItemSetChangeListener(
                 new ItemSetChangeListener() {
                     @Override
-                    public void containerItemSetChange(ItemSetChangeEvent event) {
+                    public void containerItemSetChange(
+                            ItemSetChangeEvent event) {
                         Object selected = testList.getValue();
                         if (selected != null) {
                             testForm.setItemDataSource(testList

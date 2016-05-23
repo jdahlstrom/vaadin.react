@@ -53,11 +53,11 @@ import com.vaadin.data.util.filter.UnsupportedFilterException;
  * 
  * Features:
  * <ul>
- * <li> {@link Container.Ordered}
- * <li> {@link Container.Indexed}
- * <li> {@link Filterable} and {@link SimpleFilterable} (internal implementation,
+ * <li>{@link Container.Ordered}
+ * <li>{@link Container.Indexed}
+ * <li>{@link Filterable} and {@link SimpleFilterable} (internal implementation,
  * does not implement the interface directly)
- * <li> {@link Sortable} (internal implementation, does not implement the
+ * <li>{@link Sortable} (internal implementation, does not implement the
  * interface directly)
  * </ul>
  * 
@@ -442,15 +442,6 @@ public abstract class AbstractInMemoryContainer<ITEMIDTYPE, PROPERTYIDCLASS, ITE
     }
 
     // ItemSetChangeNotifier
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Deprecated
-    @Override
-    public void addListener(Container.ItemSetChangeListener listener) {
-        addItemSetChangeListener(listener);
-    }
 
     @Override
     public void addItemSetChangeListener(
@@ -462,16 +453,6 @@ public abstract class AbstractInMemoryContainer<ITEMIDTYPE, PROPERTYIDCLASS, ITE
     public void removeItemSetChangeListener(
             Container.ItemSetChangeListener listener) {
         super.removeItemSetChangeListener(listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Deprecated
-    @Override
-    public void removeListener(Container.ItemSetChangeListener listener) {
-        removeItemSetChangeListener(listener);
     }
 
     // internal methods
@@ -990,7 +971,8 @@ public abstract class AbstractInMemoryContainer<ITEMIDTYPE, PROPERTYIDCLASS, ITE
      * @param item
      *            the added item
      */
-    protected void fireItemAdded(int position, ITEMIDTYPE itemId, ITEMCLASS item) {
+    protected void fireItemAdded(int position, ITEMIDTYPE itemId,
+            ITEMCLASS item) {
         fireItemsAdded(position, itemId, 1);
     }
 

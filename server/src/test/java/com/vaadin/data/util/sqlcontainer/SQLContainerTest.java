@@ -106,7 +106,9 @@ public class SQLContainerTest {
                     container
                             .getContainerProperty(
                                     new RowId(new Object[] { new BigDecimal(
-                                            0 + offset) }), "NAME").getValue());
+                                            0 + offset) }),
+                                    "NAME")
+                            .getValue());
         } else {
             Assert.assertEquals(
                     "Ville",
@@ -269,7 +271,8 @@ public class SQLContainerTest {
             statement.executeUpdate("insert into people values('Bengt', '42')");
         } else {
             statement
-                    .executeUpdate("insert into people values(default, 'Bengt', '42')");
+                    .executeUpdate(
+                            "insert into people values(default, 'Bengt', '42')");
         }
         statement.close();
         conn.commit();
@@ -290,7 +293,8 @@ public class SQLContainerTest {
                     new Object[] { new BigDecimal(3 + offset) })));
         } else {
             Assert.assertEquals(3,
-                    container.indexOfId(new RowId(new Object[] { 3 + offset })));
+                    container
+                            .indexOfId(new RowId(new Object[] { 3 + offset })));
         }
     }
 
@@ -585,7 +589,8 @@ public class SQLContainerTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void addContainerProperty_normal_isUnsupported() throws SQLException {
+    public void addContainerProperty_normal_isUnsupported()
+            throws SQLException {
         SQLContainer container = new SQLContainer(new FreeformQuery(
                 "SELECT * FROM people", connectionPool, "ID"));
         container.addContainerProperty("asdf", String.class, "");
@@ -1156,7 +1161,8 @@ public class SQLContainerTest {
                     public Integer answer() throws Throwable {
                         Connection conn = (Connection) EasyMock
                                 .getCurrentArguments()[0];
-                        RowItem item = (RowItem) EasyMock.getCurrentArguments()[1];
+                        RowItem item = (RowItem) EasyMock
+                                .getCurrentArguments()[1];
                         Statement statement = conn.createStatement();
                         if (SQLTestsConstants.db == DB.MSSQL) {
                             statement
@@ -1165,15 +1171,20 @@ public class SQLContainerTest {
                                                     .getValue()
                                             + "', '"
                                             + item.getItemProperty("AGE")
-                                                    .getValue() + "')");
+                                                    .getValue()
+                                            + "')");
                         } else {
                             statement
-                                    .executeUpdate("insert into people values(default, '"
-                                            + item.getItemProperty("NAME")
-                                                    .getValue()
-                                            + "', '"
-                                            + item.getItemProperty("AGE")
-                                                    .getValue() + "')");
+                                    .executeUpdate(
+                                            "insert into people values(default, '"
+                                                    + item.getItemProperty(
+                                                            "NAME")
+                                                            .getValue()
+                                                    + "', '"
+                                                    + item.getItemProperty(
+                                                            "AGE")
+                                                            .getValue()
+                                                    + "')");
                         }
                         statement.close();
                         conn.commit();
@@ -1257,7 +1268,8 @@ public class SQLContainerTest {
                     public Integer answer() throws Throwable {
                         Connection conn = (Connection) EasyMock
                                 .getCurrentArguments()[0];
-                        RowItem item = (RowItem) EasyMock.getCurrentArguments()[1];
+                        RowItem item = (RowItem) EasyMock
+                                .getCurrentArguments()[1];
                         Statement statement = conn.createStatement();
                         if (SQLTestsConstants.db == DB.MSSQL) {
                             statement
@@ -1266,15 +1278,20 @@ public class SQLContainerTest {
                                                     .getValue()
                                             + "', '"
                                             + item.getItemProperty("AGE")
-                                                    .getValue() + "')");
+                                                    .getValue()
+                                            + "')");
                         } else {
                             statement
-                                    .executeUpdate("insert into people values(default, '"
-                                            + item.getItemProperty("NAME")
-                                                    .getValue()
-                                            + "', '"
-                                            + item.getItemProperty("AGE")
-                                                    .getValue() + "')");
+                                    .executeUpdate(
+                                            "insert into people values(default, '"
+                                                    + item.getItemProperty(
+                                                            "NAME")
+                                                            .getValue()
+                                                    + "', '"
+                                                    + item.getItemProperty(
+                                                            "AGE")
+                                                            .getValue()
+                                                    + "')");
                         }
                         statement.close();
                         conn.commit();
@@ -1365,11 +1382,14 @@ public class SQLContainerTest {
                     public Boolean answer() throws Throwable {
                         Connection conn = (Connection) EasyMock
                                 .getCurrentArguments()[0];
-                        RowItem item = (RowItem) EasyMock.getCurrentArguments()[1];
+                        RowItem item = (RowItem) EasyMock
+                                .getCurrentArguments()[1];
                         Statement statement = conn.createStatement();
                         statement
-                                .executeUpdate("DELETE FROM people WHERE \"ID\"="
-                                        + item.getItemProperty("ID").getValue());
+                                .executeUpdate(
+                                        "DELETE FROM people WHERE \"ID\"="
+                                                + item.getItemProperty("ID")
+                                                        .getValue());
                         statement.close();
                         return true;
                     }
@@ -1444,7 +1464,8 @@ public class SQLContainerTest {
                     public Integer answer() throws Throwable {
                         Connection conn = (Connection) EasyMock
                                 .getCurrentArguments()[0];
-                        RowItem item = (RowItem) EasyMock.getCurrentArguments()[1];
+                        RowItem item = (RowItem) EasyMock
+                                .getCurrentArguments()[1];
                         Statement statement = conn.createStatement();
                         statement.executeUpdate("UPDATE people SET \"NAME\"='"
                                 + item.getItemProperty("NAME").getValue()
@@ -1576,7 +1597,7 @@ public class SQLContainerTest {
         listener.containerItemSetChange(EasyMock.isA(ItemSetChangeEvent.class));
         EasyMock.replay(listener);
 
-        container.addListener(listener);
+        container.addItemSetChangeListener(listener);
         container.addItem();
 
         EasyMock.verify(listener);
@@ -1593,7 +1614,7 @@ public class SQLContainerTest {
         EasyMock.expectLastCall().anyTimes();
         EasyMock.replay(listener);
 
-        container.addListener(listener);
+        container.addItemSetChangeListener(listener);
         container.removeItem(container.lastItemId());
 
         EasyMock.verify(listener);
@@ -1607,8 +1628,8 @@ public class SQLContainerTest {
                 .createMock(ItemSetChangeListener.class);
         EasyMock.replay(listener);
 
-        container.addListener(listener);
-        container.removeListener(listener);
+        container.addItemSetChangeListener(listener);
+        container.removeItemSetChangeListener(listener);
         container.addItem();
 
         EasyMock.verify(listener);
@@ -1903,7 +1924,8 @@ public class SQLContainerTest {
             }
         }).anyTimes();
         EasyMock.expect(
-                delegate.getQueryStatement(EasyMock.anyInt(), EasyMock.anyInt()))
+                delegate.getQueryStatement(EasyMock.anyInt(),
+                        EasyMock.anyInt()))
                 .andAnswer(new IAnswer<StatementHelper>() {
                     @Override
                     public StatementHelper answer() throws Throwable {
@@ -1975,7 +1997,8 @@ public class SQLContainerTest {
             }
         }).anyTimes();
         EasyMock.expect(
-                delegate.getQueryStatement(EasyMock.anyInt(), EasyMock.anyInt()))
+                delegate.getQueryStatement(EasyMock.anyInt(),
+                        EasyMock.anyInt()))
                 .andAnswer(new IAnswer<StatementHelper>() {
                     @Override
                     public StatementHelper answer() throws Throwable {
@@ -2046,7 +2069,8 @@ public class SQLContainerTest {
             }
         }).anyTimes();
         EasyMock.expect(
-                delegate.getQueryStatement(EasyMock.anyInt(), EasyMock.anyInt()))
+                delegate.getQueryStatement(EasyMock.anyInt(),
+                        EasyMock.anyInt()))
                 .andAnswer(new IAnswer<StatementHelper>() {
                     @Override
                     public StatementHelper answer() throws Throwable {
@@ -2118,7 +2142,8 @@ public class SQLContainerTest {
             }
         }).anyTimes();
         EasyMock.expect(
-                delegate.getQueryStatement(EasyMock.anyInt(), EasyMock.anyInt()))
+                delegate.getQueryStatement(EasyMock.anyInt(),
+                        EasyMock.anyInt()))
                 .andAnswer(new IAnswer<StatementHelper>() {
                     @Override
                     public StatementHelper answer() throws Throwable {
@@ -2196,7 +2221,8 @@ public class SQLContainerTest {
             }
         }).anyTimes();
         EasyMock.expect(
-                delegate.getQueryStatement(EasyMock.anyInt(), EasyMock.anyInt()))
+                delegate.getQueryStatement(EasyMock.anyInt(),
+                        EasyMock.anyInt()))
                 .andAnswer(new IAnswer<StatementHelper>() {
                     @Override
                     public StatementHelper answer() throws Throwable {
@@ -2274,7 +2300,8 @@ public class SQLContainerTest {
             }
         }).anyTimes();
         EasyMock.expect(
-                delegate.getQueryStatement(EasyMock.anyInt(), EasyMock.anyInt()))
+                delegate.getQueryStatement(EasyMock.anyInt(),
+                        EasyMock.anyInt()))
                 .andAnswer(new IAnswer<StatementHelper>() {
                     @Override
                     public StatementHelper answer() throws Throwable {
@@ -2338,7 +2365,8 @@ public class SQLContainerTest {
 
         try {
             container.getIdByIndex(4);
-            Assert.fail("SQLContainer.getIdByIndex() returned a value for an index beyond the end of the container");
+            Assert.fail(
+                    "SQLContainer.getIdByIndex() returned a value for an index beyond the end of the container");
         } catch (IndexOutOfBoundsException e) {
             // should throw exception - item is filtered out
         }

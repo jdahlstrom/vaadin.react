@@ -242,7 +242,8 @@ public class SQLContainerTableQueryTest {
             statement.executeUpdate("insert into people values('Bengt', 30)");
         } else {
             statement
-                    .executeUpdate("insert into people values(default, 'Bengt', 30)");
+                    .executeUpdate(
+                            "insert into people values(default, 'Bengt', 30)");
         }
         statement.close();
         conn.commit();
@@ -259,7 +260,8 @@ public class SQLContainerTableQueryTest {
                     new Object[] { new BigDecimal(3 + offset) })));
         } else {
             assertEquals(3,
-                    container.indexOfId(new RowId(new Object[] { 3 + offset })));
+                    container
+                            .indexOfId(new RowId(new Object[] { 3 + offset })));
         }
     }
 
@@ -481,7 +483,8 @@ public class SQLContainerTableQueryTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void addContainerProperty_normal_isUnsupported() throws SQLException {
+    public void addContainerProperty_normal_isUnsupported()
+            throws SQLException {
         container.addContainerProperty("asdf", String.class, "");
     }
 
@@ -579,7 +582,8 @@ public class SQLContainerTableQueryTest {
     }
 
     @Test
-    public void indexOfId_tableNewlyAddedItem_returnsFour() throws SQLException {
+    public void indexOfId_tableNewlyAddedItem_returnsFour()
+            throws SQLException {
         Object id = container.addItem();
         assertEquals(4, container.indexOfId(id));
     }
@@ -710,7 +714,8 @@ public class SQLContainerTableQueryTest {
     }
 
     @Test
-    public void getItem_tableAddedItemRemoved_returnsNull() throws SQLException {
+    public void getItem_tableAddedItemRemoved_returnsNull()
+            throws SQLException {
         Object id = container.addItem();
 
         Assert.assertNotNull(container.getItem(id));
@@ -958,7 +963,8 @@ public class SQLContainerTableQueryTest {
     }
 
     @Test
-    public void commit_tableAddedItem_shouldBeWrittenToDB() throws SQLException {
+    public void commit_tableAddedItem_shouldBeWrittenToDB()
+            throws SQLException {
         Object id = container.addItem();
         container.getContainerProperty(id, NAME).setValue("New Name");
 
@@ -1027,7 +1033,8 @@ public class SQLContainerTableQueryTest {
     }
 
     @Test
-    public void rollback_tableItemAdded_discardsAddedItem() throws SQLException {
+    public void rollback_tableItemAdded_discardsAddedItem()
+            throws SQLException {
         int size = container.size();
         Object id = container.addItem();
         container.getContainerProperty(id, NAME).setValue("foo");
@@ -1051,7 +1058,8 @@ public class SQLContainerTableQueryTest {
     }
 
     @Test
-    public void rollback_tableItemChanged_discardsChanges() throws SQLException {
+    public void rollback_tableItemChanged_discardsChanges()
+            throws SQLException {
         Object last = container.lastItemId();
         container.getContainerProperty(last, NAME).setValue("foo");
         container.rollback();
@@ -1075,7 +1083,7 @@ public class SQLContainerTableQueryTest {
         listener.containerItemSetChange(EasyMock.isA(ItemSetChangeEvent.class));
         EasyMock.replay(listener);
 
-        container.addListener(listener);
+        container.addItemSetChangeListener(listener);
         container.addItem();
 
         EasyMock.verify(listener);
@@ -1090,7 +1098,7 @@ public class SQLContainerTableQueryTest {
         EasyMock.expectLastCall().anyTimes();
         EasyMock.replay(listener);
 
-        container.addListener(listener);
+        container.addItemSetChangeListener(listener);
         container.removeItem(container.lastItemId());
 
         EasyMock.verify(listener);
@@ -1102,8 +1110,8 @@ public class SQLContainerTableQueryTest {
                 .createMock(ItemSetChangeListener.class);
         EasyMock.replay(listener);
 
-        container.addListener(listener);
-        container.removeListener(listener);
+        container.addItemSetChangeListener(listener);
+        container.removeItemSetChangeListener(listener);
         container.addItem();
 
         EasyMock.verify(listener);
@@ -1312,7 +1320,8 @@ public class SQLContainerTableQueryTest {
 
         try {
             container.getIdByIndex(4);
-            Assert.fail("SQLContainer.getIdByIndex() returned a value for an index beyond the end of the container");
+            Assert.fail(
+                    "SQLContainer.getIdByIndex() returned a value for an index beyond the end of the container");
         } catch (IndexOutOfBoundsException e) {
             // should throw exception - item is filtered out
         }

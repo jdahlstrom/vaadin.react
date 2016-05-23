@@ -457,7 +457,8 @@ public class ContainerHierarchicalWrapper implements Container.Hierarchical,
 
         // Check that the new parent exists in container and can have
         // children
-        if (!containsId(newParentId) || noChildrenAllowed.contains(newParentId)) {
+        if (!containsId(newParentId)
+                || noChildrenAllowed.contains(newParentId)) {
             return false;
         }
 
@@ -733,16 +734,6 @@ public class ContainerHierarchicalWrapper implements Container.Hierarchical,
         }
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Container.ItemSetChangeListener listener) {
-        addItemSetChangeListener(listener);
-    }
-
     /*
      * Removes a Item set change listener from the object. Don't add a JavaDoc
      * comment here, we use the default documentation from implemented
@@ -753,18 +744,9 @@ public class ContainerHierarchicalWrapper implements Container.Hierarchical,
             Container.ItemSetChangeListener listener) {
         if (container instanceof Container.ItemSetChangeNotifier) {
             ((Container.ItemSetChangeNotifier) container)
-                    .removeItemSetChangeListener(new PiggybackListener(listener));
+                    .removeItemSetChangeListener(
+                            new PiggybackListener(listener));
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Container.ItemSetChangeListener listener) {
-        removeItemSetChangeListener(listener);
     }
 
     /*
@@ -782,16 +764,6 @@ public class ContainerHierarchicalWrapper implements Container.Hierarchical,
         }
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addPropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Container.PropertySetChangeListener listener) {
-        addPropertySetChangeListener(listener);
-    }
-
     /*
      * Removes a Property set change listener from the object. Don't add a
      * JavaDoc comment here, we use the default documentation from implemented
@@ -805,16 +777,6 @@ public class ContainerHierarchicalWrapper implements Container.Hierarchical,
                     .removePropertySetChangeListener(new PiggybackListener(
                             listener));
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removePropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Container.PropertySetChangeListener listener) {
-        removePropertySetChangeListener(listener);
     }
 
     /**

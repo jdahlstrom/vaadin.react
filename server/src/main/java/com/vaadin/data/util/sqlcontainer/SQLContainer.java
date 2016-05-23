@@ -100,7 +100,9 @@ public class SQLContainer implements Container, Container.Filterable,
     /** ItemSetChangeListeners */
     private LinkedList<Container.ItemSetChangeListener> itemSetChangeListeners;
 
-    /** Temporary storage for modified items and items to be removed and added */
+    /**
+     * Temporary storage for modified items and items to be removed and added
+     */
     private final Map<RowId, RowItem> removedItems = new HashMap<RowId, RowItem>();
     private final List<RowItem> addedItems = new ArrayList<RowItem>();
     private final List<RowItem> modifiedItems = new ArrayList<RowItem>();
@@ -1588,16 +1590,6 @@ public class SQLContainer implements Container, Container.Filterable,
         itemSetChangeListeners.add(listener);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Container.ItemSetChangeListener listener) {
-        addItemSetChangeListener(listener);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -1612,16 +1604,6 @@ public class SQLContainer implements Container, Container.Filterable,
         if (itemSetChangeListeners != null) {
             itemSetChangeListeners.remove(listener);
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Container.ItemSetChangeListener listener) {
-        removeItemSetChangeListener(listener);
     }
 
     protected void fireContentsChange() {
@@ -1849,7 +1831,8 @@ public class SQLContainer implements Container, Container.Filterable,
         return refdCont.getItem(getReferencedItemId(itemId, refdCont));
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+    private void writeObject(java.io.ObjectOutputStream out)
+            throws IOException {
         out.defaultWriteObject();
     }
 
