@@ -44,7 +44,7 @@ public class WindowResizeListener extends TestBase {
 
         CheckBox subwindow = new CheckBox("show subwindow");
         subwindow.setImmediate(true);
-        subwindow.addListener(new Property.ValueChangeListener() {
+        subwindow.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -58,7 +58,7 @@ public class WindowResizeListener extends TestBase {
         getLayout().addComponent(subwindow);
 
         CheckBox immediate = new CheckBox("immediate");
-        immediate.addListener(new Property.ValueChangeListener() {
+        immediate.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -304,14 +304,8 @@ public interface Property<T> extends Serializable {
          * @param listener
          *            the new Listener to be registered
          */
-        public void addValueChangeListener(Property.ValueChangeListener listener);
-
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #addValueChangeListener(ValueChangeListener)}
-         **/
-        @Deprecated
-        public void addListener(Property.ValueChangeListener listener);
+        public void addValueChangeListener(
+                Property.ValueChangeListener listener);
 
         /**
          * Removes a previously registered value change listener.
@@ -321,13 +315,6 @@ public interface Property<T> extends Serializable {
          */
         public void removeValueChangeListener(
                 Property.ValueChangeListener listener);
-
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #removeValueChangeListener(ValueChangeListener)}
-         **/
-        @Deprecated
-        public void removeListener(Property.ValueChangeListener listener);
     }
 
     /* ReadOnly Status change event */

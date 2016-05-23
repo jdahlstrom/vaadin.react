@@ -38,15 +38,16 @@ import com.vaadin.data.util.filter.UnsupportedFilterException;
 
 /**
  * An implementation of the <code>{@link Container.Indexed}</code> interface
- * with all important features.</p>
+ * with all important features.
+ * </p>
  * 
  * Features:
  * <ul>
- * <li> {@link Container.Indexed}
- * <li> {@link Container.Ordered}
- * <li> {@link Container.Sortable}
- * <li> {@link Container.Filterable}
- * <li> {@link Cloneable} (deprecated, might be removed in the future)
+ * <li>{@link Container.Indexed}
+ * <li>{@link Container.Ordered}
+ * <li>{@link Container.Sortable}
+ * <li>{@link Container.Filterable}
+ * <li>{@link Cloneable} (deprecated, might be removed in the future)
  * <li>Sends all needed events on content changes.
  * </ul>
  * 
@@ -201,7 +202,8 @@ public class IndexedContainer extends
         // If default value is given, set it
         if (defaultValue != null) {
             // for existing rows
-            for (final Iterator<?> i = getAllItemIds().iterator(); i.hasNext();) {
+            for (final Iterator<?> i = getAllItemIds().iterator(); i
+                    .hasNext();) {
                 getItem(i.next()).getItemProperty(propertyId).setValue(
                         defaultValue);
             }
@@ -342,7 +344,8 @@ public class IndexedContainer extends
         }
 
         // If remove the Property from all Items
-        for (final Iterator<Object> i = getAllItemIds().iterator(); i.hasNext();) {
+        for (final Iterator<Object> i = getAllItemIds().iterator(); i
+                .hasNext();) {
             items.get(i.next()).remove(propertyId);
         }
 
@@ -449,7 +452,8 @@ public class IndexedContainer extends
 
         private final int addedItemIndex;
 
-        private ItemSetChangeEvent(IndexedContainer source, int addedItemIndex) {
+        private ItemSetChangeEvent(IndexedContainer source,
+                int addedItemIndex) {
             super(source);
             this.addedItemIndex = addedItemIndex;
         }
@@ -538,16 +542,6 @@ public class IndexedContainer extends
         propertyValueChangeListeners.add(listener);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Property.ValueChangeListener listener) {
-        addValueChangeListener(listener);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -555,20 +549,11 @@ public class IndexedContainer extends
      * .vaadin.data.Property.ValueChangeListener)
      */
     @Override
-    public void removeValueChangeListener(Property.ValueChangeListener listener) {
+    public void removeValueChangeListener(
+            Property.ValueChangeListener listener) {
         if (propertyValueChangeListeners != null) {
             propertyValueChangeListeners.remove(listener);
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Property.ValueChangeListener listener) {
-        removeValueChangeListener(listener);
     }
 
     /**
@@ -932,7 +917,8 @@ public class IndexedContainer extends
          * @see com.vaadin.data.Property#setValue(java.lang.Object)
          */
         @Override
-        public void setValue(Object newValue) throws Property.ReadOnlyException {
+        public void setValue(Object newValue)
+                throws Property.ReadOnlyException {
             // Gets the Property set
             final Map<Object, Object> propertySet = items.get(itemId);
 
@@ -1031,18 +1017,9 @@ public class IndexedContainer extends
          * com.vaadin.data.Property.ValueChangeListener)
          */
         @Override
-        public void addValueChangeListener(Property.ValueChangeListener listener) {
+        public void addValueChangeListener(
+                Property.ValueChangeListener listener) {
             addSinglePropertyChangeListener(propertyId, itemId, listener);
-        }
-
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #addValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-         **/
-        @Override
-        @Deprecated
-        public void addListener(Property.ValueChangeListener listener) {
-            addValueChangeListener(listener);
         }
 
         /*
@@ -1055,16 +1032,6 @@ public class IndexedContainer extends
         public void removeValueChangeListener(
                 Property.ValueChangeListener listener) {
             removeSinglePropertyChangeListener(propertyId, itemId, listener);
-        }
-
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #removeValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-         **/
-        @Override
-        @Deprecated
-        public void removeListener(Property.ValueChangeListener listener) {
-            removeValueChangeListener(listener);
         }
 
         private IndexedContainer getHost() {
@@ -1122,20 +1089,32 @@ public class IndexedContainer extends
         final IndexedContainer nc = new IndexedContainer();
 
         // Clone the shallow properties
-        nc.setAllItemIds(getAllItemIds() != null ? (ListSet<Object>) ((ListSet<Object>) getAllItemIds())
-                .clone() : null);
-        nc.setItemSetChangeListeners(getItemSetChangeListeners() != null ? new LinkedList<Container.ItemSetChangeListener>(
-                getItemSetChangeListeners()) : null);
+        nc.setAllItemIds(getAllItemIds() != null
+                ? (ListSet<Object>) ((ListSet<Object>) getAllItemIds())
+                        .clone()
+                : null);
+        nc.setItemSetChangeListeners(getItemSetChangeListeners() != null
+                ? new LinkedList<Container.ItemSetChangeListener>(
+                        getItemSetChangeListeners())
+                : null);
         nc.propertyIds = propertyIds != null ? (ArrayList<Object>) propertyIds
                 .clone() : null;
-        nc.setPropertySetChangeListeners(getPropertySetChangeListeners() != null ? new LinkedList<Container.PropertySetChangeListener>(
-                getPropertySetChangeListeners()) : null);
-        nc.propertyValueChangeListeners = propertyValueChangeListeners != null ? (LinkedList<Property.ValueChangeListener>) propertyValueChangeListeners
-                .clone() : null;
-        nc.readOnlyProperties = readOnlyProperties != null ? (HashSet<Property<?>>) readOnlyProperties
-                .clone() : null;
-        nc.singlePropertyValueChangeListeners = singlePropertyValueChangeListeners != null ? (Hashtable<Object, Map<Object, List<Property.ValueChangeListener>>>) singlePropertyValueChangeListeners
-                .clone() : null;
+        nc.setPropertySetChangeListeners(getPropertySetChangeListeners() != null
+                ? new LinkedList<Container.PropertySetChangeListener>(
+                        getPropertySetChangeListeners())
+                : null);
+        nc.propertyValueChangeListeners = propertyValueChangeListeners != null
+                ? (LinkedList<Property.ValueChangeListener>) propertyValueChangeListeners
+                        .clone()
+                : null;
+        nc.readOnlyProperties = readOnlyProperties != null
+                ? (HashSet<Property<?>>) readOnlyProperties
+                        .clone()
+                : null;
+        nc.singlePropertyValueChangeListeners = singlePropertyValueChangeListeners != null
+                ? (Hashtable<Object, Map<Object, List<Property.ValueChangeListener>>>) singlePropertyValueChangeListeners
+                        .clone()
+                : null;
 
         nc.types = types != null ? (Hashtable<Object, Class<?>>) types.clone()
                 : null;
@@ -1152,7 +1131,8 @@ public class IndexedContainer extends
             nc.items = null;
         } else {
             nc.items = new Hashtable<Object, Map<Object, Object>>();
-            for (final Iterator<?> i = items.keySet().iterator(); i.hasNext();) {
+            for (final Iterator<?> i = items.keySet().iterator(); i
+                    .hasNext();) {
                 final Object id = i.next();
                 final Hashtable<Object, Object> it = (Hashtable<Object, Object>) items
                         .get(id);

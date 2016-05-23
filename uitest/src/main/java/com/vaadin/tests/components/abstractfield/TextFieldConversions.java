@@ -29,7 +29,7 @@ public class TextFieldConversions extends AbstractComponentDataBindingTest {
         dataType.addItem(Date.class);
         dataType.addItem(String.class);
 
-        dataType.addListener(new ValueChangeListener() {
+        dataType.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -30,7 +30,7 @@ public class Ticket6002 extends TestBase {
         // A text field that changes its caption
         final TextField tf1 = new TextField(
                 "Changing this field modifies only the textfield", property1);
-        tf1.addListener(new Property.ValueChangeListener() {
+        tf1.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -56,7 +56,7 @@ public class Ticket6002 extends TestBase {
         final TextField tf2 = new TextField(
                 "Changing this field modifies the layout - do it twice",
                 property2);
-        tf2.addListener(new Property.ValueChangeListener() {
+        tf2.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

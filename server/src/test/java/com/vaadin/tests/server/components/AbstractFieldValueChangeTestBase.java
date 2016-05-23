@@ -49,7 +49,7 @@ public abstract class AbstractFieldValueChangeTestBase<T> {
         EasyMock.replay(listener);
 
         // Add listener and set the value -> should end up in listener once
-        getField().addListener(listener);
+        getField().addValueChangeListener(listener);
         setValue(getField());
 
         // Ensure listener was called once
@@ -57,7 +57,7 @@ public abstract class AbstractFieldValueChangeTestBase<T> {
 
         // Remove the listener and set the value -> should not end up in
         // listener
-        getField().removeListener(listener);
+        getField().removeValueChangeListener(listener);
         setValue(getField());
 
         // Ensure listener still has been called only once
@@ -103,7 +103,7 @@ public abstract class AbstractFieldValueChangeTestBase<T> {
         EasyMock.replay(listener);
 
         // Add listener and set the value -> should end up in listener once
-        getField().addListener(listener);
+        getField().addValueChangeListener(listener);
         setValue(getField());
 
         // Ensure listener was called once

@@ -30,14 +30,14 @@ public class TooltipTests extends TestBase {
         HorizontalLayout topLayout = new HorizontalLayout();
         addComponent(topLayout);
         CheckBox panelCbox = new CheckBox("Panel");
-        panelCbox.addListener(panelListener);
+        panelCbox.addValueChangeListener(panelListener);
         topLayout.addComponent(panelCbox);
         CheckBox layoutCbox = new CheckBox("Layout");
-        layoutCbox.addListener(layoutListener);
+        layoutCbox.addValueChangeListener(layoutListener);
         topLayout.addComponent(layoutCbox);
         CheckBox labelCbox = new CheckBox("Label");
         topLayout.addComponent(labelCbox);
-        labelCbox.addListener(labelListener);
+        labelCbox.addValueChangeListener(labelListener);
 
         panel = new Panel();
         panel.setCaption("Panel caption");

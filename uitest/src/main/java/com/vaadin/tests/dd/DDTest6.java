@@ -147,7 +147,7 @@ public class DDTest6 extends TestBase {
         };
         tree1.addActionHandler(actionHandler);
 
-        tree1.addListener(new Property.ValueChangeListener() {
+        tree1.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();

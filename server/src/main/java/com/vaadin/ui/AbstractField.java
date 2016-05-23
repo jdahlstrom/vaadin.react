@@ -242,7 +242,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
      * here, we use the default documentation from the implemented interface.
      */
     @Override
-    public void commit() throws Buffered.SourceException, InvalidValueException {
+    public void commit()
+            throws Buffered.SourceException, InvalidValueException {
         if (dataSource != null && !dataSource.isReadOnly()) {
             if ((isInvalidCommitted() || isValid())) {
                 try {
@@ -493,7 +494,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
                 throw new Property.ReadOnlyException();
             }
             try {
-                T doubleConvertedFieldValue = convertFromModel(convertToModel(newFieldValue));
+                T doubleConvertedFieldValue = convertFromModel(
+                        convertToModel(newFieldValue));
                 if (!SharedUtil
                         .equals(newFieldValue, doubleConvertedFieldValue)) {
                     newFieldValue = doubleConvertedFieldValue;
@@ -507,7 +509,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
             // Repaint is needed even when the client thinks that it knows the
             // new state if validity of the component may change
             if (repaintIsNotNeeded
-                    && (isRequired() || getValidators() != null || getConverter() != null)) {
+                    && (isRequired() || getValidators() != null
+                            || getConverter() != null)) {
                 repaintIsNotNeeded = false;
             }
 
@@ -686,7 +689,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
         // Fires value change if the value has changed
         T value = getInternalValue();
         if ((value != oldValue)
-                && ((value != null && !value.equals(oldValue)) || value == null)) {
+                && ((value != null && !value.equals(oldValue))
+                        || value == null)) {
             fireValueChange(false);
         }
     }
@@ -1006,7 +1010,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
         }
 
         InvalidValueException[] exceptionArray = validationExceptions
-                .toArray(new InvalidValueException[validationExceptions.size()]);
+                .toArray(
+                        new InvalidValueException[validationExceptions.size()]);
 
         // Create a composite validator and include all exceptions
         throw new Validator.InvalidValueException(null, exceptionArray);
@@ -1086,7 +1091,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
                         AbstractErrorMessage
                                 .getErrorMessageForException(validationError),
                         AbstractErrorMessage
-                                .getErrorMessageForException(getCurrentBufferedSourceException()) });
+                                .getErrorMessageForException(
+                                        getCurrentBufferedSourceException()) });
 
     }
 
@@ -1118,37 +1124,18 @@ public abstract class AbstractField<T> extends AbstractComponent implements
         markAsDirty();
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Property.ValueChangeListener listener) {
-        addValueChangeListener(listener);
-    }
-
     /*
      * Removes a value change listener from the field. Don't add a JavaDoc
      * comment here, we use the default documentation from the implemented
      * interface.
      */
     @Override
-    public void removeValueChangeListener(Property.ValueChangeListener listener) {
+    public void removeValueChangeListener(
+            Property.ValueChangeListener listener) {
         removeListener(AbstractField.ValueChangeEvent.class, listener,
                 VALUE_CHANGE_METHOD);
         // ensure "automatic immediate handling" works
         markAsDirty();
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Property.ValueChangeListener listener) {
-        removeValueChangeListener(listener);
     }
 
     /**
@@ -1171,7 +1158,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
             READ_ONLY_STATUS_CHANGE_METHOD = Property.ReadOnlyStatusChangeListener.class
                     .getDeclaredMethod(
                             "readOnlyStatusChange",
-                            new Class[] { Property.ReadOnlyStatusChangeEvent.class });
+                            new Class[] {
+                                    Property.ReadOnlyStatusChangeEvent.class });
         } catch (final java.lang.NoSuchMethodException e) {
             // This should never happen
             throw new java.lang.RuntimeException(
@@ -1627,7 +1615,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
          * @param modifiers
          *            modifiers required to invoke the shortcut
          */
-        public FocusShortcut(Focusable focusable, int keyCode, int... modifiers) {
+        public FocusShortcut(Focusable focusable, int keyCode,
+                int... modifiers) {
             super(null, keyCode, modifiers);
             this.focusable = focusable;
         }
@@ -1739,7 +1728,8 @@ public abstract class AbstractField<T> extends AbstractComponent implements
     private void addPropertyListeners() {
         if (!isListeningToPropertyEvents) {
             if (dataSource instanceof Property.ValueChangeNotifier) {
-                ((Property.ValueChangeNotifier) dataSource).addListener(this);
+                ((Property.ValueChangeNotifier) dataSource)
+                        .addValueChangeListener(this);
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeNotifier) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
@@ -1757,7 +1747,7 @@ public abstract class AbstractField<T> extends AbstractComponent implements
         if (isListeningToPropertyEvents) {
             if (dataSource instanceof Property.ValueChangeNotifier) {
                 ((Property.ValueChangeNotifier) dataSource)
-                        .removeListener(this);
+                        .removeValueChangeListener(this);
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeNotifier) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)

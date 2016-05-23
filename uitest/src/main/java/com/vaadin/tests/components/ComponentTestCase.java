@@ -112,7 +112,7 @@ public abstract class ComponentTestCase<T extends AbstractComponent> extends
             boolean initialState, final Command<T, Boolean> command) {
 
         CheckBox checkBox = new CheckBox(caption);
-        checkBox.addListener(new ValueChangeListener() {
+        checkBox.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -163,7 +163,7 @@ public abstract class ComponentTestCase<T extends AbstractComponent> extends
         select.addContainerProperty(VALUE, Object.class, "");
         select.setItemCaptionPropertyId(CAPTION);
         select.setNullSelectionAllowed(false);
-        select.addListener(new Property.ValueChangeListener() {
+        select.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

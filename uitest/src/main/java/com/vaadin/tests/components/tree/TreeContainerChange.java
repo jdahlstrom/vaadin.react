@@ -83,7 +83,7 @@ public class TreeContainerChange extends TestBase {
 
         addComponent(hl);
 
-        tree.addListener(new Property.ValueChangeListener() {
+        tree.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 currentValue

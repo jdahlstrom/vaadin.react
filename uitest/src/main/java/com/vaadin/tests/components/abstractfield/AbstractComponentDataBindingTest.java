@@ -44,7 +44,7 @@ public abstract class AbstractComponentDataBindingTest extends TestBase
         ((Container.Sortable) cb.getContainerDataSource()).sort(
                 new Object[] { CAPTION }, new boolean[] { true });
         cb.setImmediate(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -80,7 +80,7 @@ public abstract class AbstractComponentDataBindingTest extends TestBase
 
     protected void configureField(AbstractField<?> field) {
         field.setImmediate(true);
-        field.addListener(this);
+        field.addValueChangeListener(this);
     }
 
     @Override

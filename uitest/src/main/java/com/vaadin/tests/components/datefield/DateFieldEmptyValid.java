@@ -47,7 +47,7 @@ public class DateFieldEmptyValid extends TestBase {
         df.setValue(new Date(100000000000L));
         df.setImmediate(true);
         df.setResolution(DateField.RESOLUTION_DAY);
-        df.addListener(new ValueChangeListener() {
+        df.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 log.log("Value changeEvent");

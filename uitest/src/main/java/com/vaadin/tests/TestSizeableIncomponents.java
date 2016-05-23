@@ -108,7 +108,7 @@ public class TestSizeableIncomponents extends LegacyApplication {
         main.addComponent(controllers);
 
         select.setContainerDataSource(cont);
-        select.addListener(new ComboBox.ValueChangeListener() {
+        select.addValueChangeListener(new ComboBox.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 Testable t = (Testable) select.getValue();

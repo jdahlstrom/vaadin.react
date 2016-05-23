@@ -81,7 +81,7 @@ public class OutOfSyncIssueWithKeyboardShortcut extends TestBase {
             // make saving the form the default action on Enter keypress
             saveButton.setClickShortcut(KeyCode.ENTER);
 
-            table.addListener(new ValueChangeListener() {
+            table.addValueChangeListener(new ValueChangeListener() {
                 @Override
                 public void valueChange(ValueChangeEvent event) {
                     Object value = event.getProperty().getValue();

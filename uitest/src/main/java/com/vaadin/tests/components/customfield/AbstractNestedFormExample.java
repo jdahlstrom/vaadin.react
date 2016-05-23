@@ -30,7 +30,7 @@ public abstract class AbstractNestedFormExample extends TestBase {
         table.setImmediate(true);
         table.setNullSelectionAllowed(true);
         table.addContainerProperty("Name", String.class, null);
-        table.addListener(getTableValueChangeListener());
+        table.addValueChangeListener(getTableValueChangeListener());
         Person person = new Person("Teppo", "Testaaja",
                 "teppo.testaaja@example.com", "", "Ruukinkatu 2–4", 20540,
                 "Turku");

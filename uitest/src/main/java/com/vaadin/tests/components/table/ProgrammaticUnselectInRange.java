@@ -28,7 +28,7 @@ public class ProgrammaticUnselectInRange extends TestBase {
             Integer value = Integer.valueOf(i + 1);
             table.addItem(new Object[] { value }, value);
         }
-        table.addListener(new Property.ValueChangeListener() {
+        table.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 updateSelectionLabel();

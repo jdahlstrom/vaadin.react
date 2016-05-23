@@ -20,7 +20,7 @@ public class TableSingleSelect extends TestBase {
         t.setSelectable(true);
         t.setNullSelectionAllowed(true);
         t.setImmediate(true);
-        t.addListener(new ValueChangeListener() {
+        t.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

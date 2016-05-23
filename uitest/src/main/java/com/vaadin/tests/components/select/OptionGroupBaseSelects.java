@@ -27,7 +27,7 @@ public class OptionGroupBaseSelects extends ComponentTestCase<HorizontalLayout> 
     protected void initializeComponents() {
 
         CheckBox cb = new CheckBox("Switch Selects ReadOnly", false);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -41,7 +41,7 @@ public class OptionGroupBaseSelects extends ComponentTestCase<HorizontalLayout> 
             }
         });
         CheckBox cb2 = new CheckBox("Switch Selects Enabled", true);
-        cb2.addListener(new ValueChangeListener() {
+        cb2.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

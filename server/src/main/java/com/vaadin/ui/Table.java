@@ -2444,7 +2444,7 @@ public class Table extends AbstractSelect implements Action.Container,
         if (p instanceof Property.ValueChangeNotifier) {
             if (oldListenedProperties == null
                     || !oldListenedProperties.contains(p)) {
-                ((Property.ValueChangeNotifier) p).addListener(this);
+                ((Property.ValueChangeNotifier) p).addValueChangeListener(this);
             }
             /*
              * register listened properties, so we can do proper cleanup to free
@@ -2489,7 +2489,8 @@ public class Table extends AbstractSelect implements Action.Container,
                             if (p instanceof ValueChangeNotifier
                                     && listenedProperties.contains(p)) {
                                 listenedProperties.remove(p);
-                                ((ValueChangeNotifier) p).removeListener(this);
+                                ((ValueChangeNotifier) p)
+                                        .removeValueChangeListener(this);
                             }
                         }
                     }
@@ -2527,7 +2528,7 @@ public class Table extends AbstractSelect implements Action.Container,
                     .iterator(); i.hasNext();) {
                 Property.ValueChangeNotifier o = (ValueChangeNotifier) i.next();
                 if (!listenedProperties.contains(o)) {
-                    o.removeListener(this);
+                    o.removeValueChangeListener(this);
                 }
             }
         }

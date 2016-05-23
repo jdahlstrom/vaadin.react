@@ -78,15 +78,15 @@ public class ListenerOrder extends com.vaadin.server.LegacyApplication
         s1.addItem("second");
         s1.addItem("third");
         s1.addItem("fourth");
-        s1.addListener((ValueChangeListener) this);
+        s1.addValueChangeListener((ValueChangeListener) this);
         s1.addListener((PropertySetChangeListener) this);
         s1.addListener((ItemSetChangeListener) this);
         s1.addListener((ItemSetChangeListener) this);
         s1.addListener((PropertySetChangeListener) this);
         s1.addListener((PropertySetChangeListener) this);
         s1.addListener((ItemSetChangeListener) this);
-        s1.addListener((ValueChangeListener) this);
-        s1.addListener((ValueChangeListener) this);
+        s1.addValueChangeListener((ValueChangeListener) this);
+        s1.addValueChangeListener((ValueChangeListener) this);
 
         Item i = s1.getItem("second");
         for (Iterator<?> it = i.getItemPropertyIds().iterator(); it

@@ -35,7 +35,7 @@ public class KeepAllItemsVisible extends TestBase implements ExpandListener,
 
         tt.addListener((ExpandListener) this);
         tt.addListener((CollapseListener) this);
-        tt.addListener(new ValueChangeListener() {
+        tt.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

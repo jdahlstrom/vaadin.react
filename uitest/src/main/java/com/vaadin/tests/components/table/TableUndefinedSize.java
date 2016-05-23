@@ -70,7 +70,7 @@ public class TableUndefinedSize extends TestBase {
                 0, 1, 2, 4, 8, 10));
         pageLength.setImmediate(true);
         pageLength.setNullSelectionAllowed(false);
-        pageLength.addListener(new Property.ValueChangeListener() {
+        pageLength.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 int pageLength = Integer.valueOf(event.getProperty().getValue()
@@ -83,7 +83,7 @@ public class TableUndefinedSize extends TestBase {
 
         CheckBox cb = new CheckBox("Column 1");
         cb.setValue(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -101,7 +101,7 @@ public class TableUndefinedSize extends TestBase {
 
         cb = new CheckBox("Column 2");
         cb.setValue(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -120,7 +120,7 @@ public class TableUndefinedSize extends TestBase {
 
         cb = new CheckBox("Column 3");
         cb.setValue(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

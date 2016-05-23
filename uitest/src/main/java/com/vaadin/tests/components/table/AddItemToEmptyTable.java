@@ -18,7 +18,7 @@ public class AddItemToEmptyTable extends TestBase {
         CheckBox cb = new CheckBox("Set first column width");
         cb.setValue(false);
         cb.setImmediate(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -35,7 +35,7 @@ public class AddItemToEmptyTable extends TestBase {
         cb = new CheckBox("Set second column width");
         cb.setValue(true);
         cb.setImmediate(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

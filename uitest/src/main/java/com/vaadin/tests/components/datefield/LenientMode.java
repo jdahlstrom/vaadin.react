@@ -47,8 +47,8 @@ public class LenientMode extends TestBase implements ValueChangeListener {
         addComponent(df);
         addComponent(df2);
 
-        df.addListener(this);
-        df2.addListener(this);
+        df.addValueChangeListener(this);
+        df2.addValueChangeListener(this);
 
         df = new DateField("Lenient with time");
         df.setLocale(new Locale("fi"));
@@ -66,8 +66,8 @@ public class LenientMode extends TestBase implements ValueChangeListener {
         addComponent(df);
         addComponent(df2);
 
-        df.addListener(this);
-        df2.addListener(this);
+        df.addValueChangeListener(this);
+        df2.addValueChangeListener(this);
 
         addComponent(new Button("Visit server"));
 

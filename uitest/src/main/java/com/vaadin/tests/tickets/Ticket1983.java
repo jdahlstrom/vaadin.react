@@ -116,7 +116,7 @@ public class Ticket1983 extends LegacyApplication {
             leftSide.setFirstComponent(ol);
 
             CheckBox checkBox = new CheckBox("Two col");
-            checkBox.addListener(new ValueChangeListener() {
+            checkBox.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {

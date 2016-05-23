@@ -215,7 +215,7 @@ public class TestForUpload extends CustomComponent implements
         uploadBufferSelector.setValue("memory");
         uploadBufferSelector.addItem("tempfile");
         uploadBufferSelector
-                .addListener(new AbstractField.ValueChangeListener() {
+                .addValueChangeListener(new AbstractField.ValueChangeListener() {
                     @Override
                     public void valueChange(ValueChangeEvent event) {
                         setBuffer();

@@ -54,7 +54,7 @@ public class UsingObjectsInSelect extends com.vaadin.server.LegacyApplication
         panel2Layout.addComponent(selectedTask);
 
         select.setCaption("Select component");
-        select.addListener(this);
+        select.addValueChangeListener(this);
         select.setImmediate(true);
 
         main.addComponent(panel);

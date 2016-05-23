@@ -38,7 +38,7 @@ public class ComboBoxInvalidNullSelection extends TestBase {
         combo = new ComboBox();
         combo.setImmediate(true);
         combo.setContainerDataSource(ds1);
-        combo.addListener(new ValueChangeListener() {
+        combo.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -120,7 +120,7 @@ public class Ticket2061b extends LegacyApplication implements
             table.setMultiSelect(false);
             table.setNullSelectionAllowed(false);
             // table.setRowHeaderMode(Table.ROW_HEADER_MODE_ID);
-            table.addListener(this);
+            table.addValueChangeListener(this);
             table.setContainerDataSource(createContainer());
             layout.addComponent(table);
         }

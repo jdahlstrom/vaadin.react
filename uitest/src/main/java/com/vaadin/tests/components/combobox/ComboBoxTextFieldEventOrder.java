@@ -16,7 +16,7 @@ public class ComboBoxTextFieldEventOrder extends TestBase {
         textField.setImmediate(true);
         final Select select = new Select("select", Arrays.asList("1", "2", "3",
                 "4"));
-        textField.addListener(new ValueChangeListener() {
+        textField.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 select.addItem(Long.valueOf(select.size() + 1).toString()); // or

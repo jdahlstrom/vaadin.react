@@ -29,7 +29,7 @@ public class Ticket1805 extends com.vaadin.server.LegacyApplication {
         final GridLayout grid = new GridLayout(4, 1);
 
         final TextField size = new TextField("Grid width in css unit");
-        size.addListener(new ValueChangeListener() {
+        size.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 String width = size.getValue().toString();

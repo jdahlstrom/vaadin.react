@@ -29,7 +29,7 @@ public class ColumnHeaderAlignments extends TestBase {
         theme.setValue("reindeer");
         theme.setNullSelectionAllowed(false);
         theme.setImmediate(true);
-        theme.addListener(new ValueChangeListener() {
+        theme.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 setTheme(String.valueOf(event.getProperty().getValue()));
@@ -37,7 +37,7 @@ public class ColumnHeaderAlignments extends TestBase {
         });
         addComponent(theme);
         CheckBox footers = new CheckBox("Show footers");
-        footers.addListener(new ValueChangeListener() {
+        footers.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -69,7 +69,7 @@ public class TableClickValueChangeInteraction extends TestBase {
             });
         }
         if (listenValueChanges) {
-            table.addListener(new ValueChangeListener() {
+            table.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {

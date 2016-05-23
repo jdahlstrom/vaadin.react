@@ -81,7 +81,7 @@ public class CaptionsInLayouts extends AbstractTestUI {
         CheckBox requiredToggle = new CheckBox();
         requiredToggle.setImmediate(true);
         requiredToggle.setCaption("Required");
-        requiredToggle.addListener(new ValueChangeListener() {
+        requiredToggle.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -95,7 +95,7 @@ public class CaptionsInLayouts extends AbstractTestUI {
         CheckBox iconToggle = new CheckBox();
         iconToggle.setImmediate(true);
         iconToggle.setCaption("Icons");
-        iconToggle.addListener(new ValueChangeListener() {
+        iconToggle.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -127,7 +127,7 @@ public class CaptionsInLayouts extends AbstractTestUI {
         CheckBox errorToggle = new CheckBox();
         errorToggle.setImmediate(true);
         errorToggle.setCaption("Error");
-        errorToggle.addListener(new ValueChangeListener() {
+        errorToggle.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -253,7 +253,7 @@ public class CaptionsInLayouts extends AbstractTestUI {
 
         }
         layoutSelect.setImmediate(true);
-        layoutSelect.addListener(new ValueChangeListener() {
+        layoutSelect.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             @SuppressWarnings("unchecked")

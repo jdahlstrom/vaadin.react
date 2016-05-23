@@ -51,7 +51,7 @@ public class DateFieldTimezone extends TestBase {
         timezoneSelector.setNullSelectionAllowed(true);
         timezoneSelector.setNullSelectionItemId(nullValue);
         timezoneSelector.setFilteringMode(FilteringMode.CONTAINS);
-        timezoneSelector.addListener(new Property.ValueChangeListener() {
+        timezoneSelector.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();
@@ -76,7 +76,7 @@ public class DateFieldTimezone extends TestBase {
         dateField.setImmediate(true);
         dateField.setTimeZone(cal.getTimeZone());
         dateField.setLocale(EN);
-        dateField.addListener(new Property.ValueChangeListener() {
+        dateField.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 Date date = dateField.getValue();

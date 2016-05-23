@@ -72,7 +72,7 @@ public class TestForWindowing extends CustomComponent {
                         s2.addItem("Separate by semicolon (;)");
                         s2.setEnabled(false);
 
-                        s1.addListener(new ValueChangeListener() {
+                        s1.addValueChangeListener(new ValueChangeListener() {
 
                             @Override
                             public void valueChange(ValueChangeEvent event) {

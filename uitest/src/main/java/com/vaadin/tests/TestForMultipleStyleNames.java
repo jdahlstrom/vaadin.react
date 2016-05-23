@@ -68,7 +68,7 @@ public class TestForMultipleStyleNames extends CustomComponent implements
         styleNames2.add("italic");
 
         s.setContainerDataSource(new IndexedContainer(styleNames2));
-        s.addListener(this);
+        s.addValueChangeListener(this);
         s.setImmediate(true);
         main.addComponent(s);
 

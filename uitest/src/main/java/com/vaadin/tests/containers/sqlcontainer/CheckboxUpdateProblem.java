@@ -34,7 +34,7 @@ public class CheckboxUpdateProblem extends LegacyApplication implements
         testList.setContainerDataSource(databaseHelper.getTestContainer());
         testList.setSelectable(true);
         testList.setImmediate(true);
-        testList.addListener(this);
+        testList.addValueChangeListener(this);
 
         databaseHelper.getTestContainer().addListener(
                 new ItemSetChangeListener() {

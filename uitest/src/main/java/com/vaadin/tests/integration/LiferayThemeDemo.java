@@ -319,7 +319,7 @@ public class LiferayThemeDemo extends LegacyApplication {
             }
         }
 
-        closable.addListener(new Property.ValueChangeListener() {
+        closable.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -483,7 +483,7 @@ public class LiferayThemeDemo extends LegacyApplication {
         sp3.setSecondComponent(sp4);
         l.addComponent(sp3);
 
-        lockCheckBox.addListener(new Property.ValueChangeListener() {
+        lockCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

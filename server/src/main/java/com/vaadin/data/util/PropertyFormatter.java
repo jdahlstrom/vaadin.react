@@ -113,7 +113,7 @@ public abstract class PropertyFormatter<T> extends AbstractProperty<String>
         if (dataSource != null) {
             if (dataSource instanceof Property.ValueChangeNotifier) {
                 ((Property.ValueChangeNotifier) dataSource)
-                        .removeListener(this);
+                        .removeValueChangeListener(this);
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeListener) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
@@ -127,7 +127,8 @@ public abstract class PropertyFormatter<T> extends AbstractProperty<String>
 
         if (dataSource != null) {
             if (dataSource instanceof Property.ValueChangeNotifier) {
-                ((Property.ValueChangeNotifier) dataSource).addListener(this);
+                ((Property.ValueChangeNotifier) dataSource)
+                        .addValueChangeListener(this);
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeListener) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)

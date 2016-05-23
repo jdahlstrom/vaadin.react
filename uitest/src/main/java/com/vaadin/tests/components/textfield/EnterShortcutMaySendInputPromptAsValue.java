@@ -44,7 +44,7 @@ public class EnterShortcutMaySendInputPromptAsValue extends TestBase {
             }
 
         });
-        testField.addListener(new ValueChangeListener() {
+        testField.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 String value = event.getProperty().getValue().toString();

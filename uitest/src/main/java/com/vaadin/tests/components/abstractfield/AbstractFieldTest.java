@@ -110,9 +110,9 @@ public abstract class AbstractFieldTest<T extends AbstractField> extends
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ValueChangeListener) AbstractFieldTest.this);
+                c.addValueChangeListener(AbstractFieldTest.this);
             } else {
-                c.removeListener((ValueChangeListener) AbstractFieldTest.this);
+                c.removeValueChangeListener(AbstractFieldTest.this);
             }
         }
     };
@@ -121,9 +121,9 @@ public abstract class AbstractFieldTest<T extends AbstractField> extends
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ReadOnlyStatusChangeListener) AbstractFieldTest.this);
+                c.addListener(AbstractFieldTest.this);
             } else {
-                c.removeListener((ReadOnlyStatusChangeListener) AbstractFieldTest.this);
+                c.removeListener(AbstractFieldTest.this);
             }
         }
     };
@@ -189,7 +189,8 @@ public abstract class AbstractFieldTest<T extends AbstractField> extends
         List<String> values = new ArrayList<String>();
         values.add("Test");
         values.add("A little longer value");
-        values.add("A very long value with very much text. All in all it is 74 characters long");
+        values.add(
+                "A very long value with very much text. All in all it is 74 characters long");
 
         createClickAction("(empty string)", subCategory, setValueCommand, "");
         createClickAction("(null)", subCategory, setValueCommand, null);

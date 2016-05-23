@@ -425,8 +425,8 @@ public abstract class AbstractBeanContainer<IDTYPE, BEANTYPE> extends
             // avoid multiple notifications for the same property if
             // multiple filters are in use
             ValueChangeNotifier notifier = (ValueChangeNotifier) property;
-            notifier.removeListener(this);
-            notifier.addListener(this);
+            notifier.removeValueChangeListener(this);
+            notifier.addValueChangeListener(this);
         }
     }
 
@@ -441,7 +441,7 @@ public abstract class AbstractBeanContainer<IDTYPE, BEANTYPE> extends
     private void removeValueChangeListener(Item item, Object propertyId) {
         Property<?> property = item.getItemProperty(propertyId);
         if (property instanceof ValueChangeNotifier) {
-            ((ValueChangeNotifier) property).removeListener(this);
+            ((ValueChangeNotifier) property).removeValueChangeListener(this);
         }
     }
 
@@ -698,7 +698,8 @@ public abstract class AbstractBeanContainer<IDTYPE, BEANTYPE> extends
                         "Resolved identifier for a bean must not be null");
             }
 
-            if (internalAddItemAtEnd(itemId, createBeanItem(bean), false) != null) {
+            if (internalAddItemAtEnd(itemId, createBeanItem(bean),
+                    false) != null) {
                 modified = true;
             }
         }
@@ -914,7 +915,8 @@ public abstract class AbstractBeanContainer<IDTYPE, BEANTYPE> extends
         model.remove(propertyId);
 
         // If remove the Property from all Items
-        for (final Iterator<IDTYPE> i = getAllItemIds().iterator(); i.hasNext();) {
+        for (final Iterator<IDTYPE> i = getAllItemIds().iterator(); i
+                .hasNext();) {
             getUnfilteredItem(i.next()).removeItemProperty(propertyId);
         }
 

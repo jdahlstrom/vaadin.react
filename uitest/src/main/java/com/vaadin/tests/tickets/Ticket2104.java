@@ -50,7 +50,7 @@ public class Ticket2104 extends LegacyApplication {
         cb.setImmediate(true);
         ol.addComponent(cb);
         cb = new CheckBox("icon");
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

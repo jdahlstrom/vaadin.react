@@ -52,7 +52,7 @@ public class TestForRichTextEditor extends CustomComponent implements
                 "RTE uses google richtextArea and their examples toolbar."));
 
         rte = new RichTextArea();
-        rte.addListener(this);
+        rte.addValueChangeListener(this);
 
         main.addComponent(rte);
 
@@ -63,7 +63,7 @@ public class TestForRichTextEditor extends CustomComponent implements
 
         CheckBox b = new CheckBox("enabled");
         b.setImmediate(true);
-        b.addListener(new Property.ValueChangeListener() {
+        b.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

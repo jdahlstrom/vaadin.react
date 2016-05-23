@@ -61,7 +61,7 @@ public class DeepComponentTrees extends TestBase {
         s.addItem(VerticalLayout.class);
         s.addItem(HorizontalLayout.class);
         s.addItem(GridLayout.class);
-        s.addListener(new ComboBox.ValueChangeListener() {
+        s.addValueChangeListener(new ComboBox.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -54,7 +54,7 @@ public class IndexedContainerFilteringTest extends TestBase {
         vl.addComponent(filterString);
 
         final CheckBox cb = new CheckBox("Filter");
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

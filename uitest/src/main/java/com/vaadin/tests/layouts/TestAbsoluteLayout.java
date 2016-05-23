@@ -170,7 +170,7 @@ public class TestAbsoluteLayout extends TestBase {
                     select.setItemCaptionPropertyId("caption");
                     select.setImmediate(true);
 
-                    select.addListener(new ValueChangeListener() {
+                    select.addValueChangeListener(new ValueChangeListener() {
                         @Override
                         public void valueChange(ValueChangeEvent event) {
                             editcomponent((Component) event.getProperty()
@@ -243,7 +243,7 @@ public class TestAbsoluteLayout extends TestBase {
                     select.setContainerDataSource(container);
                     select.setImmediate(true);
 
-                    select.addListener(new ValueChangeListener() {
+                    select.addValueChangeListener(new ValueChangeListener() {
                         @Override
                         public void valueChange(ValueChangeEvent event) {
                             Class<?> c = (Class<?>) event.getProperty()

@@ -27,7 +27,7 @@ public class IntegerFieldWithoutDataSource extends TestBase {
         final TextField tf = new TextField("Enter an integer");
         tf.setConverter(Integer.class);
         tf.setImmediate(true);
-        tf.addListener(new ValueChangeListener() {
+        tf.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

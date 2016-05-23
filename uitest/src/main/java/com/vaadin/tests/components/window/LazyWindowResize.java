@@ -66,7 +66,7 @@ public class LazyWindowResize extends AbstractTestCase {
 
         lazyMode = new CheckBox("Lazy resize");
         lazyMode.setImmediate(true);
-        lazyMode.addListener(new ValueChangeListener() {
+        lazyMode.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -76,7 +76,7 @@ public class LazyWindowResize extends AbstractTestCase {
 
         resizeListenerCheckBox = new CheckBox("Resize listener");
         resizeListenerCheckBox.setImmediate(true);
-        resizeListenerCheckBox.addListener(new ValueChangeListener() {
+        resizeListenerCheckBox.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -93,7 +93,7 @@ public class LazyWindowResize extends AbstractTestCase {
         });
         immediateCheckBox = new CheckBox("Windows immediate");
         immediateCheckBox.setImmediate(true);
-        immediateCheckBox.addListener(new ValueChangeListener() {
+        immediateCheckBox.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

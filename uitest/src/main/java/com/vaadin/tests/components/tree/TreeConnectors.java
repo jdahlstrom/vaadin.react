@@ -25,7 +25,7 @@ public class TreeConnectors extends TestBase {
         CheckBox cb = new CheckBox("Connectors");
         cb.setValue(false);
         cb.setImmediate(true);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

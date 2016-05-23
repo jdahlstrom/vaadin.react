@@ -26,7 +26,7 @@ public class Ticket2090 extends LegacyApplication {
         w.addComponent(height);
         w.addComponent(label);
         w.addComponent(target);
-        height.addListener(new Property.ValueChangeListener() {
+        height.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 try {
@@ -38,7 +38,7 @@ public class Ticket2090 extends LegacyApplication {
                 }
             }
         });
-        width.addListener(new Property.ValueChangeListener() {
+        width.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 try {

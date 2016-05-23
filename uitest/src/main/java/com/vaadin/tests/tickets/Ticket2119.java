@@ -73,7 +73,7 @@ public class Ticket2119 extends LegacyApplication {
         select.setPropertyDataSource(valueProperty);
         layout.addComponent(select);
 
-        globalValue.addListener(new Property.ValueChangeListener() {
+        globalValue.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();

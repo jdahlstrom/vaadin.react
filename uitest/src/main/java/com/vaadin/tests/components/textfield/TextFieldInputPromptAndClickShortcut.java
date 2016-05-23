@@ -28,7 +28,7 @@ public class TextFieldInputPromptAndClickShortcut extends TestBase {
 
         final CheckBox inputPromptSelection = new CheckBox("Input prompt");
         inputPromptSelection.setImmediate(true);
-        inputPromptSelection.addListener(new ValueChangeListener() {
+        inputPromptSelection.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (event.getProperty().getValue() == Boolean.TRUE) {

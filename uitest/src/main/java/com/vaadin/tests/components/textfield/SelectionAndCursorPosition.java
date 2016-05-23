@@ -27,7 +27,7 @@ public class SelectionAndCursorPosition extends TestBase {
         panel.setCaption("Hackers panel");
         CheckBox ml = new CheckBox("Multiline");
         ml.setImmediate(true);
-        ml.addListener(new Property.ValueChangeListener() {
+        ml.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (textField.getUI() == null

@@ -125,7 +125,7 @@ public class TestBench extends com.vaadin.server.LegacyApplication implements
             menu.expandItemsRecursively(i.next());
         }
 
-        menu.addListener(this);
+        menu.addValueChangeListener(this);
         menu.setImmediate(true);
         menu.setNullSelectionAllowed(false);
         VerticalLayout lo = new VerticalLayout();

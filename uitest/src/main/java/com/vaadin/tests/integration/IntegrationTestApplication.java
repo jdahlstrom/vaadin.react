@@ -35,7 +35,7 @@ public class IntegrationTestApplication extends LegacyApplication {
         item.getItemProperty("country").setValue("Sweden");
 
         final Label selectedLabel = new Label();
-        table.addListener(new ValueChangeListener() {
+        table.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 selectedLabel.setValue(String.valueOf(table.getValue()));

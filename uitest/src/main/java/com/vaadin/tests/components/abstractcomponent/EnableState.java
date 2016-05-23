@@ -21,7 +21,7 @@ public class EnableState extends AbstractTestCase {
         panelLayout.addComponent(button);
 
         CheckBox enable = new CheckBox("Toggle button enabled", true);
-        enable.addListener(new Property.ValueChangeListener() {
+        enable.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -33,7 +33,7 @@ public class EnableState extends AbstractTestCase {
         enable.setImmediate(true);
 
         CheckBox caption = new CheckBox("Toggle button caption", true);
-        caption.addListener(new Property.ValueChangeListener() {
+        caption.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -43,7 +43,7 @@ public class EnableState extends AbstractTestCase {
         caption.setImmediate(true);
 
         CheckBox visible = new CheckBox("Toggle panel visibility", true);
-        visible.addListener(new Property.ValueChangeListener() {
+        visible.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -55,7 +55,7 @@ public class EnableState extends AbstractTestCase {
         visible.setImmediate(true);
 
         CheckBox panelEnable = new CheckBox("Toggle panel enabled", true);
-        panelEnable.addListener(new Property.ValueChangeListener() {
+        panelEnable.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
