@@ -189,7 +189,8 @@ public abstract class AbstractTextField extends AbstractField<String> implements
                 String newValue = (String) variables.get("text");
 
                 // server side check for max length
-                if (getMaxLength() != -1 && newValue.length() > getMaxLength()) {
+                if (getMaxLength() != -1
+                        && newValue.length() > getMaxLength()) {
                     newValue = newValue.substring(0, getMaxLength());
                 }
                 final String oldValue = getValue();
@@ -680,7 +681,7 @@ public abstract class AbstractTextField extends AbstractField<String> implements
      * 
      * @param pos
      *            the position for the cursor
-     * */
+     */
     public void setCursorPosition(int pos) {
         setSelectionRange(pos, 0);
         lastKnownCursorPosition = pos;
@@ -708,29 +709,9 @@ public abstract class AbstractTextField extends AbstractField<String> implements
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     @Override
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     @Override
@@ -739,28 +720,9 @@ public abstract class AbstractTextField extends AbstractField<String> implements
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     @Override
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     /*

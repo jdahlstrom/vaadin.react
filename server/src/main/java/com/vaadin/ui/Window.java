@@ -55,7 +55,8 @@ import com.vaadin.util.ReflectTools;
 /**
  * A component that represents a floating popup window that can be added to a
  * {@link UI}. A window is added to a {@code UI} using
- * {@link UI#addWindow(Window)}. </p>
+ * {@link UI#addWindow(Window)}.
+ * </p>
  * <p>
  * The contents of a window is set using {@link #setContent(Component)} or by
  * using the {@link #Window(String, Component)} constructor.
@@ -105,7 +106,8 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
     /**
      * Holds registered CloseShortcut instances for query and later removal
      */
-    private List<CloseShortcut> closeShortcuts = new ArrayList<CloseShortcut>(4);
+    private List<CloseShortcut> closeShortcuts = new ArrayList<CloseShortcut>(
+            4);
 
     /**
      * Creates a new, empty window
@@ -162,9 +164,8 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * com.vaadin.ui.AbstractComponent#setParent(com.vaadin.server.ClientConnector
-     * )
+     * @see com.vaadin.ui.AbstractComponent#setParent(com.vaadin.server.
+     * ClientConnector )
      */
     @Override
     public void setParent(HasComponents parent) {
@@ -535,13 +536,15 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
      * @param listener
      *            the WindowModeChangeListener to remove.
      */
-    public void removeWindowModeChangeListener(WindowModeChangeListener listener) {
+    public void removeWindowModeChangeListener(
+            WindowModeChangeListener listener) {
         removeListener(WindowModeChangeEvent.class, listener,
                 WindowModeChangeListener.windowModeChangeMethod);
     }
 
     protected void fireWindowWindowModeChange() {
-        fireEvent(new Window.WindowModeChangeEvent(this, getState().windowMode));
+        fireEvent(
+                new Window.WindowModeChangeEvent(this, getState().windowMode));
     }
 
     /**
@@ -1089,29 +1092,9 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     @Override
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     /*
@@ -1127,28 +1110,9 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     @Override
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     /**
@@ -1269,8 +1233,8 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
      * Sets the WAI-ARIA role the window.
      * 
      * This role defines how an assistive device handles a window. Available
-     * roles are alertdialog and dialog (@see <a
-     * href="http://www.w3.org/TR/2011/CR-wai-aria-20110118/roles">Roles
+     * roles are alertdialog and dialog (@see
+     * <a href="http://www.w3.org/TR/2011/CR-wai-aria-20110118/roles">Roles
      * Model</a>).
      * 
      * The default role is dialog.
@@ -1286,8 +1250,8 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
      * Gets the WAI-ARIA role the window.
      * 
      * This role defines how an assistive device handles a window. Available
-     * roles are alertdialog and dialog (@see <a
-     * href="http://www.w3.org/TR/2011/CR-wai-aria-20110118/roles">Roles
+     * roles are alertdialog and dialog (@see
+     * <a href="http://www.w3.org/TR/2011/CR-wai-aria-20110118/roles">Roles
      * Model</a>).
      * 
      * @return WAI-ARIA role set for the window
@@ -1395,7 +1359,7 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
             // Parse shortcuts
             String[] shortcutStrings = DesignAttributeHandler.readAttribute(
                     "close-shortcut", design.attributes(), String.class).split(
-                    "\\s+");
+                            "\\s+");
 
             removeAllCloseShortcuts();
 
@@ -1433,7 +1397,8 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
      * @see #setAssistiveDescription(Component...)
      */
     @Override
-    protected void readDesignChildren(Elements children, DesignContext context) {
+    protected void readDesignChildren(Elements children,
+            DesignContext context) {
         List<Component> descriptions = new ArrayList<Component>();
         Elements content = new Elements();
 

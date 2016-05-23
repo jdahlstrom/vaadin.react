@@ -445,7 +445,8 @@ public class ComboBox extends AbstractSelect implements
             // to page with the selected item after filtering if accepted by
             // filter
             Object selection = getValue();
-            if (isScrollToSelectedItem() && !optionRequest && selection != null) {
+            if (isScrollToSelectedItem() && !optionRequest
+                    && selection != null) {
                 // ensure proper page
                 indexToEnsureInView = indexed.indexOfId(selection);
             }
@@ -530,7 +531,8 @@ public class ComboBox extends AbstractSelect implements
      *            flag to indicate if nullselect option needs to be taken into
      *            consideration
      */
-    private List<?> sanitetizeList(List<?> options, boolean needNullSelectOption) {
+    private List<?> sanitetizeList(List<?> options,
+            boolean needNullSelectOption) {
 
         if (pageLength != 0 && options.size() > pageLength) {
 
@@ -540,7 +542,8 @@ public class ComboBox extends AbstractSelect implements
             // to page with the selected item after filtering if accepted by
             // filter
             Object selection = getValue();
-            if (isScrollToSelectedItem() && !optionRequest && selection != null) {
+            if (isScrollToSelectedItem() && !optionRequest
+                    && selection != null) {
                 // ensure proper page
                 indexToEnsureInView = options.indexOf(selection);
             }
@@ -777,28 +780,9 @@ public class ComboBox extends AbstractSelect implements
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     @Override
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     @Override
@@ -807,29 +791,9 @@ public class ComboBox extends AbstractSelect implements
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     @Override
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     /**
@@ -845,7 +809,8 @@ public class ComboBox extends AbstractSelect implements
     @Override
     public void setMultiSelect(boolean multiSelect) {
         if (multiSelect) {
-            throw new UnsupportedOperationException("Multiselect not supported");
+            throw new UnsupportedOperationException(
+                    "Multiselect not supported");
         }
     }
 

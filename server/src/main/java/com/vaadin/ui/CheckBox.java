@@ -66,7 +66,8 @@ public class CheckBox extends AbstractField<Boolean> {
         }
     };
 
-    FocusAndBlurServerRpcImpl focusBlurRpc = new FocusAndBlurServerRpcImpl(this) {
+    FocusAndBlurServerRpcImpl focusBlurRpc = new FocusAndBlurServerRpcImpl(
+            this) {
         @Override
         protected void fireEvent(Event event) {
             CheckBox.this.fireEvent(event);
@@ -149,25 +150,8 @@ public class CheckBox extends AbstractField<Boolean> {
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     public void addFocusListener(FocusListener listener) {
@@ -175,26 +159,8 @@ public class CheckBox extends AbstractField<Boolean> {
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     /**
@@ -223,7 +189,8 @@ public class CheckBox extends AbstractField<Boolean> {
         if (design.hasAttr("checked")) {
             this.setValue(
                     DesignAttributeHandler.readAttribute("checked",
-                            design.attributes(), Boolean.class), false, true);
+                            design.attributes(), Boolean.class),
+                    false, true);
         }
     }
 

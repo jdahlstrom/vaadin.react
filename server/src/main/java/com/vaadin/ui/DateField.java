@@ -485,7 +485,7 @@ public class DateField extends AbstractField<Date> implements
                         || variables.containsKey("min")
                         || variables.containsKey("sec")
                         || variables.containsKey("msec") || variables
-                            .containsKey("dateString"))) {
+                                .containsKey("dateString"))) {
 
             // Old and new dates
             final Date oldDate = getValue();
@@ -543,7 +543,8 @@ public class DateField extends AbstractField<Date> implements
                 newDate = cal.getTime();
             }
 
-            if (newDate == null && dateString != null && !"".equals(dateString)) {
+            if (newDate == null && dateString != null
+                    && !"".equals(dateString)) {
                 try {
                     Date parsedDate = handleUnparsableDateString(dateString);
                     setValue(parsedDate, true);
@@ -813,7 +814,8 @@ public class DateField extends AbstractField<Date> implements
             // Start by a zeroed calendar to avoid having values for lower
             // resolution variables e.g. time when resolution is day
             int min, field;
-            for (Resolution r : Resolution.getResolutionsLowerThan(resolution)) {
+            for (Resolution r : Resolution
+                    .getResolutionsLowerThan(resolution)) {
                 field = r.getCalendarField();
                 min = calendar.getActualMinimum(field);
                 calendar.set(field, min);
@@ -898,29 +900,9 @@ public class DateField extends AbstractField<Date> implements
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     @Override
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     @Override
@@ -929,28 +911,9 @@ public class DateField extends AbstractField<Date> implements
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     @Override
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     /**
