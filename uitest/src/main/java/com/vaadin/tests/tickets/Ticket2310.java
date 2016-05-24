@@ -34,7 +34,7 @@ public class Ticket2310 extends LegacyApplication {
 
         Button b = new Button("change label");
 
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             int i = 0;
 
             @Override
@@ -46,7 +46,7 @@ public class Ticket2310 extends LegacyApplication {
         });
 
         Button b2 = new Button("toggle panel visibility");
-        b2.addListener(new Button.ClickListener() {
+        b2.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 p.setVisible(!p.isVisible());

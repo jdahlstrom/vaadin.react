@@ -32,7 +32,7 @@ public class SafariRenderingBugWhiteSpace extends TestBase {
         table.setSelectable(true);
         table.setImmediate(true);
         table.setSizeFull();
-        table.addListener(new ValueChangeListener() {
+        table.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

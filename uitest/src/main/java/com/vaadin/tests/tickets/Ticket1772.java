@@ -21,7 +21,7 @@ public class Ticket1772 extends com.vaadin.server.LegacyApplication {
         final GridLayout gridLayout = new GridLayout(2, 2);
         main.addComponent(gridLayout);
 
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             int counter = 0;
 
             @Override

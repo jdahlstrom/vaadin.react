@@ -23,7 +23,7 @@ public class Ticket1900 extends LegacyApplication {
             f[i].setImmediate(true);
             f[i].setRequired(true);
             main.addComponent(f[i]);
-            f[i].addListener(new Property.ValueChangeListener() {
+            f[i].addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
                 public void valueChange(ValueChangeEvent event) {
                     main.showNotification("Validity test", "Testcase " + j

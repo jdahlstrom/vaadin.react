@@ -79,7 +79,7 @@ public class Ticket2029 extends LegacyApplication {
         for (int i = 0; i < COMPONENTS; i++) {
             TextField tf = new TextField();
             tf.setImmediate(true);
-            tf.addListener(new ValueChangeListener() {
+            tf.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {

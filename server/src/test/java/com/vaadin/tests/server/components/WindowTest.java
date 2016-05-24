@@ -35,7 +35,7 @@ public class WindowTest {
         EasyMock.replay(cl);
 
         // Add listener and send a close event -> should end up in listener once
-        window.addListener(cl);
+        window.addCloseListener(cl);
         sendClose(window);
 
         // Ensure listener was called once
@@ -43,7 +43,7 @@ public class WindowTest {
 
         // Remove the listener and send close event -> should not end up in
         // listener
-        window.removeListener(cl);
+        window.removeCloseListener(cl);
         sendClose(window);
 
         // Ensure listener still has been called only once
@@ -63,7 +63,7 @@ public class WindowTest {
 
         // Add listener and send a resize event -> should end up in listener
         // once
-        window.addListener(rl);
+        window.addResizeListener(rl);
         sendResize(window);
 
         // Ensure listener was called once
@@ -71,7 +71,7 @@ public class WindowTest {
 
         // Remove the listener and send close event -> should not end up in
         // listener
-        window.removeListener(rl);
+        window.removeResizeListener(rl);
         sendResize(window);
 
         // Ensure listener still has been called only once

@@ -68,7 +68,7 @@ public class TextFieldWithPropertyFormatterTest {
             }
         };
 
-        field.addListener(listener);
+        field.addValueChangeListener(listener);
         listenerCalled = 0;
         repainted = 0;
     }

@@ -65,7 +65,7 @@ public class TextFieldValueChangeTest extends
         EasyMock.replay(getListener());
 
         // Add listener and set the value -> should end up in listener once
-        getField().addListener(getListener());
+        getField().addValueChangeListener(getListener());
 
         property.setValue("Foo");
 
@@ -101,7 +101,7 @@ public class TextFieldValueChangeTest extends
         getListener().valueChange(EasyMock.isA(ValueChangeEvent.class));
         EasyMock.replay(getListener());
 
-        getField().addListener(getListener());
+        getField().addValueChangeListener(getListener());
         getField().setPropertyDataSource(property);
 
         // Ensure listener was called once

@@ -23,7 +23,7 @@ public class Ticket2347 extends LegacyApplication {
     private void createUI(VerticalLayout layout) {
         CustomLayout cl = new CustomLayout("Ticket2347");
         b1 = new Button("200px button");
-        b1.addListener(new ClickListener() {
+        b1.addClickListener(new ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

@@ -78,7 +78,8 @@ public interface ComponentContainer extends HasComponents,
      * @param newComponent
      *            the new component to be replaced.
      */
-    public void replaceComponent(Component oldComponent, Component newComponent);
+    public void replaceComponent(Component oldComponent,
+            Component newComponent);
 
     /**
      * Gets an iterator to the collection of contained components. Using this
@@ -110,33 +111,4 @@ public interface ComponentContainer extends HasComponents,
      *            moved to this container.
      */
     public void moveComponentsFrom(ComponentContainer source);
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addComponentAttachListener(ComponentAttachListener)}
-     **/
-    @Deprecated
-    public void addListener(ComponentAttachListener listener);
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeComponentAttachListener(ComponentAttachListener)}
-     **/
-    @Deprecated
-    public void removeListener(ComponentAttachListener listener);
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addComponentDetachListener(ComponentDetachListener)}
-     **/
-    @Deprecated
-    public void addListener(ComponentDetachListener listener);
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeComponentDetachListener(ComponentDetachListener)}
-     **/
-    @Deprecated
-    public void removeListener(ComponentDetachListener listener);
-
 }

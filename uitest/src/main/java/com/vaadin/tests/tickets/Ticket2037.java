@@ -23,7 +23,7 @@ public class Ticket2037 extends com.vaadin.server.LegacyApplication {
 
         main.addComponent(b);
         main.addComponent(lo);
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

@@ -32,16 +32,18 @@ public class Ticket34 extends LegacyApplication {
                 "Test app for URI fragment management/reading", mainLayout);
         setMainWindow(mainWin);
 
-        mainWin.getPage().addListener(new Page.UriFragmentChangedListener() {
+        mainWin.getPage().addUriFragmentChangedListener(
+                new Page.UriFragmentChangedListener() {
 
-            @Override
-            public void uriFragmentChanged(UriFragmentChangedEvent event) {
-                getMainWindow().showNotification(
-                        "Fragment now: " + event.getUriFragment());
-                // try to change to view mapped by fragment string
-                setView(event.getUriFragment());
-            }
-        });
+                    @Override
+                    public void uriFragmentChanged(
+                            UriFragmentChangedEvent event) {
+                        getMainWindow().showNotification(
+                                "Fragment now: " + event.getUriFragment());
+                        // try to change to view mapped by fragment string
+                        setView(event.getUriFragment());
+                    }
+                });
 
         setView("main");
 
@@ -91,7 +93,7 @@ public class Ticket34 extends LegacyApplication {
             pl.addComponent(tf);
             Button b = new Button("Go!");
             pl.addComponent(b);
-            b.addListener(new Button.ClickListener() {
+            b.addClickListener(new Button.ClickListener() {
 
                 @Override
                 public void buttonClick(ClickEvent event) {

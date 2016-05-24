@@ -87,7 +87,7 @@ public class BeanItemContainerFilteringTest extends TestBase {
             vl.addComponent(filterString);
 
             final CheckBox cb = new CheckBox("Filter on value");
-            cb.addListener(new ValueChangeListener() {
+            cb.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {

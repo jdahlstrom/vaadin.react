@@ -45,7 +45,7 @@ public class TreeFiltering extends TestBase {
         final CheckBox filterType = new CheckBox(
                 "Include parent when filtering", true);
         filterType.setImmediate(true);
-        filterType.addListener(new ValueChangeListener() {
+        filterType.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

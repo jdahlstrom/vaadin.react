@@ -68,7 +68,7 @@ public class Ticket2061b extends LegacyApplication implements
         tf.setWidth("2500px");
 
         TabsAcc tab = new TabsAcc(new Component[] { p, a, tf });
-        tab.addListener(this);
+        tab.addSelectedTabChangeListener(this);
 
         mainLayout.addComponent(sp);
         sp.addComponent(new Label("C 1"));
@@ -101,7 +101,8 @@ public class Ticket2061b extends LegacyApplication implements
         tab.addTab(p, "Panel with panel", null);
     }
 
-    public class MyTable extends CustomComponent implements ValueChangeListener {
+    public class MyTable extends CustomComponent
+            implements ValueChangeListener {
 
         private Table table = new Table();
         private String[] columns;
@@ -120,7 +121,7 @@ public class Ticket2061b extends LegacyApplication implements
             table.setMultiSelect(false);
             table.setNullSelectionAllowed(false);
             // table.setRowHeaderMode(Table.ROW_HEADER_MODE_ID);
-            table.addListener(this);
+            table.addValueChangeListener(this);
             table.setContainerDataSource(createContainer());
             layout.addComponent(table);
         }

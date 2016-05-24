@@ -32,7 +32,7 @@ public class TableHeightWhenHidingHeaders extends AbstractTestCase {
         table.addItem("2").getItemProperty("Name").setValue("Item 2");
 
         CheckBox showHeaders = new CheckBox("Show headers");
-        showHeaders.addListener(new ValueChangeListener() {
+        showHeaders.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

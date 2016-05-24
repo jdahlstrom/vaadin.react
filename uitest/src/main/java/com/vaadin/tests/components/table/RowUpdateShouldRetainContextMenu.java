@@ -17,7 +17,7 @@ public class RowUpdateShouldRetainContextMenu extends TestBase {
     @Override
     protected void setup() {
         indicator.setWidth("200px");
-        indicator.addListener(new ValueChangeListener() {
+        indicator.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 // Do some changes to the table

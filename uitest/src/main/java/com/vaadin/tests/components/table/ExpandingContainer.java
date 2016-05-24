@@ -114,7 +114,7 @@ public class ExpandingContainer extends AbstractContainer implements
 
     @Override
     @SuppressWarnings("rawtypes")
-    public Property/* <?> */getContainerProperty(Object itemId,
+    public Property/* <?> */ getContainerProperty(Object itemId,
             Object propertyId) {
         BeanItem<MyBean> item = getItem(itemId);
         return item != null ? item.getItemProperty(propertyId) : null;
@@ -341,21 +341,9 @@ public class ExpandingContainer extends AbstractContainer implements
     // Container.ItemSetChangeNotifier
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void addListener(Container.ItemSetChangeListener listener) {
-        super.addListener(listener);
-    }
-
-    @Override
     public void addItemSetChangeListener(
             Container.ItemSetChangeListener listener) {
         super.addItemSetChangeListener(listener);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void removeListener(Container.ItemSetChangeListener listener) {
-        super.removeListener(listener);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class TreeFilesystem extends com.vaadin.server.LegacyApplication
         explorerPanel.setHeight("400px");
 
         // "this" handles tree's expand event
-        tree.addListener(this);
+        tree.addExpandListener(this);
 
         // Get sample directory
         final File sampleDir = SampleDirectory.getDirectory(

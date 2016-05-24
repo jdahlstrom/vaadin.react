@@ -31,7 +31,7 @@ public class TableSorting extends TestBase {
         testTable.setVisibleColumns(new Object[] { "testName" });
 
         // Handle selection change.
-        testTable.addListener(new Property.ValueChangeListener() {
+        testTable.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 System.out.println("ValueChanged: "

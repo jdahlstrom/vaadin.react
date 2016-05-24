@@ -41,7 +41,7 @@ public class DragAndDropDisable extends AbstractTestUI {
             final CheckBox enabled = new CheckBox("Enabled", true);
             addComponent(enabled);
             enabled.setImmediate(true);
-            enabled.addListener(new ValueChangeListener() {
+            enabled.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {
@@ -80,7 +80,7 @@ public class DragAndDropDisable extends AbstractTestUI {
             final CheckBox enabled = new CheckBox("Enabled", true);
             addComponent(enabled);
             enabled.setImmediate(true);
-            enabled.addListener(new ValueChangeListener() {
+            enabled.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {
@@ -129,7 +129,7 @@ public class DragAndDropDisable extends AbstractTestUI {
             final CheckBox enabled = new CheckBox("Enabled", true);
             addComponent(enabled);
             enabled.setImmediate(true);
-            enabled.addListener(new ValueChangeListener() {
+            enabled.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {

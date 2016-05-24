@@ -50,7 +50,7 @@ public class Ticket2104 extends LegacyApplication {
         cb.setImmediate(true);
         ol.addComponent(cb);
         cb = new CheckBox("icon");
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -82,7 +82,7 @@ public class Ticket2104 extends LegacyApplication {
                 new ExternalResource(
                         "http://www.itmill.com/res/images/itmill_logo.gif"));
 
-        tree.addListener(new ItemClickListener() {
+        tree.addItemClickListener(new ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 getMainWindow().addComponent(
@@ -118,7 +118,7 @@ public class Ticket2104 extends LegacyApplication {
         for (int i = 0; i < 10; i++) {
             table.addItem("Item " + i);
         }
-        table.addListener(new ItemClickListener() {
+        table.addItemClickListener(new ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 getMainWindow().addComponent(

@@ -216,7 +216,8 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
                     setSelected(null);
                 } else {
 
-                    int newSelectedIndex = selectedTabIndexAfterTabRemove(componentIndex);
+                    int newSelectedIndex = selectedTabIndexAfterTabRemove(
+                            componentIndex);
 
                     // Make sure the component actually exists, in case someone
                     // override it and provide a non existing component.
@@ -631,7 +632,8 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
      */
     private boolean updateSelection() {
         Component originalSelection = selected;
-        for (final Iterator<Component> i = getComponentIterator(); i.hasNext();) {
+        for (final Iterator<Component> i = getComponentIterator(); i
+                .hasNext();) {
             final Component component = i.next();
 
             Tab tab = tabs.get(component);
@@ -705,7 +707,8 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
      */
 
     @Override
-    public void replaceComponent(Component oldComponent, Component newComponent) {
+    public void replaceComponent(Component oldComponent,
+            Component newComponent) {
         boolean selectAfterInserting = false;
 
         if (selected == oldComponent) {
@@ -720,7 +723,8 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
         int newLocation = -1;
         int location = 0;
 
-        for (final Iterator<Component> i = components.iterator(); i.hasNext();) {
+        for (final Iterator<Component> i = components.iterator(); i
+                .hasNext();) {
             final Component component = i.next();
 
             if (component == oldComponent) {
@@ -755,8 +759,10 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
 
             if (selectAfterInserting) {
                 setSelected(newComponent);
-                //SelectedTabChangeEvent should be fired here as selected Tab is changed.
-                //Other cases are handled implicitly by removeComponent() and addComponent()addTab()
+                // SelectedTabChangeEvent should be fired here as selected Tab
+                // is changed.
+                // Other cases are handled implicitly by removeComponent() and
+                // addComponent()addTab()
                 fireSelectedTabChange();
             }
 
@@ -842,18 +848,10 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
      * @param listener
      *            the Listener to be added.
      */
-    public void addSelectedTabChangeListener(SelectedTabChangeListener listener) {
+    public void addSelectedTabChangeListener(
+            SelectedTabChangeListener listener) {
         addListener(SelectedTabChangeEvent.class, listener,
                 SELECTED_TAB_CHANGE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addSelectedTabChangeListener(SelectedTabChangeListener)}
-     **/
-    @Deprecated
-    public void addListener(SelectedTabChangeListener listener) {
-        addSelectedTabChangeListener(listener);
     }
 
     /**
@@ -866,15 +864,6 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
             SelectedTabChangeListener listener) {
         removeListener(SelectedTabChangeEvent.class, listener,
                 SELECTED_TAB_CHANGE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeSelectedTabChangeListener(SelectedTabChangeListener)}
-     **/
-    @Deprecated
-    public void removeListener(SelectedTabChangeListener listener) {
-        removeSelectedTabChangeListener(listener);
     }
 
     /**
@@ -1257,8 +1246,10 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
         public void setComponentError(ErrorMessage componentError) {
             this.componentError = componentError;
 
-            String formattedHtmlMessage = componentError != null ? componentError
-                    .getFormattedHtmlMessage() : null;
+            String formattedHtmlMessage = componentError != null
+                    ? componentError
+                            .getFormattedHtmlMessage()
+                    : null;
             tabState.componentError = formattedHtmlMessage;
 
             markAsDirty();
@@ -1397,28 +1388,9 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     @Override
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     @Override
@@ -1427,29 +1399,9 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     @Override
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     @Override

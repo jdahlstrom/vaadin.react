@@ -39,7 +39,7 @@ public class Ticket1857 extends LegacyApplication implements Handler {
                 false);
         footer.addComponent(actionHandlerEnabler);
         actionHandlerEnabler.setImmediate(true);
-        actionHandlerEnabler.addListener(new Property.ValueChangeListener() {
+        actionHandlerEnabler.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (actionHandlerEnabler.getValue().booleanValue()) {
@@ -53,7 +53,7 @@ public class Ticket1857 extends LegacyApplication implements Handler {
         final CheckBox cellStylesEnabler = new CheckBox("Cell styles", false);
         footer.addComponent(cellStylesEnabler);
         cellStylesEnabler.setImmediate(true);
-        cellStylesEnabler.addListener(new Property.ValueChangeListener() {
+        cellStylesEnabler.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (cellStylesEnabler.getValue().booleanValue()) {

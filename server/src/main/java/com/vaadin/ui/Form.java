@@ -131,7 +131,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
      */
     private final ValueChangeListener fieldValueChangeListener = new ValueChangeListener() {
         @Override
-        public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+        public void valueChange(
+                com.vaadin.data.Property.ValueChangeEvent event) {
             markAsDirty();
         }
     };
@@ -236,7 +237,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
         // getErrorMessage() recursively instead of validate().
         ErrorMessage validationError = null;
         if (isValidationVisible()) {
-            for (final Iterator<Object> i = propertyIds.iterator(); i.hasNext();) {
+            for (final Iterator<Object> i = propertyIds.iterator(); i
+                    .hasNext();) {
                 Object f = fields.get(i.next());
                 if (f instanceof AbstractComponent) {
                     AbstractComponent field = (AbstractComponent) f;
@@ -248,7 +250,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
                             validationError = new UserError(field.getCaption());
                         }
                         break;
-                    } else if (f instanceof Field && !((Field<?>) f).isValid()) {
+                    } else if (f instanceof Field
+                            && !((Field<?>) f).isValid()) {
                         // Something is wrong with the field, but no proper
                         // error is given. Generate one.
                         validationError = new UserError(field.getCaption());
@@ -270,7 +273,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
                         getComponentError(),
                         validationError,
                         AbstractErrorMessage
-                                .getErrorMessageForException(currentBufferedSourceException) });
+                                .getErrorMessageForException(
+                                        currentBufferedSourceException) });
     }
 
     /**
@@ -308,7 +312,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
      * use the default one from the interface.
      */
     @Override
-    public void commit() throws Buffered.SourceException, InvalidValueException {
+    public void commit()
+            throws Buffered.SourceException, InvalidValueException {
 
         LinkedList<SourceException> problems = null;
 
@@ -433,7 +438,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
     public void setBuffered(boolean buffered) {
         if (buffered != this.buffered) {
             this.buffered = buffered;
-            for (final Iterator<Object> i = propertyIds.iterator(); i.hasNext();) {
+            for (final Iterator<Object> i = propertyIds.iterator(); i
+                    .hasNext();) {
                 (fields.get(i.next())).setBuffered(buffered);
             }
         }
@@ -518,7 +524,7 @@ public class Form extends AbstractField<Object> implements Item.Editor,
         }
 
         fields.put(propertyId, field);
-        field.addListener(fieldValueChangeListener);
+        field.addValueChangeListener(fieldValueChangeListener);
         if (!propertyIds.contains(propertyId)) {
             // adding a field directly
             propertyIds.addLast(propertyId);
@@ -622,7 +628,7 @@ public class Form extends AbstractField<Object> implements Item.Editor,
             propertyIds.remove(id);
             fields.remove(id);
             detachField(field);
-            field.removeListener(fieldValueChangeListener);
+            field.removeValueChangeListener(fieldValueChangeListener);
             return true;
         }
 
@@ -701,7 +707,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
      * 
      * @see com.vaadin.data.Item.Viewer#setItemDataSource(Item)
      */
-    public void setItemDataSource(Item newDataSource, Collection<?> propertyIds) {
+    public void setItemDataSource(Item newDataSource,
+            Collection<?> propertyIds) {
 
         if (getLayout() instanceof GridLayout) {
             GridLayout gl = (GridLayout) getLayout();
@@ -877,8 +884,9 @@ public class Form extends AbstractField<Object> implements Item.Editor,
         }
         if (value != null && !found) {
             if (value instanceof Collection) {
-                for (final Iterator<?> it = ((Collection<?>) value).iterator(); it
-                        .hasNext();) {
+                for (final Iterator<?> it = ((Collection<?>) value)
+                        .iterator(); it
+                                .hasNext();) {
                     final Object val = it.next();
                     found = false;
                     for (int i = 0; i < values.length && !found; i++) {
@@ -938,8 +946,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
         // Replaces the old field with new one
         getLayout().replaceComponent(oldField, newField);
         fields.put(propertyId, newField);
-        newField.addListener(fieldValueChangeListener);
-        oldField.removeListener(fieldValueChangeListener);
+        newField.addValueChangeListener(fieldValueChangeListener);
+        oldField.removeValueChangeListener(fieldValueChangeListener);
 
         return newField;
     }
@@ -1166,7 +1174,8 @@ public class Form extends AbstractField<Object> implements Item.Editor,
     @Override
     public void setTabIndex(int tabIndex) {
         super.setTabIndex(tabIndex);
-        for (final Iterator<?> i = getItemPropertyIds().iterator(); i.hasNext();) {
+        for (final Iterator<?> i = getItemPropertyIds().iterator(); i
+                .hasNext();) {
             (getField(i.next())).setTabIndex(tabIndex);
         }
     }

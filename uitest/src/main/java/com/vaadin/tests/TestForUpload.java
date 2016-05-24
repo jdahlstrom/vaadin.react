@@ -116,7 +116,7 @@ public class TestForUpload extends CustomComponent implements
             }
         });
 
-        up.addListener(new StartedListener() {
+        up.addStartedListener(new StartedListener() {
             private static final long serialVersionUID = 5508883803861085154L;
 
             @Override
@@ -130,7 +130,7 @@ public class TestForUpload extends CustomComponent implements
             }
         });
 
-        up.addListener(new Upload.FinishedListener() {
+        up.addFinishedListener(new Upload.FinishedListener() {
             private static final long serialVersionUID = -3773034195991947371L;
 
             @Override
@@ -162,7 +162,7 @@ public class TestForUpload extends CustomComponent implements
 
                     statusLayout.addComponent(new Link("Download "
                             + buffer.getFileName(), new StreamResource(buffer,
-                            buffer.getFileName())));
+                                    buffer.getFileName())));
 
                     statusLayout.setVisible(true);
                 }
@@ -171,7 +171,7 @@ public class TestForUpload extends CustomComponent implements
             }
         });
 
-        up.addListener(new Upload.ProgressListener() {
+        up.addProgressListener(new Upload.ProgressListener() {
 
             @Override
             public void updateProgress(long readBytes, long contentLenght) {
@@ -202,7 +202,7 @@ public class TestForUpload extends CustomComponent implements
         main.addComponent(beSluggish);
         main.addComponent(throwExecption);
         main.addComponent(interrupt);
-        interrupt.addListener(new Button.ClickListener() {
+        interrupt.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 up.interruptUpload();
@@ -215,12 +215,13 @@ public class TestForUpload extends CustomComponent implements
         uploadBufferSelector.setValue("memory");
         uploadBufferSelector.addItem("tempfile");
         uploadBufferSelector
-                .addListener(new AbstractField.ValueChangeListener() {
-                    @Override
-                    public void valueChange(ValueChangeEvent event) {
-                        setBuffer();
-                    }
-                });
+                .addValueChangeListener(
+                        new AbstractField.ValueChangeListener() {
+                            @Override
+                            public void valueChange(ValueChangeEvent event) {
+                                setBuffer();
+                            }
+                        });
         main.addComponent(uploadBufferSelector);
 
         main.addComponent(up);
@@ -243,7 +244,7 @@ public class TestForUpload extends CustomComponent implements
         main.addComponent(status);
 
         final Button restart = new Button("R");
-        restart.addListener(new Button.ClickListener() {
+        restart.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

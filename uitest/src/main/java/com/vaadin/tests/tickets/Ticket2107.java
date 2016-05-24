@@ -21,7 +21,7 @@ public class Ticket2107 extends LegacyApplication {
         tf.setDescription("Enter someting and click outside the field to activate");
         tf.setRequired(true);
         tf.setImmediate(true);
-        tf.addListener(new Property.ValueChangeListener() {
+        tf.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -47,7 +47,7 @@ public class Ticket2107 extends LegacyApplication {
                 false);
         w.addComponent(b);
         b.setImmediate(true);
-        b.addListener(new Property.ValueChangeListener() {
+        b.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 tf.setRequiredError(b.getValue() ? "Field must not be empty"

@@ -55,12 +55,13 @@ public class Ticket2061c extends LegacyApplication implements
         a.setCaption("Label a");
         ol.setCaption("OL");
         Tabs tab = new Tabs(new Component[] { a, ol });
-        tab.addListener(this);
+        tab.addSelectedTabChangeListener(this);
         mainWindow.addComponent(tab);
 
     }
 
-    public class MyTable extends CustomComponent implements ValueChangeListener {
+    public class MyTable extends CustomComponent
+            implements ValueChangeListener {
 
         private Table table = new Table();
         private String[] columns;
@@ -79,7 +80,7 @@ public class Ticket2061c extends LegacyApplication implements
             table.setMultiSelect(false);
             table.setNullSelectionAllowed(false);
             // table.setRowHeaderMode(Table.ROW_HEADER_MODE_ID);
-            table.addListener(this);
+            table.addValueChangeListener(this);
             table.setContainerDataSource(createContainer());
             layout.addComponent(table);
         }

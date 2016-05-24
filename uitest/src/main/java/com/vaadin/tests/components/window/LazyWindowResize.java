@@ -66,7 +66,7 @@ public class LazyWindowResize extends AbstractTestCase {
 
         lazyMode = new CheckBox("Lazy resize");
         lazyMode.setImmediate(true);
-        lazyMode.addListener(new ValueChangeListener() {
+        lazyMode.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -76,24 +76,28 @@ public class LazyWindowResize extends AbstractTestCase {
 
         resizeListenerCheckBox = new CheckBox("Resize listener");
         resizeListenerCheckBox.setImmediate(true);
-        resizeListenerCheckBox.addListener(new ValueChangeListener() {
+        resizeListenerCheckBox
+                .addValueChangeListener(new ValueChangeListener() {
 
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                if (resizeListenerCheckBox.getValue()) {
-                    subWindow.addListener(resizeListener);
-                    mainWindow.addListener(browserWindowResizeListener);
-                } else {
-                    subWindow.removeListener(resizeListener);
-                    mainWindow.removeListener(browserWindowResizeListener);
-                }
+                    @Override
+                    public void valueChange(ValueChangeEvent event) {
+                        if (resizeListenerCheckBox.getValue()) {
+                            subWindow.addResizeListener(resizeListener);
+                            mainWindow.getPage().addBrowserWindowResizeListener(
+                                    browserWindowResizeListener);
+                        } else {
+                            subWindow.removeResizeListener(resizeListener);
+                            mainWindow.getPage()
+                                    .removeBrowserWindowResizeListener(
+                                            browserWindowResizeListener);
+                        }
 
-            }
+                    }
 
-        });
+                });
         immediateCheckBox = new CheckBox("Windows immediate");
         immediateCheckBox.setImmediate(true);
-        immediateCheckBox.addListener(new ValueChangeListener() {
+        immediateCheckBox.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -149,7 +149,8 @@ public class Trees extends AbstractSelectTestCase<Tree> implements
         LinkedHashMap<String, com.vaadin.ui.Tree.ItemStyleGenerator> options = new LinkedHashMap<String, com.vaadin.ui.Tree.ItemStyleGenerator>();
 
         options.put("-", null);
-        options.put(rootGreenSecondLevelRed.toString(), rootGreenSecondLevelRed);
+        options.put(rootGreenSecondLevelRed.toString(),
+                rootGreenSecondLevelRed);
         options.put(evenItemsBold.toString(), evenItemsBold);
 
         createSelectAction("Item Style generator", category, options, "-",
@@ -366,9 +367,9 @@ public class Trees extends AbstractSelectTestCase<Tree> implements
         @Override
         public void execute(Tree c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ExpandListener) Trees.this);
+                c.addExpandListener(Trees.this);
             } else {
-                c.removeListener((ExpandListener) Trees.this);
+                c.removeExpandListener(Trees.this);
             }
         }
     };
@@ -377,9 +378,9 @@ public class Trees extends AbstractSelectTestCase<Tree> implements
         @Override
         public void execute(Tree c, Boolean value, Object data) {
             if (value) {
-                c.addListener((CollapseListener) Trees.this);
+                c.addCollapseListener(Trees.this);
             } else {
-                c.removeListener((CollapseListener) Trees.this);
+                c.removeCollapseListener(Trees.this);
             }
         }
     };

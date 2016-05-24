@@ -82,7 +82,7 @@ public class Ticket1983 extends LegacyApplication {
             leftSide.setSecondComponent(table);
 
             Button button = new Button("Change col value to short");
-            button.addListener(new Button.ClickListener() {
+            button.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(Button.ClickEvent event) {
                     // Change the column value to a short one --> Should remove
@@ -116,7 +116,7 @@ public class Ticket1983 extends LegacyApplication {
             leftSide.setFirstComponent(ol);
 
             CheckBox checkBox = new CheckBox("Two col");
-            checkBox.addListener(new ValueChangeListener() {
+            checkBox.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
                 public void valueChange(ValueChangeEvent event) {

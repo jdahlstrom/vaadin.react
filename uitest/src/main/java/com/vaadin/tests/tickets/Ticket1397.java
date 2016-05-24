@@ -60,7 +60,7 @@ public class Ticket1397 extends LegacyApplication {
         class myButton extends Button {
             public myButton() {
                 super("Reverse the property");
-                this.addListener(new Button.ClickListener() {
+                this.addClickListener(new Button.ClickListener() {
                     @Override
                     public void buttonClick(Button.ClickEvent event) {
                         StringBuffer getContents = prop2.getValue();

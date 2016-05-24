@@ -119,7 +119,7 @@ public class Button extends AbstractFocusable implements
      */
     public Button(String caption, ClickListener listener) {
         this(caption);
-        addListener(listener);
+        addClickListener(listener);
     }
 
     /**
@@ -317,15 +317,6 @@ public class Button extends AbstractFocusable implements
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addClickListener(ClickListener)}
-     **/
-    @Deprecated
-    public void addListener(ClickListener listener) {
-        addClickListener(listener);
-    }
-
-    /**
      * Removes the button click listener.
      * 
      * @param listener
@@ -334,15 +325,6 @@ public class Button extends AbstractFocusable implements
     public void removeClickListener(ClickListener listener) {
         throw new UnsupportedOperationException(
                 "Click listeners cannot currently be removed");
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeClickListener(ClickListener)}
-     **/
-    @Deprecated
-    public void removeListener(ClickListener listener) {
-        removeClickListener(listener);
     }
 
     /**

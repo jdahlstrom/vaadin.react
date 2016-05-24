@@ -67,7 +67,8 @@ public abstract class AbstractSelectTestCase<T extends AbstractSelect> extends
     }
 
     protected void createMultiSelectCheckbox(String category) {
-        createBooleanAction("Multi select", category, false, multiselectCommand);
+        createBooleanAction("Multi select", category, false,
+                multiselectCommand);
 
     }
 
@@ -192,10 +193,10 @@ public abstract class AbstractSelectTestCase<T extends AbstractSelect> extends
         public void execute(T c, Boolean value, Object data) {
             if (value) {
                 ((ItemClickNotifier) c)
-                        .addListener(AbstractSelectTestCase.this);
+                        .addItemClickListener(AbstractSelectTestCase.this);
             } else {
                 ((ItemClickNotifier) c)
-                        .removeListener(AbstractSelectTestCase.this);
+                        .removeItemClickListener(AbstractSelectTestCase.this);
             }
 
         }

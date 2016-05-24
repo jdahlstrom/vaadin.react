@@ -26,7 +26,7 @@ public class TableMultiSelectSimple extends TestBase {
         t.setMultiSelect(true);
         t.setMultiSelectMode(MultiSelectMode.SIMPLE);
         t.setImmediate(true);
-        t.addListener(new ValueChangeListener() {
+        t.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

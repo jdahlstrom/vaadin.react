@@ -921,7 +921,8 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
      *      boolean)
      */
     @Override
-    public boolean setChildrenAllowed(Object itemId, boolean areChildrenAllowed) {
+    public boolean setChildrenAllowed(Object itemId,
+            boolean areChildrenAllowed) {
         final boolean success = ((Container.Hierarchical) items)
                 .setChildrenAllowed(itemId, areChildrenAllowed);
         if (success) {
@@ -1083,15 +1084,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addExpandListener(ExpandListener)}
-     **/
-    @Deprecated
-    public void addListener(ExpandListener listener) {
-        addExpandListener(listener);
-    }
-
-    /**
      * Removes the expand listener.
      * 
      * @param listener
@@ -1100,15 +1092,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     public void removeExpandListener(ExpandListener listener) {
         removeListener(ExpandEvent.class, listener,
                 ExpandListener.EXPAND_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeExpandListener(ExpandListener)}
-     **/
-    @Deprecated
-    public void removeListener(ExpandListener listener) {
-        removeExpandListener(listener);
     }
 
     /**
@@ -1187,15 +1170,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addCollapseListener(CollapseListener)}
-     **/
-    @Deprecated
-    public void addListener(CollapseListener listener) {
-        addCollapseListener(listener);
-    }
-
-    /**
      * Removes the collapse listener.
      * 
      * @param listener
@@ -1204,15 +1178,6 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
     public void removeCollapseListener(CollapseListener listener) {
         removeListener(CollapseEvent.class, listener,
                 CollapseListener.COLLAPSE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeCollapseListener(CollapseListener)}
-     **/
-    @Deprecated
-    public void removeListener(CollapseListener listener) {
-        removeCollapseListener(listener);
     }
 
     /**
@@ -1364,30 +1329,10 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
                 listener, ItemClickEvent.ITEM_CLICK_METHOD);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemClickListener(ItemClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(ItemClickListener listener) {
-        addItemClickListener(listener);
-    }
-
     @Override
     public void removeItemClickListener(ItemClickListener listener) {
         removeListener(TreeConstants.ITEM_CLICK_EVENT_ID, ItemClickEvent.class,
                 listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeItemClickListener(ItemClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(ItemClickListener listener) {
-        removeItemClickListener(listener);
     }
 
     /**
@@ -1729,7 +1674,8 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
                     return false;
                 }
                 // return true if directly over
-                return eventDetails.getDropLocation() == VerticalDropLocation.MIDDLE;
+                return eventDetails
+                        .getDropLocation() == VerticalDropLocation.MIDDLE;
             } catch (Exception e) {
                 return false;
             }
@@ -1816,7 +1762,8 @@ public class Tree extends AbstractSelect implements Container.Hierarchical,
      * @param generator
      *            The generator to use or null to disable
      */
-    public void setItemDescriptionGenerator(ItemDescriptionGenerator generator) {
+    public void setItemDescriptionGenerator(
+            ItemDescriptionGenerator generator) {
         if (generator != itemDescriptionGenerator) {
             itemDescriptionGenerator = generator;
             markAsDirty();

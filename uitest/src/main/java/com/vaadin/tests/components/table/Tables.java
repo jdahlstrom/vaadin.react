@@ -97,9 +97,9 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
         @Override
         public void execute(Table c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ColumnResizeListener) Tables.this);
+                c.addColumnResizeListener(Tables.this);
             } else {
-                c.removeListener((ColumnResizeListener) Tables.this);
+                c.removeColumnResizeListener(Tables.this);
             }
         }
     };
@@ -109,9 +109,9 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener((HeaderClickListener) Tables.this);
+                c.addHeaderClickListener(Tables.this);
             } else {
-                c.removeListener((HeaderClickListener) Tables.this);
+                c.removeHeaderClickListener(Tables.this);
             }
         }
     };
@@ -121,9 +121,9 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
         @Override
         public void execute(Table c, Boolean value, Object data) {
             if (value) {
-                c.addListener((FooterClickListener) Tables.this);
+                c.addFooterClickListener(Tables.this);
             } else {
-                c.removeListener((FooterClickListener) Tables.this);
+                c.removeFooterClickListener(Tables.this);
             }
         }
     };
@@ -205,7 +205,8 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
     private Command<T, ColumnHeaderMode> columnHeaderModeCommand = new Command<T, ColumnHeaderMode>() {
 
         @Override
-        public void execute(T c, ColumnHeaderMode columnHeaderMode, Object data) {
+        public void execute(T c, ColumnHeaderMode columnHeaderMode,
+                Object data) {
             c.setColumnHeaderMode(columnHeaderMode);
 
         }
@@ -314,7 +315,8 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
         private final Object itemId;
         private final Object propertyId;
 
-        public CellStyleInfo(String styleName, Object itemId, Object propertyId) {
+        public CellStyleInfo(String styleName, Object itemId,
+                Object propertyId) {
             this.styleName = styleName;
             this.itemId = itemId;
             this.propertyId = propertyId;
@@ -322,15 +324,17 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
 
         public boolean appliesTo(Object itemId, Object propertyId) {
             return (this.itemId != null && this.itemId.equals(itemId))
-                    && (this.propertyId == propertyId || (this.propertyId != null && this.propertyId
-                            .equals(propertyId)));
+                    && (this.propertyId == propertyId
+                            || (this.propertyId != null && this.propertyId
+                                    .equals(propertyId)));
         }
     }
 
     private Command<T, CellStyleInfo> cellStyleCommand = new Command<T, CellStyleInfo>() {
 
         @Override
-        public void execute(T c, final CellStyleInfo cellStyleInfo, Object data) {
+        public void execute(T c, final CellStyleInfo cellStyleInfo,
+                Object data) {
             if (cellStyleInfo == null) {
                 c.setCellStyleGenerator(null);
             } else {
@@ -384,12 +388,14 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
                 c.setRowGenerator(new RowGenerator() {
 
                     @Override
-                    public GeneratedRow generateRow(Table table, Object itemId) {
+                    public GeneratedRow generateRow(Table table,
+                            Object itemId) {
                         if (generatedRowInfo.appliesTo(itemId)) {
                             GeneratedRow generatedRow = new GeneratedRow(
                                     generatedRowInfo.text);
                             generatedRow
-                                    .setHtmlContentAllowed(generatedRowInfo.isHtml);
+                                    .setHtmlContentAllowed(
+                                            generatedRowInfo.isHtml);
                             return generatedRow;
                         }
                         return null;
@@ -812,7 +818,8 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
                 "Explicit defaults id", new Command<T, ColumnHeaderMode>() {
 
                     @Override
-                    public void execute(T c, ColumnHeaderMode value, Object data) {
+                    public void execute(T c, ColumnHeaderMode value,
+                            Object data) {
                         c.setColumnHeaderMode(value);
 
                     }
@@ -852,7 +859,8 @@ public class Tables<T extends Table> extends AbstractSelectTestCase<T>
                 "Multi - ctrl/shift", new Command<T, SelectMode>() {
 
                     @Override
-                    public void execute(Table t, SelectMode value, Object data) {
+                    public void execute(Table t, SelectMode value,
+                            Object data) {
                         switch (value) {
                         case NONE:
                             t.setSelectable(false);

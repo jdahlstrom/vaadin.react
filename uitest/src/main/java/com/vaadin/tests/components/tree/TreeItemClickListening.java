@@ -25,7 +25,7 @@ public class TreeItemClickListening extends AbstractTestUIWithLog {
         tree.setItemCaptionMode(Tree.ITEM_CAPTION_MODE_PROPERTY);
         tree.setItemCaptionPropertyId("caption");
 
-        tree.addListener(new ItemClickEvent.ItemClickListener() {
+        tree.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 clickCounter++;

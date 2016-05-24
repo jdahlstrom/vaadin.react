@@ -53,7 +53,7 @@ public class IndexedContainerTest extends AbstractInMemoryContainerTestBase {
     public void testItemSetChangeListeners() {
         IndexedContainer container = new IndexedContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         String id1 = "id1";
         String id2 = "id2";
@@ -125,7 +125,7 @@ public class IndexedContainerTest extends AbstractInMemoryContainerTestBase {
     public void testAddRemoveContainerFilter() {
         IndexedContainer container = new IndexedContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         // simply adding or removing container filters should cause events
         // (content changes)
@@ -148,7 +148,7 @@ public class IndexedContainerTest extends AbstractInMemoryContainerTestBase {
     public void testItemSetChangeListenersFiltering() {
         IndexedContainer container = new IndexedContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         counter.reset();
         container.addContainerFilter(FULLY_QUALIFIED_NAME, "Test", true, false);
@@ -380,7 +380,8 @@ public class IndexedContainerTest extends AbstractInMemoryContainerTestBase {
         IndexedContainer container = new IndexedContainer();
         Object itemId = container.addItem();
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeItem(itemId);
@@ -394,7 +395,8 @@ public class IndexedContainerTest extends AbstractInMemoryContainerTestBase {
         container.addItem();
         Object secondItemId = container.addItem();
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeItem(secondItemId);
@@ -408,7 +410,8 @@ public class IndexedContainerTest extends AbstractInMemoryContainerTestBase {
         container.addItem();
         container.addItem();
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeAllItems();

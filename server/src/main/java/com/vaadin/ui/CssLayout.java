@@ -259,13 +259,15 @@ public class CssLayout extends AbstractLayout implements LayoutClickNotifier {
 
     /* Documented in superclass */
     @Override
-    public void replaceComponent(Component oldComponent, Component newComponent) {
+    public void replaceComponent(Component oldComponent,
+            Component newComponent) {
 
         // Gets the locations
         int oldLocation = -1;
         int newLocation = -1;
         int location = 0;
-        for (final Iterator<Component> i = components.iterator(); i.hasNext();) {
+        for (final Iterator<Component> i = components.iterator(); i
+                .hasNext();) {
             final Component component = i.next();
 
             if (component == oldComponent) {
@@ -307,30 +309,10 @@ public class CssLayout extends AbstractLayout implements LayoutClickNotifier {
                 LayoutClickListener.clickMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addLayoutClickListener(LayoutClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(LayoutClickListener listener) {
-        addLayoutClickListener(listener);
-    }
-
     @Override
     public void removeLayoutClickListener(LayoutClickListener listener) {
         removeListener(EventId.LAYOUT_CLICK_EVENT_IDENTIFIER,
                 LayoutClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeLayoutClickListener(LayoutClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(LayoutClickListener listener) {
-        removeLayoutClickListener(listener);
     }
 
     /**

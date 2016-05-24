@@ -33,18 +33,21 @@ public class WindowResizeListener extends TestBase {
         final Label l = new Label();
         getLayout().addComponent(l);
 
-        getMainWindow().addListener(new Page.BrowserWindowResizeListener() {
-            @Override
-            public void browserWindowResized(BrowserWindowResizeEvent event) {
-                l.setValue("Current browser window size: "
-                        + getMainWindow().getBrowserWindowWidth() + " x "
-                        + getMainWindow().getBrowserWindowHeight());
-            }
-        });
+        getMainWindow().getPage().addBrowserWindowResizeListener(
+                new Page.BrowserWindowResizeListener() {
+                    @Override
+                    public void browserWindowResized(
+                            BrowserWindowResizeEvent event) {
+                        l.setValue("Current browser window size: "
+                                + getMainWindow().getBrowserWindowWidth()
+                                + " x "
+                                + getMainWindow().getBrowserWindowHeight());
+                    }
+                });
 
         CheckBox subwindow = new CheckBox("show subwindow");
         subwindow.setImmediate(true);
-        subwindow.addListener(new Property.ValueChangeListener() {
+        subwindow.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -58,7 +61,7 @@ public class WindowResizeListener extends TestBase {
         getLayout().addComponent(subwindow);
 
         CheckBox immediate = new CheckBox("immediate");
-        immediate.addListener(new Property.ValueChangeListener() {
+        immediate.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -90,7 +93,7 @@ class ResizeListenerWindow extends Window {
         hl.addComponent(new Label("Current size: "));
         hl.addComponent(sizeLabel);
 
-        addListener(new ResizeListener() {
+        addResizeListener(new ResizeListener() {
             @Override
             public void windowResized(ResizeEvent e) {
                 updateLabel();

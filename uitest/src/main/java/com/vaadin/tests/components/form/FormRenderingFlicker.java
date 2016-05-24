@@ -47,7 +47,7 @@ public class FormRenderingFlicker extends TestBase {
                     new Object());
         }
         table.setImmediate(true);
-        table.addListener(new ItemClickListener() {
+        table.addItemClickListener(new ItemClickListener() {
 
             @Override
             public void itemClick(ItemClickEvent event) {

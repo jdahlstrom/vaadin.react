@@ -488,7 +488,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                     }
                 }
 
-                if (!isNullSelectionAllowed() && acceptedSelections.size() < 1) {
+                if (!isNullSelectionAllowed()
+                        && acceptedSelections.size() < 1) {
                     // empty selection not allowed, keep old value
                     markAsDirty();
                     return;
@@ -498,7 +499,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 // (non-visible items can not be deselected)
                 Collection<?> visibleNotSelected = getVisibleItemIds();
                 if (visibleNotSelected != null) {
-                    visibleNotSelected = new HashSet<Object>(visibleNotSelected);
+                    visibleNotSelected = new HashSet<Object>(
+                            visibleNotSelected);
                     // Don't remove those that will be added to preserve order
                     visibleNotSelected.removeAll(acceptedSelections);
 
@@ -517,7 +519,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 // Single select mode
                 if (!isNullSelectionAllowed()
                         && (clientSideSelectedKeys.length == 0
-                                || clientSideSelectedKeys[0] == null || clientSideSelectedKeys[0] == getNullSelectionItemId())) {
+                                || clientSideSelectedKeys[0] == null
+                                || clientSideSelectedKeys[0] == getNullSelectionItemId())) {
                     markAsDirty();
                     return;
                 }
@@ -602,7 +605,7 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 if (getItemCaptionPropertyId() != null) {
                     getContainerProperty(newItemCaption,
                             getItemCaptionPropertyId())
-                            .setValue(newItemCaption);
+                                    .setValue(newItemCaption);
                 }
                 if (isMultiSelect()) {
                     Set values = new HashSet((Collection) getValue());
@@ -923,7 +926,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
      *             if the underlying container don't support adding items with
      *             identifiers
      */
-    public void addItems(Object... itemId) throws UnsupportedOperationException {
+    public void addItems(Object... itemId)
+            throws UnsupportedOperationException {
         for (Object id : itemId) {
             addItem(id);
         }
@@ -1265,7 +1269,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
     private String idToCaption(Object itemId) {
         try {
             Converter<String, Object> c = (Converter<String, Object>) ConverterUtil
-                    .getConverter(String.class, itemId.getClass(), getSession());
+                    .getConverter(String.class, itemId.getClass(),
+                            getSession());
             return ConverterUtil.convertFromModel(itemId, String.class, c,
                     getLocale());
         } catch (Exception e) {
@@ -1586,16 +1591,6 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addPropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Container.PropertySetChangeListener listener) {
-        addPropertySetChangeListener(listener);
-    }
-
-    /**
      * Removes a previously registered Property set change listener.
      * 
      * @see com.vaadin.data.Container.PropertySetChangeNotifier#removeListener(com.vaadin.data.Container.PropertySetChangeListener)
@@ -1609,16 +1604,6 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 propertySetEventListeners = null;
             }
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removePropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Container.PropertySetChangeListener listener) {
-        removePropertySetChangeListener(listener);
     }
 
     /**
@@ -1636,16 +1621,6 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Container.ItemSetChangeListener listener) {
-        addItemSetChangeListener(listener);
-    }
-
-    /**
      * Removes the Item set change listener from the object.
      * 
      * @see com.vaadin.data.Container.ItemSetChangeNotifier#removeListener(com.vaadin.data.Container.ItemSetChangeListener)
@@ -1659,16 +1634,6 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 itemSetEventListeners = null;
             }
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Container.ItemSetChangeListener listener) {
-        removeItemSetChangeListener(listener);
     }
 
     @Override
@@ -1928,7 +1893,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 }
                 if (i instanceof Item.PropertySetChangeNotifier) {
                     ((Item.PropertySetChangeNotifier) i)
-                            .addPropertySetChangeListener(getCaptionChangeListener());
+                            .addPropertySetChangeListener(
+                                    getCaptionChangeListener());
                     captionChangeNotifiers.add(i);
                 }
                 Collection<?> pids = i.getItemPropertyIds();
@@ -1938,7 +1904,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                         if (p != null
                                 && p instanceof Property.ValueChangeNotifier) {
                             ((Property.ValueChangeNotifier) p)
-                                    .addValueChangeListener(getCaptionChangeListener());
+                                    .addValueChangeListener(
+                                            getCaptionChangeListener());
                             captionChangeNotifiers.add(p);
                         }
                     }
@@ -1973,17 +1940,20 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
                 Object notifier = it.next();
                 if (notifier instanceof Item.PropertySetChangeNotifier) {
                     ((Item.PropertySetChangeNotifier) notifier)
-                            .removePropertySetChangeListener(getCaptionChangeListener());
+                            .removePropertySetChangeListener(
+                                    getCaptionChangeListener());
                 } else {
                     ((Property.ValueChangeNotifier) notifier)
-                            .removeValueChangeListener(getCaptionChangeListener());
+                            .removeValueChangeListener(
+                                    getCaptionChangeListener());
                 }
             }
             captionChangeNotifiers.clear();
         }
 
         @Override
-        public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+        public void valueChange(
+                com.vaadin.data.Property.ValueChangeEvent event) {
             markAsDirty();
         }
 
@@ -2040,7 +2010,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
         protected final Collection<Object> itemIds = new HashSet<Object>();
         protected AbstractSelect select;
 
-        public AbstractItemSetCriterion(AbstractSelect select, Object... itemId) {
+        public AbstractItemSetCriterion(AbstractSelect select,
+                Object... itemId) {
             if (itemIds == null || select == null) {
                 throw new IllegalArgumentException(
                         "Accepted item identifiers must be accepted.");
@@ -2121,7 +2092,8 @@ public abstract class AbstractSelect extends AbstractField<Object> implements
          * corresponding item Id
          * 
          */
-        protected AbstractSelectTargetDetails(Map<String, Object> rawVariables) {
+        protected AbstractSelectTargetDetails(
+                Map<String, Object> rawVariables) {
             super(rawVariables, (DropTarget) AbstractSelect.this);
             // eagar fetch itemid, mapper may be emptied
             String keyover = (String) getData("itemIdOver");

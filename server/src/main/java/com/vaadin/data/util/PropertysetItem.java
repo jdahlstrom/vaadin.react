@@ -155,7 +155,8 @@ public class PropertysetItem implements Item, Item.PropertySetChangeNotifier,
     public String toString() {
         String retValue = "";
 
-        for (final Iterator<?> i = getItemPropertyIds().iterator(); i.hasNext();) {
+        for (final Iterator<?> i = getItemPropertyIds().iterator(); i
+                .hasNext();) {
             final Object propertyId = i.next();
             retValue += getItemProperty(propertyId).getValue();
             if (i.hasNext()) {
@@ -209,16 +210,6 @@ public class PropertysetItem implements Item, Item.PropertySetChangeNotifier,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addPropertySetChangeListener(com.vaadin.data.Item.PropertySetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Item.PropertySetChangeListener listener) {
-        addPropertySetChangeListener(listener);
-    }
-
-    /**
      * Removes a previously registered property set change listener.
      * 
      * @param listener
@@ -230,16 +221,6 @@ public class PropertysetItem implements Item, Item.PropertySetChangeNotifier,
         if (propertySetChangeListeners != null) {
             propertySetChangeListeners.remove(listener);
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removePropertySetChangeListener(com.vaadin.data.Item.PropertySetChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Item.PropertySetChangeListener listener) {
-        removePropertySetChangeListener(listener);
     }
 
     /**
@@ -297,8 +278,10 @@ public class PropertysetItem implements Item, Item.PropertySetChangeNotifier,
         final PropertysetItem npsi = new PropertysetItem();
 
         npsi.list = list != null ? (LinkedList<Object>) list.clone() : null;
-        npsi.propertySetChangeListeners = propertySetChangeListeners != null ? (LinkedList<PropertySetChangeListener>) propertySetChangeListeners
-                .clone() : null;
+        npsi.propertySetChangeListeners = propertySetChangeListeners != null
+                ? (LinkedList<PropertySetChangeListener>) propertySetChangeListeners
+                        .clone()
+                : null;
         npsi.map = (HashMap<Object, Property<?>>) map.clone();
 
         return npsi;
@@ -335,10 +318,12 @@ public class PropertysetItem implements Item, Item.PropertySetChangeNotifier,
             }
         }
         if (other.propertySetChangeListeners != propertySetChangeListeners) {
-            boolean thisEmpty = (propertySetChangeListeners == null || propertySetChangeListeners
-                    .isEmpty());
-            boolean otherEmpty = (other.propertySetChangeListeners == null || other.propertySetChangeListeners
-                    .isEmpty());
+            boolean thisEmpty = (propertySetChangeListeners == null
+                    || propertySetChangeListeners
+                            .isEmpty());
+            boolean otherEmpty = (other.propertySetChangeListeners == null
+                    || other.propertySetChangeListeners
+                            .isEmpty());
             if (thisEmpty && otherEmpty) {
                 return true;
             }
@@ -364,7 +349,10 @@ public class PropertysetItem implements Item, Item.PropertySetChangeNotifier,
 
         return (list == null ? 0 : list.hashCode())
                 ^ (map == null ? 0 : map.hashCode())
-                ^ ((propertySetChangeListeners == null || propertySetChangeListeners
-                        .isEmpty()) ? 0 : propertySetChangeListeners.hashCode());
+                ^ ((propertySetChangeListeners == null
+                        || propertySetChangeListeners
+                                .isEmpty()) ? 0
+                                        : propertySetChangeListeners
+                                                .hashCode());
     }
 }

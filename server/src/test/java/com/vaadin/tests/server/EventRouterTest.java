@@ -27,11 +27,11 @@ public class EventRouterTest {
                     }
                 };
 
-                tf.addListener(inner);
+                tf.addValueChangeListener(inner);
             }
         };
 
-        tf.addListener(outer);
+        tf.addValueChangeListener(outer);
         tf.setValue("abc"); // No inner listener calls, adds one inner
         tf.setValue("def"); // One inner listener call, adds one inner
         tf.setValue("ghi"); // Two inner listener calls, adds one inner

@@ -236,13 +236,15 @@ public class BeanItemContainerTest extends AbstractBeanContainerTestBase {
     public void testEmptyCollectionConstructor() {
         try {
             new BeanItemContainer<ClassName>((Collection<ClassName>) null);
-            Assert.fail("Initializing BeanItemContainer from a null collection should not work!");
+            Assert.fail(
+                    "Initializing BeanItemContainer from a null collection should not work!");
         } catch (IllegalArgumentException e) {
             // success
         }
         try {
             new BeanItemContainer<ClassName>(new ArrayList<ClassName>());
-            Assert.fail("Initializing BeanItemContainer from an empty collection should not work!");
+            Assert.fail(
+                    "Initializing BeanItemContainer from an empty collection should not work!");
         } catch (IllegalArgumentException e) {
             // success
         }
@@ -252,7 +254,7 @@ public class BeanItemContainerTest extends AbstractBeanContainerTestBase {
     public void testItemSetChangeListeners() {
         BeanItemContainer<ClassName> container = getContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         ClassName cn1 = new ClassName("com.example.Test", 1111);
         ClassName cn2 = new ClassName("com.example.Test2", 2222);
@@ -351,7 +353,7 @@ public class BeanItemContainerTest extends AbstractBeanContainerTestBase {
     public void testItemSetChangeListenersFiltering() {
         BeanItemContainer<ClassName> container = getContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         ClassName cn1 = new ClassName("com.example.Test", 1111);
         ClassName cn2 = new ClassName("com.example.Test2", 2222);
@@ -902,7 +904,8 @@ public class BeanItemContainerTest extends AbstractBeanContainerTestBase {
         Person bean = new Person("John");
         container.addItem(bean);
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeItem(bean);
@@ -918,7 +921,8 @@ public class BeanItemContainerTest extends AbstractBeanContainerTestBase {
         Person secondBean = new Person("John");
         container.addItem(secondBean);
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeItem(secondBean);
@@ -933,7 +937,8 @@ public class BeanItemContainerTest extends AbstractBeanContainerTestBase {
         container.addItem(new Person("Jack"));
         container.addItem(new Person("John"));
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeAllItems();

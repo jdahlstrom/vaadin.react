@@ -36,28 +36,28 @@ public class TableSelectTest extends CustomComponent implements
         t(t);
         t.setMultiSelect(false);
         t.setNullSelectionAllowed(true);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         t = new Table("single NO-nullsel");
         main.addComponent(t);
         t(t);
         t.setMultiSelect(false);
         t.setNullSelectionAllowed(false);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         t = new Table("multi nullsel");
         main.addComponent(t);
         t(t);
         t.setMultiSelect(true);
         t.setNullSelectionAllowed(true);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         t = new Table("multi NO-nullsel");
         main.addComponent(t);
         t(t);
         t.setMultiSelect(true);
         t.setNullSelectionAllowed(false);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         // --
 
@@ -67,7 +67,7 @@ public class TableSelectTest extends CustomComponent implements
         t.setNullSelectionItemId(id);
         t.setMultiSelect(false);
         t.setNullSelectionAllowed(true);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         t = new Table("single NO-nullsel nullselid");
         main.addComponent(t);
@@ -75,7 +75,7 @@ public class TableSelectTest extends CustomComponent implements
         t.setNullSelectionItemId(id);
         t.setMultiSelect(false);
         t.setNullSelectionAllowed(false);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         t = new Table("multi(fails) nullsel nullselid");
         main.addComponent(t);
@@ -88,7 +88,7 @@ public class TableSelectTest extends CustomComponent implements
             System.err.println("failed ok");
         }
         t.setNullSelectionAllowed(true);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         t = new Table("multi(fails) NO-nullsel nullselid");
         main.addComponent(t);
@@ -101,7 +101,7 @@ public class TableSelectTest extends CustomComponent implements
             System.err.println("failed ok");
         }
         t.setNullSelectionAllowed(false);
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         /*
          * And that's it! The framework will display the main window and its

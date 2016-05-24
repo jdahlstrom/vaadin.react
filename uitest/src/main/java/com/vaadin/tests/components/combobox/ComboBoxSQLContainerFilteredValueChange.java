@@ -52,7 +52,7 @@ public class ComboBoxSQLContainerFilteredValueChange extends TestBase {
         myCombo.setImmediate(true);
         myCombo.setWidth("100.0%");
         myCombo.setHeight("-1px");
-        myCombo.addListener(new Property.ValueChangeListener() {
+        myCombo.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 selectedLabel.setValue("Selected: "

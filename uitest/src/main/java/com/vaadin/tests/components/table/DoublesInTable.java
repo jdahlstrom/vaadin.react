@@ -38,7 +38,7 @@ public class DoublesInTable extends TestBase {
     protected void setup() {
         editMode = new CheckBox("Edit mode");
         editMode.setImmediate(true);
-        editMode.addListener(new ValueChangeListener() {
+        editMode.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -49,7 +49,7 @@ public class DoublesInTable extends TestBase {
 
         useCustomConverters = new CheckBox("Use custom converters");
         useCustomConverters.setImmediate(true);
-        useCustomConverters.addListener(new ValueChangeListener() {
+        useCustomConverters.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -75,7 +75,7 @@ public class DoublesInTable extends TestBase {
         }
         cb.setImmediate(true);
         cb.setValue(Locale.US);
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -135,7 +135,7 @@ public class DoublesInTable extends TestBase {
         }
         t.setSelectable(true);
         t.setImmediate(true);
-        t.addListener(new ValueChangeListener() {
+        t.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

@@ -312,14 +312,15 @@ public class GeneratedPropertyContainer extends AbstractContainer implements
         // PropertySetChangeEvents
         if (wrappedContainer instanceof PropertySetChangeNotifier) {
             ((PropertySetChangeNotifier) wrappedContainer)
-                    .addPropertySetChangeListener(new PropertySetChangeListener() {
+                    .addPropertySetChangeListener(
+                            new PropertySetChangeListener() {
 
-                        @Override
-                        public void containerPropertySetChange(
-                                PropertySetChangeEvent event) {
-                            fireContainerPropertySetChange();
-                        }
-                    });
+                                @Override
+                                public void containerPropertySetChange(
+                                        PropertySetChangeEvent event) {
+                                    fireContainerPropertySetChange();
+                                }
+                            });
         }
     }
 
@@ -374,39 +375,20 @@ public class GeneratedPropertyContainer extends AbstractContainer implements
     }
 
     @Override
-    public void addListener(ItemSetChangeListener listener) {
-        super.addListener(listener);
-    }
-
-    @Override
     public void removeItemSetChangeListener(ItemSetChangeListener listener) {
         super.removeItemSetChangeListener(listener);
     }
 
     @Override
-    public void removeListener(ItemSetChangeListener listener) {
-        super.removeListener(listener);
-    }
-
-    @Override
-    public void addPropertySetChangeListener(PropertySetChangeListener listener) {
+    public void addPropertySetChangeListener(
+            PropertySetChangeListener listener) {
         super.addPropertySetChangeListener(listener);
-    }
-
-    @Override
-    public void addListener(PropertySetChangeListener listener) {
-        super.addListener(listener);
     }
 
     @Override
     public void removePropertySetChangeListener(
             PropertySetChangeListener listener) {
         super.removePropertySetChangeListener(listener);
-    }
-
-    @Override
-    public void removeListener(PropertySetChangeListener listener) {
-        super.removeListener(listener);
     }
 
     /* Filtering functionality */
@@ -508,7 +490,8 @@ public class GeneratedPropertyContainer extends AbstractContainer implements
                 // modify sort orders to work with original properties in the
                 // container.
                 for (SortOrder s : propertyGenerators.get(property)
-                        .getSortProperties(new SortOrder(property, direction))) {
+                        .getSortProperties(
+                                new SortOrder(property, direction))) {
                     actualSortProperties.add(s.getPropertyId());
                     actualSortDirections
                             .add(s.getDirection() == SortDirection.ASCENDING);

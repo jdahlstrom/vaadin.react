@@ -296,11 +296,11 @@ public class Ticket1710 extends com.vaadin.server.LegacyApplication {
                 }
             };
 
-            marginBottom.addListener(marginSpacingListener);
-            marginTop.addListener(marginSpacingListener);
-            marginLeft.addListener(marginSpacingListener);
-            marginRight.addListener(marginSpacingListener);
-            spacing.addListener(marginSpacingListener);
+            marginBottom.addValueChangeListener(marginSpacingListener);
+            marginTop.addValueChangeListener(marginSpacingListener);
+            marginLeft.addValueChangeListener(marginSpacingListener);
+            marginRight.addValueChangeListener(marginSpacingListener);
+            spacing.addValueChangeListener(marginSpacingListener);
             updateMarginsAndSpacing();
 
             addAlignmentControls();
@@ -358,8 +358,8 @@ public class Ticket1710 extends com.vaadin.server.LegacyApplication {
             };
 
             hAlign.setValue(new Integer(Bits.ALIGNMENT_LEFT));
-            vAlign.addListener(alignmentChangeListener);
-            hAlign.addListener(alignmentChangeListener);
+            vAlign.addValueChangeListener(alignmentChangeListener);
+            hAlign.addValueChangeListener(alignmentChangeListener);
             vAlign.setValue(new Integer(Bits.ALIGNMENT_TOP));
 
             controls.addComponent(new Label("layout alignment"));
@@ -374,7 +374,7 @@ public class Ticket1710 extends com.vaadin.server.LegacyApplication {
             lAlign.addItem(new Integer(Bits.ALIGNMENT_RIGHT));
             lAlign.setItemCaption(new Integer(Bits.ALIGNMENT_RIGHT), "right");
 
-            lAlign.addListener(new Property.ValueChangeListener() {
+            lAlign.addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
                 public void valueChange(ValueChangeEvent event) {
                     testPanelLayout.setComponentAlignment(

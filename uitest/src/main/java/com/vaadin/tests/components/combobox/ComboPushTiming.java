@@ -39,7 +39,7 @@ public class ComboPushTiming extends TestBase {
 
         final ObjectProperty<String> log = new ObjectProperty<String>("");
 
-        cb.addListener(new FieldEvents.FocusListener() {
+        cb.addFocusListener(new FieldEvents.FocusListener() {
             @Override
             public void focus(FocusEvent event) {
                 log.setValue(log.getValue().toString() + "<br>" + counter
@@ -49,7 +49,7 @@ public class ComboPushTiming extends TestBase {
             }
         });
 
-        cb.addListener(new FieldEvents.BlurListener() {
+        cb.addBlurListener(new FieldEvents.BlurListener() {
             @Override
             public void blur(BlurEvent event) {
                 log.setValue(log.getValue().toString() + "<br>" + counter
@@ -75,6 +75,7 @@ public class ComboPushTiming extends TestBase {
 
     private void changeValue(final ComboBox cb) {
         executor.execute(new Runnable() {
+            @Override
             public void run() {
                 VaadinSession.getCurrent().lock();
                 try {
@@ -93,7 +94,8 @@ public class ComboPushTiming extends TestBase {
 
     class MyExecutor extends ThreadPoolExecutor {
         public MyExecutor() {
-            super(5, 20, 20, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+            super(5, 20, 20, TimeUnit.SECONDS,
+                    new SynchronousQueue<Runnable>());
         }
     }
 

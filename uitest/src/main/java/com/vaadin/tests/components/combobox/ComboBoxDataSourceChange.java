@@ -55,7 +55,7 @@ public class ComboBoxDataSourceChange extends TestBase {
         state.addComponent(t);
 
         Button b = new Button("Use ds1");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -71,7 +71,7 @@ public class ComboBoxDataSourceChange extends TestBase {
         state.addComponent(t);
 
         b = new Button("Use ds2");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -83,7 +83,7 @@ public class ComboBoxDataSourceChange extends TestBase {
 
         addComponent(hl);
 
-        cb2.addListener(new Property.ValueChangeListener() {
+        cb2.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 currentValue.setValue(String.valueOf(event.getProperty()

@@ -46,7 +46,7 @@ public class IconsInCaption extends TestBase {
         iconTypeSelect.addItem(TYPE_CAPTION);
         iconTypeSelect.setImmediate(true);
         iconTypeSelect.setNullSelectionAllowed(false);
-        iconTypeSelect.addListener(new ValueChangeListener() {
+        iconTypeSelect.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 updateContainer();
@@ -59,7 +59,7 @@ public class IconsInCaption extends TestBase {
             containerSelect.addItem(cc);
         }
         containerSelect.setImmediate(true);
-        containerSelect.addListener(new ValueChangeListener() {
+        containerSelect.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

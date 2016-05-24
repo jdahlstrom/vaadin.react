@@ -13,7 +13,7 @@ public class Ticket2526 extends LegacyApplication {
         final LegacyWindow main = new LegacyWindow();
         setMainWindow(main);
         Button b = new Button("Add windows");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 main.addWindow(new Window());

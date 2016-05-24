@@ -62,7 +62,7 @@ public class GeneratedPropertyContainerBasicTest extends
     public void testItemSetChangeListeners() {
         GeneratedPropertyContainer container = createContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         String id1 = "id1";
         String id2 = "id2";
@@ -134,7 +134,7 @@ public class GeneratedPropertyContainerBasicTest extends
     public void testAddRemoveContainerFilter() {
         GeneratedPropertyContainer container = createContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        container.addListener(counter);
+        container.addItemSetChangeListener(counter);
 
         // simply adding or removing container filters should cause events
         // (content changes)
@@ -160,7 +160,8 @@ public class GeneratedPropertyContainerBasicTest extends
     public void testItemSetChangeListenersFiltering() {
         Container.Indexed container = createContainer();
         ItemSetChangeCounter counter = new ItemSetChangeCounter();
-        ((GeneratedPropertyContainer) container).addListener(counter);
+        ((GeneratedPropertyContainer) container)
+                .addItemSetChangeListener(counter);
 
         counter.reset();
         ((Container.Filterable) container)
@@ -394,7 +395,8 @@ public class GeneratedPropertyContainerBasicTest extends
         GeneratedPropertyContainer container = createContainer();
         Object itemId = container.addItem();
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeItem(itemId);
@@ -408,7 +410,8 @@ public class GeneratedPropertyContainerBasicTest extends
         container.addItem();
         Object secondItemId = container.addItem();
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeItem(secondItemId);
@@ -422,7 +425,8 @@ public class GeneratedPropertyContainerBasicTest extends
         container.addItem();
         container.addItem();
         ItemSetChangeListener removeListener = createListenerMockFor(container);
-        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(removeListener);
+        Capture<ItemRemoveEvent> capturedEvent = captureRemoveEvent(
+                removeListener);
         EasyMock.replay(removeListener);
 
         container.removeAllItems();

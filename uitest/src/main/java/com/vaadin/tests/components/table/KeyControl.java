@@ -40,7 +40,7 @@ public class KeyControl extends TestBase {
         table1.setImmediate(true);
         layout1.addComponent(table1);
 
-        table1.addListener(new Table.ValueChangeListener() {
+        table1.addValueChangeListener(new Table.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 @SuppressWarnings("unchecked")
@@ -63,7 +63,7 @@ public class KeyControl extends TestBase {
         table2.setImmediate(true);
         layout2.addComponent(table2);
 
-        table2.addListener(new Table.ValueChangeListener() {
+        table2.addValueChangeListener(new Table.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 String value = table2.getValue() == null ? "No selected items"
@@ -87,7 +87,7 @@ public class KeyControl extends TestBase {
         table3.setImmediate(true);
         layout3.addComponent(table3);
 
-        table3.addListener(new Table.ValueChangeListener() {
+        table3.addValueChangeListener(new Table.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 @SuppressWarnings("unchecked")

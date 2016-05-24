@@ -1246,7 +1246,8 @@ public class Table extends AbstractSelect implements Action.Container,
         }
 
         String header = columnHeaders.get(propertyId);
-        if ((header == null && getColumnHeaderMode() == ColumnHeaderMode.EXPLICIT_DEFAULTS_ID)
+        if ((header == null
+                && getColumnHeaderMode() == ColumnHeaderMode.EXPLICIT_DEFAULTS_ID)
                 || getColumnHeaderMode() == ColumnHeaderMode.ID) {
             header = propertyId.toString();
         }
@@ -1489,7 +1490,8 @@ public class Table extends AbstractSelect implements Action.Container,
         return currentPageFirstItemIndex;
     }
 
-    void setCurrentPageFirstItemIndex(int newIndex, boolean needsPageBufferReset) {
+    void setCurrentPageFirstItemIndex(int newIndex,
+            boolean needsPageBufferReset) {
 
         if (newIndex < 0) {
             newIndex = 0;
@@ -1845,7 +1847,8 @@ public class Table extends AbstractSelect implements Action.Container,
             firstCacheRowToRemoveInPageBuffer = maxPageBufferIndex + 1;
         }
 
-        if (firstCacheRowToRemoveInPageBuffer - pageBufferFirstIndex < currentlyCachedRowCount) {
+        if (firstCacheRowToRemoveInPageBuffer
+                - pageBufferFirstIndex < currentlyCachedRowCount) {
             /*
              * Unregister all components that fall beyond the cache limits after
              * inserting the new rows.
@@ -1973,7 +1976,8 @@ public class Table extends AbstractSelect implements Action.Container,
         pageBuffer = newPageBuffer;
     }
 
-    private Object[][] getVisibleCellsUpdateCacheRows(int firstIndex, int rows) {
+    private Object[][] getVisibleCellsUpdateCacheRows(int firstIndex,
+            int rows) {
         Object[][] cells = getVisibleCellsNoCache(firstIndex, rows, false);
         int cacheIx = firstIndex - pageBufferFirstIndex;
         // update the new rows in the cache.
@@ -1996,7 +2000,8 @@ public class Table extends AbstractSelect implements Action.Container,
      *            too small.
      * @return
      */
-    private Object[][] getVisibleCellsInsertIntoCache(int firstIndex, int rows) {
+    private Object[][] getVisibleCellsInsertIntoCache(int firstIndex,
+            int rows) {
         getLogger()
                 .log(Level.FINEST,
                         "Insert {0} rows at index {1} to existing page buffer requested",
@@ -2070,11 +2075,13 @@ public class Table extends AbstractSelect implements Action.Container,
 
         // Calculate the new cache size
         int newCachedRowCount = maxBufferSize;
-        if (pageBufferFirstIndex + currentlyCachedRowCount + rows - 1 < maxPageBufferIndex) {
+        if (pageBufferFirstIndex + currentlyCachedRowCount + rows
+                - 1 < maxPageBufferIndex) {
             // there aren't enough rows to fill the whole potential -> use what
             // there is
             newCachedRowCount -= maxPageBufferIndex
-                    - (pageBufferFirstIndex + currentlyCachedRowCount + rows - 1);
+                    - (pageBufferFirstIndex + currentlyCachedRowCount + rows
+                            - 1);
         } else if (minPageBufferIndex < pageBufferFirstIndex) {
             newCachedRowCount -= pageBufferFirstIndex - minPageBufferIndex;
         }
@@ -2104,7 +2111,8 @@ public class Table extends AbstractSelect implements Action.Container,
                 newPageBuffer[i][row] = cells[i][row
                         - firstIndexInNewPageBuffer];
             }
-            for (int row = firstIndexInNewPageBuffer + rows; row < newCachedRowCount; row++) {
+            for (int row = firstIndexInNewPageBuffer
+                    + rows; row < newCachedRowCount; row++) {
                 // Move the old rows down below the newly inserted rows
                 newPageBuffer[i][row] = pageBuffer[i][rowsFromBeginning + row
                         - rows];
@@ -2350,7 +2358,8 @@ public class Table extends AbstractSelect implements Action.Container,
                     if (index < firstIndexNotInCache
                             && index >= pageBufferFirstIndex
                             && pageBuffer[CELL_GENERATED_ROW][indexInOldBuffer] == null
-                            && id.equals(pageBuffer[CELL_ITEMID][indexInOldBuffer])) {
+                            && id.equals(
+                                    pageBuffer[CELL_ITEMID][indexInOldBuffer])) {
                         // we already have data in our cache,
                         // recycle it instead of fetching it via
                         // getValue/getPropertyValue
@@ -2438,7 +2447,7 @@ public class Table extends AbstractSelect implements Action.Container,
         if (p instanceof Property.ValueChangeNotifier) {
             if (oldListenedProperties == null
                     || !oldListenedProperties.contains(p)) {
-                ((Property.ValueChangeNotifier) p).addListener(this);
+                ((Property.ValueChangeNotifier) p).addValueChangeListener(this);
             }
             /*
              * register listened properties, so we can do proper cleanup to free
@@ -2456,7 +2465,8 @@ public class Table extends AbstractSelect implements Action.Container,
      *            to page buffer.
      * @param count
      */
-    private void unregisterComponentsAndPropertiesInRows(int firstIx, int count) {
+    private void unregisterComponentsAndPropertiesInRows(int firstIx,
+            int count) {
         if (getLogger().isLoggable(Level.FINEST)) {
             getLogger().log(Level.FINEST,
                     "Unregistering components in rows {0}-{1}",
@@ -2482,7 +2492,8 @@ public class Table extends AbstractSelect implements Action.Container,
                             if (p instanceof ValueChangeNotifier
                                     && listenedProperties.contains(p)) {
                                 listenedProperties.remove(p);
-                                ((ValueChangeNotifier) p).removeListener(this);
+                                ((ValueChangeNotifier) p)
+                                        .removeValueChangeListener(this);
                             }
                         }
                     }
@@ -2505,8 +2516,9 @@ public class Table extends AbstractSelect implements Action.Container,
             HashSet<Property<?>> oldListenedProperties,
             HashSet<Component> oldVisibleComponents) {
         if (oldVisibleComponents != null) {
-            for (final Iterator<Component> i = oldVisibleComponents.iterator(); i
-                    .hasNext();) {
+            for (final Iterator<Component> i = oldVisibleComponents
+                    .iterator(); i
+                            .hasNext();) {
                 Component c = i.next();
                 if (!visibleComponents.contains(c)) {
                     unregisterComponent(c);
@@ -2519,7 +2531,7 @@ public class Table extends AbstractSelect implements Action.Container,
                     .iterator(); i.hasNext();) {
                 Property.ValueChangeNotifier o = (ValueChangeNotifier) i.next();
                 if (!listenedProperties.contains(o)) {
-                    o.removeListener(this);
+                    o.removeValueChangeListener(this);
                 }
             }
         }
@@ -3045,7 +3057,8 @@ public class Table extends AbstractSelect implements Action.Container,
             boolean doSort = false;
             if (variables.containsKey("sortcolumn")) {
                 final String colId = (String) variables.get("sortcolumn");
-                if (colId != null && !"".equals(colId) && !"null".equals(colId)) {
+                if (colId != null && !"".equals(colId)
+                        && !"null".equals(colId)) {
                     final Object id = columnIdMap.get(colId);
                     setSortContainerPropertyId(id, false);
                     doSort = true;
@@ -3076,8 +3089,9 @@ public class Table extends AbstractSelect implements Action.Container,
                     for (Object id : ids) {
                         idSet.add(columnIdMap.get(id.toString()));
                     }
-                    for (final Iterator<Object> it = visibleColumns.iterator(); it
-                            .hasNext();) {
+                    for (final Iterator<Object> it = visibleColumns
+                            .iterator(); it
+                                    .hasNext();) {
                         Object propertyId = it.next();
                         if (isColumnCollapsed(propertyId)) {
                             if (!idSet.contains(propertyId)) {
@@ -3365,7 +3379,8 @@ public class Table extends AbstractSelect implements Action.Container,
 
         if (keyMapperReset) {
             keyMapperReset = false;
-            target.addAttribute(TableConstants.ATTRIBUTE_KEY_MAPPER_RESET, true);
+            target.addAttribute(TableConstants.ATTRIBUTE_KEY_MAPPER_RESET,
+                    true);
         }
 
         if (dropHandler != null) {
@@ -3383,7 +3398,8 @@ public class Table extends AbstractSelect implements Action.Container,
         return rowCacheInvalidated;
     }
 
-    private void paintPartialRowUpdate(PaintTarget target, Set<Action> actionSet)
+    private void paintPartialRowUpdate(PaintTarget target,
+            Set<Action> actionSet)
             throws PaintException {
         paintPartialRowUpdates(target, actionSet);
         paintPartialRowAdditions(target, actionSet);
@@ -3937,7 +3953,8 @@ public class Table extends AbstractSelect implements Action.Container,
                 }
             }
 
-            if ((iscomponent[currentColumn] || iseditable || cells[CELL_GENERATED_ROW][indexInRowbuffer] != null)
+            if ((iscomponent[currentColumn] || iseditable
+                    || cells[CELL_GENERATED_ROW][indexInRowbuffer] != null)
                     && Component.class.isInstance(cells[CELL_FIRSTCOL
                             + currentColumn][indexInRowbuffer])) {
                 final Component c = (Component) cells[CELL_FIRSTCOL
@@ -3950,7 +3967,8 @@ public class Table extends AbstractSelect implements Action.Container,
                     LegacyPaint.paint(c, target);
                 }
             } else {
-                target.addText((String) cells[CELL_FIRSTCOL + currentColumn][indexInRowbuffer]);
+                target.addText((String) cells[CELL_FIRSTCOL
+                        + currentColumn][indexInRowbuffer]);
             }
             paintCellTooltips(target, itemId, columnId);
         }
@@ -4033,7 +4051,8 @@ public class Table extends AbstractSelect implements Action.Container,
             int indexInRowBuffer) throws PaintException {
         GeneratedRow generatedRow = (GeneratedRow) cells[CELL_GENERATED_ROW][indexInRowBuffer];
         if (generatedRow != null) {
-            target.addAttribute("gen_html", generatedRow.isHtmlContentAllowed());
+            target.addAttribute("gen_html",
+                    generatedRow.isHtmlContentAllowed());
             target.addAttribute("gen_span", generatedRow.isSpanColumns());
             target.addAttribute("gen_widget",
                     generatedRow.getValue() instanceof Component);
@@ -4327,7 +4346,8 @@ public class Table extends AbstractSelect implements Action.Container,
     public boolean removeItem(Object itemId) {
         final Object nextItemId = nextItemId(itemId);
         final boolean ret = super.removeItem(itemId);
-        if (ret && (itemId != null) && (itemId.equals(currentPageFirstItemId))) {
+        if (ret && (itemId != null)
+                && (itemId.equals(currentPageFirstItemId))) {
             currentPageFirstItemId = nextItemId;
         }
         if (!(items instanceof Container.ItemSetChangeNotifier)) {
@@ -5116,30 +5136,10 @@ public class Table extends AbstractSelect implements Action.Container,
                 listener, ItemClickEvent.ITEM_CLICK_METHOD);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemClickListener(ItemClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(ItemClickListener listener) {
-        addItemClickListener(listener);
-    }
-
     @Override
     public void removeItemClickListener(ItemClickListener listener) {
         removeListener(TableConstants.ITEM_CLICK_EVENT_ID,
                 ItemClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeItemClickListener(ItemClickListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(ItemClickListener listener) {
-        removeItemClickListener(listener);
     }
 
     // Identical to AbstractCompoenentContainer.setEnabled();
@@ -5271,7 +5271,8 @@ public class Table extends AbstractSelect implements Action.Container,
      * initialized from server and no subsequent requests requests are needed
      * during that drag and drop operation.
      */
-    public static abstract class TableDropCriterion extends ServerSideCriterion {
+    public static abstract class TableDropCriterion
+            extends ServerSideCriterion {
 
         private Table table;
 
@@ -5489,15 +5490,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addHeaderClickListener(HeaderClickListener)}
-     **/
-    @Deprecated
-    public void addListener(HeaderClickListener listener) {
-        addHeaderClickListener(listener);
-    }
-
-    /**
      * Removes a header click listener
      * 
      * @param listener
@@ -5506,15 +5498,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeHeaderClickListener(HeaderClickListener listener) {
         removeListener(TableConstants.HEADER_CLICK_EVENT_ID,
                 HeaderClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeHeaderClickListener(HeaderClickListener)}
-     **/
-    @Deprecated
-    public void removeListener(HeaderClickListener listener) {
-        removeHeaderClickListener(listener);
     }
 
     /**
@@ -5535,15 +5518,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFooterClickListener(FooterClickListener)}
-     **/
-    @Deprecated
-    public void addListener(FooterClickListener listener) {
-        addFooterClickListener(listener);
-    }
-
-    /**
      * Removes a footer click listener
      * 
      * @param listener
@@ -5552,15 +5526,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeFooterClickListener(FooterClickListener listener) {
         removeListener(TableConstants.FOOTER_CLICK_EVENT_ID,
                 FooterClickEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFooterClickListener(FooterClickListener)}
-     **/
-    @Deprecated
-    public void removeListener(FooterClickListener listener) {
-        removeFooterClickListener(listener);
     }
 
     /**
@@ -5721,15 +5686,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addColumnResizeListener(ColumnResizeListener)}
-     **/
-    @Deprecated
-    public void addListener(ColumnResizeListener listener) {
-        addColumnResizeListener(listener);
-    }
-
-    /**
      * Removes a column resize listener from the Table.
      * 
      * @param listener
@@ -5738,15 +5694,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeColumnResizeListener(ColumnResizeListener listener) {
         removeListener(TableConstants.COLUMN_RESIZE_EVENT_ID,
                 ColumnResizeEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeColumnResizeListener(ColumnResizeListener)}
-     **/
-    @Deprecated
-    public void removeListener(ColumnResizeListener listener) {
-        removeColumnResizeListener(listener);
     }
 
     /**
@@ -5855,15 +5802,6 @@ public class Table extends AbstractSelect implements Action.Container,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addColumnReorderListener(ColumnReorderListener)}
-     **/
-    @Deprecated
-    public void addListener(ColumnReorderListener listener) {
-        addColumnReorderListener(listener);
-    }
-
-    /**
      * Removes a column reorder listener from the Table.
      * 
      * @param listener
@@ -5872,15 +5810,6 @@ public class Table extends AbstractSelect implements Action.Container,
     public void removeColumnReorderListener(ColumnReorderListener listener) {
         removeListener(TableConstants.COLUMN_REORDER_EVENT_ID,
                 ColumnReorderEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeColumnReorderListener(ColumnReorderListener)}
-     **/
-    @Deprecated
-    public void removeListener(ColumnReorderListener listener) {
-        removeColumnReorderListener(listener);
     }
 
     /**
@@ -5894,7 +5823,8 @@ public class Table extends AbstractSelect implements Action.Container,
      */
     public void addColumnCollapseListener(ColumnCollapseListener listener) {
         addListener(TableConstants.COLUMN_COLLAPSE_EVENT_ID,
-                ColumnCollapseEvent.class, listener, ColumnCollapseEvent.METHOD);
+                ColumnCollapseEvent.class, listener,
+                ColumnCollapseEvent.METHOD);
     }
 
     /**
@@ -5916,7 +5846,8 @@ public class Table extends AbstractSelect implements Action.Container,
      * @param generator
      *            The generator to use or null to disable
      */
-    public void setItemDescriptionGenerator(ItemDescriptionGenerator generator) {
+    public void setItemDescriptionGenerator(
+            ItemDescriptionGenerator generator) {
         if (generator != itemDescriptionGenerator) {
             itemDescriptionGenerator = generator;
             // Assures the visual refresh. No need to reset the page buffer
@@ -6070,7 +6001,8 @@ public class Table extends AbstractSelect implements Action.Container,
      * @param converter
      *            The converter to use for the property id
      */
-    public void setConverter(Object propertyId, Converter<String, ?> converter) {
+    public void setConverter(Object propertyId,
+            Converter<String, ?> converter) {
         if (!getContainerPropertyIds().contains(propertyId)) {
             throw new IllegalArgumentException("PropertyId " + propertyId
                     + " must be in the container");

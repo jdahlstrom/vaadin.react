@@ -103,18 +103,10 @@ public abstract class AbstractContainer implements Container {
     protected void addPropertySetChangeListener(
             Container.PropertySetChangeListener listener) {
         if (getPropertySetChangeListeners() == null) {
-            setPropertySetChangeListeners(new LinkedList<Container.PropertySetChangeListener>());
+            setPropertySetChangeListeners(
+                    new LinkedList<Container.PropertySetChangeListener>());
         }
         getPropertySetChangeListeners().add(listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addPropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Deprecated
-    protected void addListener(Container.PropertySetChangeListener listener) {
-        addPropertySetChangeListener(listener);
     }
 
     /**
@@ -132,15 +124,6 @@ public abstract class AbstractContainer implements Container {
         }
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removePropertySetChangeListener(com.vaadin.data.Container.PropertySetChangeListener)}
-     **/
-    @Deprecated
-    protected void removeListener(Container.PropertySetChangeListener listener) {
-        removePropertySetChangeListener(listener);
-    }
-
     // ItemSetChangeNotifier
 
     /**
@@ -153,18 +136,10 @@ public abstract class AbstractContainer implements Container {
     protected void addItemSetChangeListener(
             Container.ItemSetChangeListener listener) {
         if (getItemSetChangeListeners() == null) {
-            setItemSetChangeListeners(new LinkedList<Container.ItemSetChangeListener>());
+            setItemSetChangeListeners(
+                    new LinkedList<Container.ItemSetChangeListener>());
         }
         getItemSetChangeListeners().add(listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Deprecated
-    protected void addListener(Container.ItemSetChangeListener listener) {
-        addItemSetChangeListener(listener);
     }
 
     /**
@@ -179,15 +154,6 @@ public abstract class AbstractContainer implements Container {
         if (getItemSetChangeListeners() != null) {
             getItemSetChangeListeners().remove(listener);
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addItemSetChangeListener(com.vaadin.data.Container.ItemSetChangeListener)}
-     **/
-    @Deprecated
-    protected void removeListener(Container.ItemSetChangeListener listener) {
-        removeItemSetChangeListener(listener);
     }
 
     /**
@@ -281,7 +247,8 @@ public abstract class AbstractContainer implements Container {
     }
 
     public Collection<?> getListeners(Class<?> eventType) {
-        if (Container.PropertySetChangeEvent.class.isAssignableFrom(eventType)) {
+        if (Container.PropertySetChangeEvent.class
+                .isAssignableFrom(eventType)) {
             if (propertySetChangeListeners == null) {
                 return Collections.EMPTY_LIST;
             } else {

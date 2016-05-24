@@ -66,7 +66,8 @@ public class OptionGroup extends AbstractSelect implements
     public void paintContent(PaintTarget target) throws PaintException {
         target.addAttribute("type", "optiongroup");
         if (isHtmlContentAllowed()) {
-            target.addAttribute(OptionGroupConstants.HTML_CONTENT_ALLOWED, true);
+            target.addAttribute(OptionGroupConstants.HTML_CONTENT_ALLOWED,
+                    true);
         }
         super.paintContent(target);
     }
@@ -99,28 +100,9 @@ public class OptionGroup extends AbstractSelect implements
                 BlurListener.blurMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by {@link #addBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(BlurListener listener) {
-        addBlurListener(listener);
-    }
-
     @Override
     public void removeBlurListener(BlurListener listener) {
         removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBlurListener(BlurListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(BlurListener listener) {
-        removeBlurListener(listener);
     }
 
     @Override
@@ -129,30 +111,10 @@ public class OptionGroup extends AbstractSelect implements
                 FocusListener.focusMethod);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(FocusListener listener) {
-        addFocusListener(listener);
-    }
-
     @Override
     public void removeFocusListener(FocusListener listener) {
         removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
 
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeFocusListener(FocusListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(FocusListener listener) {
-        removeFocusListener(listener);
     }
 
     @Override
@@ -168,7 +130,8 @@ public class OptionGroup extends AbstractSelect implements
                 Set<?> currentValueSet = (Set<?>) getValue();
                 Set<?> newValueSet = (Set<?>) newValue;
                 for (Object itemId : currentValueSet) {
-                    if (!isItemEnabled(itemId) && !newValueSet.contains(itemId)) {
+                    if (!isItemEnabled(itemId)
+                            && !newValueSet.contains(itemId)) {
                         markAsDirty();
                         return;
                     }

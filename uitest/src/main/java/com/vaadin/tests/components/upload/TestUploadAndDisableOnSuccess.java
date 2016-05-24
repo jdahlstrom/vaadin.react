@@ -49,7 +49,7 @@ public class TestUploadAndDisableOnSuccess extends ComponentTestCase<Upload>
         l = new Label(getUploadcount());
         addComponent(l);
 
-        u.addListener(new Upload.StartedListener() {
+        u.addStartedListener(new Upload.StartedListener() {
 
             @Override
             public void uploadStarted(StartedEvent event) {
@@ -63,7 +63,7 @@ public class TestUploadAndDisableOnSuccess extends ComponentTestCase<Upload>
             }
         });
 
-        u.addListener(new Upload.FinishedListener() {
+        u.addFinishedListener(new Upload.FinishedListener() {
             @Override
             public void uploadFinished(FinishedEvent event) {
                 getMainWindow().showNotification("Done");

@@ -57,7 +57,7 @@ public class PropertyValueChange extends TestBase {
             // cases (eg. edit mode)
             if (integer instanceof Property.ValueChangeNotifier) {
                 Property.ValueChangeNotifier notifier = (Property.ValueChangeNotifier) integer;
-                notifier.addListener(new ValueChangeListener() {
+                notifier.addValueChangeListener(new ValueChangeListener() {
                     @Override
                     public void valueChange(ValueChangeEvent event) {
                         l.setValue(String.valueOf(getMultipliedValue(integer)));
@@ -107,8 +107,9 @@ public class PropertyValueChange extends TestBase {
         t2.setId("disabled table");
 
         Table reader = new Table("Reader table");
-        reader.setDescription("This table should be redrawn on container changes as container data is "
-                + "displayed directly in cells.");
+        reader.setDescription(
+                "This table should be redrawn on container changes as container data is "
+                        + "displayed directly in cells.");
         reader.setContainerDataSource(container);
         reader.addGeneratedColumn("integer x 3", multiplier);
         reader.setPageLength(0);

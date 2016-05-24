@@ -41,7 +41,7 @@ public class BasicPanelTest extends TestBase {
 
         final CheckBox heightSelection = new CheckBox("Undefined height");
         heightSelection.setImmediate(true);
-        heightSelection.addListener(new ValueChangeListener() {
+        heightSelection.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (heightSelection.getValue() == Boolean.TRUE) {

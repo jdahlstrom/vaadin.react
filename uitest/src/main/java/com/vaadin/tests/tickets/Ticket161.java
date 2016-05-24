@@ -26,7 +26,7 @@ public class Ticket161 extends LegacyApplication {
         mainWin.addComponent(t);
 
         Button b = new Button("Truncate to 20 rows");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
 

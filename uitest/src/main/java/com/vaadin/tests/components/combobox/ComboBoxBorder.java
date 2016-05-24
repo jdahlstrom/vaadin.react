@@ -20,7 +20,7 @@ public class ComboBoxBorder extends TestBase {
         cb.setImmediate(true);
         cb.setWidth("200px"); // must have with to reproduce
 
-        cb.addListener(new ValueChangeListener() {
+        cb.addValueChangeListener(new ValueChangeListener() {
             public void valueChange(ValueChangeEvent event) {
                 cb.setComponentError(new UserError("Error"));
             }

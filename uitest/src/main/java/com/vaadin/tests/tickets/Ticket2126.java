@@ -43,7 +43,7 @@ public class Ticket2126 extends com.vaadin.server.LegacyApplication {
         // table.setHeight("300px");
 
         Button refreshTable = new Button("Switch table container");
-        refreshTable.addListener(new Button.ClickListener() {
+        refreshTable.addClickListener(new Button.ClickListener() {
             boolean full = true;
 
             @Override

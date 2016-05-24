@@ -24,8 +24,8 @@ public class DynamicallyModified extends TestBase implements
         // Create the treetable
         treetable = new TreeTable();
         treetable.setWidth("100%");
-        treetable.addListener((Tree.ExpandListener) this);
-        treetable.addListener((Tree.CollapseListener) this);
+        treetable.addExpandListener(this);
+        treetable.addCollapseListener(this);
 
         addComponent(treetable);
 

@@ -253,7 +253,8 @@ public class Label extends AbstractComponent implements Property<String>,
         if (dataSource != null
                 && Property.ValueChangeNotifier.class
                         .isAssignableFrom(dataSource.getClass())) {
-            ((Property.ValueChangeNotifier) dataSource).removeListener(this);
+            ((Property.ValueChangeNotifier) dataSource)
+                    .removeValueChangeListener(this);
         }
 
         // Check if the current converter is compatible.
@@ -278,7 +279,8 @@ public class Label extends AbstractComponent implements Property<String>,
         if (dataSource != null
                 && Property.ValueChangeNotifier.class
                         .isAssignableFrom(dataSource.getClass())) {
-            ((Property.ValueChangeNotifier) dataSource).addListener(this);
+            ((Property.ValueChangeNotifier) dataSource)
+                    .addValueChangeListener(this);
         }
         markAsDirty();
     }
@@ -361,21 +363,12 @@ public class Label extends AbstractComponent implements Property<String>,
      * 
      * @param listener
      *            the Listener to be added.
-     * @see com.vaadin.data.Property.ValueChangeNotifier#addListener(com.vaadin.data.Property.ValueChangeListener)
+     * @see com.vaadin.data.Property.ValueChangeNotifier#addValueChangeListener(com.vaadin.data.Property.ValueChangeListener)
      */
     @Override
     public void addValueChangeListener(Property.ValueChangeListener listener) {
-        addListener(Label.ValueChangeEvent.class, listener, VALUE_CHANGE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Property.ValueChangeListener listener) {
-        addValueChangeListener(listener);
+        addListener(Label.ValueChangeEvent.class, listener,
+                VALUE_CHANGE_METHOD);
     }
 
     /**
@@ -386,19 +379,10 @@ public class Label extends AbstractComponent implements Property<String>,
      * @see com.vaadin.data.Property.ValueChangeNotifier#removeListener(com.vaadin.data.Property.ValueChangeListener)
      */
     @Override
-    public void removeValueChangeListener(Property.ValueChangeListener listener) {
+    public void removeValueChangeListener(
+            Property.ValueChangeListener listener) {
         removeListener(Label.ValueChangeEvent.class, listener,
                 VALUE_CHANGE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Property.ValueChangeListener listener) {
-        removeValueChangeListener(listener);
     }
 
     /**

@@ -113,11 +113,11 @@ public abstract class PropertyFormatter<T> extends AbstractProperty<String>
         if (dataSource != null) {
             if (dataSource instanceof Property.ValueChangeNotifier) {
                 ((Property.ValueChangeNotifier) dataSource)
-                        .removeListener(this);
+                        .removeValueChangeListener(this);
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeListener) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
-                        .removeListener(this);
+                        .removeReadOnlyStatusChangeListener(this);
             }
             readOnly = isReadOnly();
             prevValue = getValue();
@@ -127,11 +127,12 @@ public abstract class PropertyFormatter<T> extends AbstractProperty<String>
 
         if (dataSource != null) {
             if (dataSource instanceof Property.ValueChangeNotifier) {
-                ((Property.ValueChangeNotifier) dataSource).addListener(this);
+                ((Property.ValueChangeNotifier) dataSource)
+                        .addValueChangeListener(this);
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeListener) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
-                        .addListener(this);
+                        .addReadOnlyStatusChangeListener(this);
             }
         }
 

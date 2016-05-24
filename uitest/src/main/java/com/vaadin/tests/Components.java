@@ -181,7 +181,7 @@ public class Components extends LegacyApplication {
             expandAndSetChildrenAllowed(o);
         }
 
-        naviTree.addListener(new ItemClickListener() {
+        naviTree.addItemClickListener(new ItemClickListener() {
 
             @Override
             public void itemClick(ItemClickEvent event) {

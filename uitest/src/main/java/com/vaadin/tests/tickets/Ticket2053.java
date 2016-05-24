@@ -35,7 +35,7 @@ public class Ticket2053 extends LegacyApplication {
                 main.addComponent(new Label(name + " opened"));
                 final TextField tf = new TextField("Non immediate textfield");
                 c.addComponent(tf);
-                tf.addListener(new Property.ValueChangeListener() {
+                tf.addValueChangeListener(new Property.ValueChangeListener() {
                     @Override
                     public void valueChange(ValueChangeEvent event) {
                         main.addComponent(new Label(name + " send text:"

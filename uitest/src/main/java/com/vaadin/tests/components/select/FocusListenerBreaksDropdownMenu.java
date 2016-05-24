@@ -13,7 +13,7 @@ public class FocusListenerBreaksDropdownMenu extends TestBase {
             comboBox.addItem("Item " + i);
         }
 
-        comboBox.addListener(new FieldEvents.FocusListener() {
+        comboBox.addFocusListener(new FieldEvents.FocusListener() {
             @Override
             public void focus(FieldEvents.FocusEvent event) {
                 comboBox.addItem();
@@ -34,5 +34,4 @@ public class FocusListenerBreaksDropdownMenu extends TestBase {
     protected Integer getTicketNumber() {
         return 8321;
     }
-
 }

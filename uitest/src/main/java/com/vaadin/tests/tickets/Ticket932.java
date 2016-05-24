@@ -25,7 +25,7 @@ public class Ticket932 extends LegacyApplication {
         final Label l = new Label();
 
         Button b = new Button("Check value");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -45,7 +45,7 @@ public class Ticket932 extends LegacyApplication {
         tx2.setMaxLength(10);
 
         Button b2 = new Button("Check value");
-        b2.addListener(new Button.ClickListener() {
+        b2.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

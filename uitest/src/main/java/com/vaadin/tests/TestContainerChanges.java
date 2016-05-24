@@ -69,7 +69,7 @@ public class TestContainerChanges extends CustomComponent {
         tbl2.setSelectable(true);
         tbl2.setMultiSelect(false);
         tbl2.setImmediate(true);
-        tbl2.addListener(new Table.ValueChangeListener() {
+        tbl2.addValueChangeListener(new Table.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 System.err.println("Value now "

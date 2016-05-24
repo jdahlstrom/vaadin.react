@@ -23,7 +23,7 @@ public class Ticket2179 extends LegacyApplication {
         setMainWindow(main);
         main.addComponent(f);
 
-        f.addListener(new Property.ValueChangeListener() {
+        f.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

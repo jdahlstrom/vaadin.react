@@ -24,7 +24,7 @@ public class Ticket2365 extends LegacyApplication {
 
         Button b = new Button("Toggle parent level size");
         lo.addComponent(b);
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 if (p.getWidth() > 0) {

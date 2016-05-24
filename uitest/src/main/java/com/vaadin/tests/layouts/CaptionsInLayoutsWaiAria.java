@@ -67,7 +67,7 @@ public class CaptionsInLayoutsWaiAria extends TestBase {
 
     private Component addCaptionText() {
         Button b = new Button("Add caption text");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -88,7 +88,7 @@ public class CaptionsInLayoutsWaiAria extends TestBase {
         CheckBox requiredToggle = new CheckBox();
         requiredToggle.setImmediate(true);
         requiredToggle.setCaption("Required");
-        requiredToggle.addListener(new ValueChangeListener() {
+        requiredToggle.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -102,7 +102,7 @@ public class CaptionsInLayoutsWaiAria extends TestBase {
         CheckBox iconToggle = new CheckBox();
         iconToggle.setImmediate(true);
         iconToggle.setCaption("Icons");
-        iconToggle.addListener(new ValueChangeListener() {
+        iconToggle.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -200,7 +200,7 @@ public class CaptionsInLayoutsWaiAria extends TestBase {
         CheckBox errorToggle = new CheckBox();
         errorToggle.setImmediate(true);
         errorToggle.setCaption("Error");
-        errorToggle.addListener(new ValueChangeListener() {
+        errorToggle.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -345,7 +345,7 @@ public class CaptionsInLayoutsWaiAria extends TestBase {
 
         }
         layoutSelect.setImmediate(true);
-        layoutSelect.addListener(new ValueChangeListener() {
+        layoutSelect.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             @SuppressWarnings("unchecked")

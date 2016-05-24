@@ -35,7 +35,7 @@ public class ComboBoxReapperingOldValue extends LegacyApplication implements
         cbox1.setContainerDataSource(getContainer());
         cbox1.setImmediate(true);
         cbox1.setNullSelectionAllowed(false);
-        cbox1.addListener(this);
+        cbox1.addValueChangeListener(this);
 
         layout.addComponent(cbox1);
         layout.addComponent(cbox2);

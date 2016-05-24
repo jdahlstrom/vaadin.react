@@ -15,7 +15,7 @@ public class LowResolution extends TestBase {
         final PopupDateField dateField = new PopupDateField();
         dateField.setValue(new java.util.Date());
         dateField.setResolution(PopupDateField.RESOLUTION_MONTH);
-        dateField.addListener(new PopupDateField.ValueChangeListener() {
+        dateField.addValueChangeListener(new PopupDateField.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 getMainWindow().showNotification(
@@ -28,7 +28,7 @@ public class LowResolution extends TestBase {
         final PopupDateField dateField3 = new PopupDateField();
         // dateField.setValue(new java.util.Date());
         dateField3.setResolution(PopupDateField.RESOLUTION_YEAR);
-        dateField3.addListener(new PopupDateField.ValueChangeListener() {
+        dateField3.addValueChangeListener(new PopupDateField.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 getMainWindow().showNotification(
@@ -41,7 +41,7 @@ public class LowResolution extends TestBase {
         final InlineDateField dateField2 = new InlineDateField();
         dateField2.setValue(new java.util.Date());
         dateField2.setResolution(PopupDateField.RESOLUTION_MONTH);
-        dateField2.addListener(new PopupDateField.ValueChangeListener() {
+        dateField2.addValueChangeListener(new PopupDateField.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 getMainWindow().showNotification(
@@ -54,7 +54,7 @@ public class LowResolution extends TestBase {
         CheckBox immediate = new CheckBox(
                 "Immediate (use sync button to change fields) ");
         immediate.setValue(true);
-        immediate.addListener(new CheckBox.ValueChangeListener() {
+        immediate.addValueChangeListener(new CheckBox.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 boolean immediate = !dateField.isImmediate();

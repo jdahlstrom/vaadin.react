@@ -16,9 +16,9 @@ public abstract class AbstractSplitPanelTest<T extends AbstractSplitPanel>
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener((SplitterClickListener) AbstractSplitPanelTest.this);
+                c.addSplitterClickListener(AbstractSplitPanelTest.this);
             } else {
-                c.removeListener((SplitterClickListener) AbstractSplitPanelTest.this);
+                c.removeSplitterClickListener(AbstractSplitPanelTest.this);
             }
 
         }

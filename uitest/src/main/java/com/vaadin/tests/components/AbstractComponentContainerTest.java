@@ -147,9 +147,11 @@ public abstract class AbstractComponentContainerTest<T extends AbstractComponent
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ComponentAttachListener) AbstractComponentContainerTest.this);
+                c.addComponentAttachListener(
+                        AbstractComponentContainerTest.this);
             } else {
-                c.removeListener((ComponentAttachListener) AbstractComponentContainerTest.this);
+                c.removeComponentAttachListener(
+                        AbstractComponentContainerTest.this);
             }
         }
     };
@@ -159,9 +161,11 @@ public abstract class AbstractComponentContainerTest<T extends AbstractComponent
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener((ComponentDetachListener) AbstractComponentContainerTest.this);
+                c.addComponentDetachListener(
+                        AbstractComponentContainerTest.this);
             } else {
-                c.removeListener((ComponentDetachListener) AbstractComponentContainerTest.this);
+                c.removeComponentDetachListener(
+                        AbstractComponentContainerTest.this);
             }
         }
     };

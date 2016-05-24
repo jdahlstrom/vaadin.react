@@ -27,7 +27,7 @@ public class SelectionAndCursorPosition extends TestBase {
         panel.setCaption("Hackers panel");
         CheckBox ml = new CheckBox("Multiline");
         ml.setImmediate(true);
-        ml.addListener(new Property.ValueChangeListener() {
+        ml.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (textField.getUI() == null
@@ -43,7 +43,7 @@ public class SelectionAndCursorPosition extends TestBase {
         fl.addComponent(ml);
 
         Button b = new Button("Select all ( selectAll() )");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 activeComponent.selectAll();
@@ -57,7 +57,7 @@ public class SelectionAndCursorPosition extends TestBase {
         final TextField start = new TextField("From:");
         final TextField length = new TextField("Selection length:");
         b = new Button("select");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 int startPos = Integer.parseInt(start.getValue());
@@ -75,7 +75,7 @@ public class SelectionAndCursorPosition extends TestBase {
         HorizontalLayout setCursorPosition = new HorizontalLayout();
         final TextField pos = new TextField("Position:");
         b = new Button("set");
-        b.addListener(new ClickListener() {
+        b.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 int startPos = Integer.parseInt(pos.getValue());

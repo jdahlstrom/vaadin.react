@@ -56,12 +56,12 @@ public class ModalWindow extends com.vaadin.server.LegacyApplication implements
 
         // Main window button
         final Button b = new Button("Test Button in main window");
-        b.addListener(this);
+        b.addClickListener(this);
         b.setTabIndex(2);
         main.addComponent(b);
 
         reopen = new Button("Open modal subwindow");
-        reopen.addListener(this);
+        reopen.addClickListener(this);
         reopen.setTabIndex(3);
         main.addComponent(reopen);
 
@@ -95,7 +95,7 @@ public class ModalWindow extends com.vaadin.server.LegacyApplication implements
         // Modal window button
         final Button b = new Button("Test Button in modal window");
         b.setTabIndex(5);
-        b.addListener(this);
+        b.addClickListener(this);
         layout.addComponent(b);
     }
 }

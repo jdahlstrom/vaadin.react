@@ -37,7 +37,7 @@ public class TreeDragStart extends TestBase {
         CheckBox checkBox = new CheckBox("Enabled");
         checkBox.setImmediate(true);
         checkBox.setValue(true);
-        checkBox.addListener(new ValueChangeListener() {
+        checkBox.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 tree.setEnabled(!tree.isEnabled());
@@ -47,7 +47,7 @@ public class TreeDragStart extends TestBase {
         checkBox = new CheckBox("Drag start");
         checkBox.setImmediate(true);
         checkBox.setValue(true);
-        checkBox.addListener(new ValueChangeListener() {
+        checkBox.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 if (((CheckBox) event.getProperty()).getValue()) {

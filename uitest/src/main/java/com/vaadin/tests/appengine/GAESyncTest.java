@@ -58,7 +58,7 @@ public class GAESyncTest extends LegacyApplication {
             this.app = app;
             tf = new TextField("Echo thingie");
             tf.setImmediate(true);
-            tf.addListener(new Property.ValueChangeListener() {
+            tf.addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
                 public void valueChange(ValueChangeEvent event) {
                     IntrWindow.this.showNotification((String) event

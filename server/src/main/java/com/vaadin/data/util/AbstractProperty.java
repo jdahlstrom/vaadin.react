@@ -106,7 +106,8 @@ public abstract class AbstractProperty<T> implements Property<T>,
      * status has been changed.
      */
     protected static class ReadOnlyStatusChangeEvent extends
-            java.util.EventObject implements Property.ReadOnlyStatusChangeEvent {
+            java.util.EventObject
+            implements Property.ReadOnlyStatusChangeEvent {
 
         /**
          * Constructs a new read-only status change event for this object.
@@ -146,16 +147,6 @@ public abstract class AbstractProperty<T> implements Property<T>,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addReadOnlyStatusChangeListener(com.vaadin.data.Property.ReadOnlyStatusChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Property.ReadOnlyStatusChangeListener listener) {
-        addReadOnlyStatusChangeListener(listener);
-    }
-
-    /**
      * Removes a previously registered read-only status change listener.
      * 
      * @param listener
@@ -167,16 +158,6 @@ public abstract class AbstractProperty<T> implements Property<T>,
         if (readOnlyStatusChangeListeners != null) {
             readOnlyStatusChangeListeners.remove(listener);
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeReadOnlyStatusChangeListener(com.vaadin.data.Property.ReadOnlyStatusChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Property.ReadOnlyStatusChangeListener listener) {
-        removeReadOnlyStatusChangeListener(listener);
     }
 
     /**
@@ -232,32 +213,12 @@ public abstract class AbstractProperty<T> implements Property<T>,
 
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(ValueChangeListener listener) {
-        addValueChangeListener(listener);
-    }
-
     @Override
     public void removeValueChangeListener(ValueChangeListener listener) {
         if (valueChangeListeners != null) {
             valueChangeListeners.remove(listener);
         }
 
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeValueChangeListener(com.vaadin.data.Property.ValueChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(ValueChangeListener listener) {
-        removeValueChangeListener(listener);
     }
 
     /**

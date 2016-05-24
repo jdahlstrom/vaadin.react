@@ -86,7 +86,7 @@ public class EditableTableLeak extends TestBase {
     protected void setup() {
         addComponent(useFieldFactory);
         useFieldFactory.setImmediate(true);
-        useFieldFactory.addListener(new ValueChangeListener() {
+        useFieldFactory.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {

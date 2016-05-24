@@ -69,7 +69,7 @@ public class SelectDisplaysOldValue extends TestBase {
             controllerComboBox = new Select(CONTROLLER_COMBO_BOX_CAPTION,
                     masterOptionContainer);
             configureMasterOptionDropdown();
-            controllerComboBox.addListener(new ControllerUpdatedListener());
+            controllerComboBox.addValueChangeListener(new ControllerUpdatedListener());
 
             buildSlaveDropdown(1);
         }

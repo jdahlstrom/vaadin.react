@@ -53,7 +53,7 @@ public class Ticket2242 extends LegacyApplication implements
         t.setPageLength(5);
         t.setContainerDataSource(createContainer());
         tableValue = t.getValue();
-        t.addListener(this);
+        t.addValueChangeListener(this);
 
         layout.addComponent(t);
     }

@@ -44,7 +44,7 @@ public class DeepComponentTrees extends TestBase {
         root.setWidth("600px");
         root.setHeight("200px");
         final Button b = new Button("Go try your luck with " + i + " layouts!");
-        b.addListener(new Button.ClickListener() {
+        b.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -61,7 +61,7 @@ public class DeepComponentTrees extends TestBase {
         s.addItem(VerticalLayout.class);
         s.addItem(HorizontalLayout.class);
         s.addItem(GridLayout.class);
-        s.addListener(new ComboBox.ValueChangeListener() {
+        s.addValueChangeListener(new ComboBox.ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
