@@ -1221,16 +1221,6 @@ public abstract class AbstractField<T> extends AbstractComponent implements
                 READ_ONLY_STATUS_CHANGE_METHOD);
     }
 
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addReadOnlyStatusChangeListener(com.vaadin.data.Property.ReadOnlyStatusChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(Property.ReadOnlyStatusChangeListener listener) {
-        addReadOnlyStatusChangeListener(listener);
-    }
-
     /*
      * Removes a read-only status change listener from the field. Don't add a
      * JavaDoc comment here, we use the default documentation from the
@@ -1241,16 +1231,6 @@ public abstract class AbstractField<T> extends AbstractComponent implements
             Property.ReadOnlyStatusChangeListener listener) {
         removeListener(Property.ReadOnlyStatusChangeEvent.class, listener,
                 READ_ONLY_STATUS_CHANGE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeReadOnlyStatusChangeListener(com.vaadin.data.Property.ReadOnlyStatusChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(Property.ReadOnlyStatusChangeListener listener) {
-        removeReadOnlyStatusChangeListener(listener);
     }
 
     /**
@@ -1733,7 +1713,7 @@ public abstract class AbstractField<T> extends AbstractComponent implements
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeNotifier) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
-                        .addListener(this);
+                        .addReadOnlyStatusChangeListener(this);
             }
             isListeningToPropertyEvents = true;
         }
@@ -1751,7 +1731,7 @@ public abstract class AbstractField<T> extends AbstractComponent implements
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeNotifier) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
-                        .removeListener(this);
+                        .removeReadOnlyStatusChangeListener(this);
             }
             isListeningToPropertyEvents = false;
         }

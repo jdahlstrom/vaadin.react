@@ -99,7 +99,8 @@ public class LoginForm extends CustomComponent {
 
         HashMap<String, String> params = new HashMap<String, String>();
         // expecting single params
-        for (Iterator<String> it = parameters.keySet().iterator(); it.hasNext();) {
+        for (Iterator<String> it = parameters.keySet().iterator(); it
+                .hasNext();) {
             String key = it.next();
             String value = (parameters.get(key))[0];
             params.put(key, value);
@@ -127,7 +128,8 @@ public class LoginForm extends CustomComponent {
                 ApplicationConstants.APP_PROTOCOL_PREFIX
                         + ApplicationConstants.APP_PATH + '/'
                         + ConnectorResource.CONNECTOR_PATH + '/'
-                        + getUI().getUIId() + '/' + getConnectorId() + "/login"));
+                        + getUI().getUIId() + '/' + getConnectorId()
+                        + "/login"));
         super.beforeClientResponse(initial);
     }
 
@@ -255,30 +257,12 @@ public class LoginForm extends CustomComponent {
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addLoginListener(LoginListener)}
-     **/
-    @Deprecated
-    public void addListener(LoginListener listener) {
-        addLoginListener(listener);
-    }
-
-    /**
      * Removes LoginListener
      * 
      * @param listener
      */
     public void removeLoginListener(LoginListener listener) {
         removeListener(LoginEvent.class, listener, ON_LOGIN_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeLoginListener(LoginListener)}
-     **/
-    @Deprecated
-    public void removeListener(LoginListener listener) {
-        removeLoginListener(listener);
     }
 
     @Override

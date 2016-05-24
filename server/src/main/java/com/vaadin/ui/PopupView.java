@@ -347,15 +347,6 @@ public class PopupView extends AbstractComponent implements HasComponents {
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addPopupVisibilityListener(PopupVisibilityListener)}
-     **/
-    @Deprecated
-    public void addListener(PopupVisibilityListener listener) {
-        addPopupVisibilityListener(listener);
-    }
-
-    /**
      * Removes a previously added listener, so that it no longer receives events
      * when the visibility of the popup changes.
      * 
@@ -364,18 +355,10 @@ public class PopupView extends AbstractComponent implements HasComponents {
      * @see PopupVisibilityListener
      * @see #addListener(PopupVisibilityListener)
      */
-    public void removePopupVisibilityListener(PopupVisibilityListener listener) {
+    public void removePopupVisibilityListener(
+            PopupVisibilityListener listener) {
         removeListener(PopupVisibilityEvent.class, listener,
                 POPUP_VISIBILITY_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removePopupVisibilityListener(PopupVisibilityListener)}
-     **/
-    @Deprecated
-    public void removeListener(PopupVisibilityListener listener) {
-        removePopupVisibilityListener(listener);
     }
 
     /**

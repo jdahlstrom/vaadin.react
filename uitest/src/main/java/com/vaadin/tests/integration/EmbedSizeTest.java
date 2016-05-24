@@ -35,13 +35,15 @@ public class EmbedSizeTest extends TestBase {
         addComponent(lazyCheckBox);
 
         addComponent(log);
-        mainWindow.addListener(new Page.BrowserWindowResizeListener() {
-            @Override
-            public void browserWindowResized(BrowserWindowResizeEvent event) {
-                log.log("Resize event: " + event.getWidth() + " x "
-                        + event.getHeight());
-            }
-        });
+        mainWindow.getPage().addBrowserWindowResizeListener(
+                new Page.BrowserWindowResizeListener() {
+                    @Override
+                    public void browserWindowResized(
+                            BrowserWindowResizeEvent event) {
+                        log.log("Resize event: " + event.getWidth() + " x "
+                                + event.getHeight());
+                    }
+                });
     }
 
     @Override

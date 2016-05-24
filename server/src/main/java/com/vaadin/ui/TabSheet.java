@@ -855,15 +855,6 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addSelectedTabChangeListener(SelectedTabChangeListener)}
-     **/
-    @Deprecated
-    public void addListener(SelectedTabChangeListener listener) {
-        addSelectedTabChangeListener(listener);
-    }
-
-    /**
      * Removes a tab selection listener
      * 
      * @param listener
@@ -873,15 +864,6 @@ public class TabSheet extends AbstractComponentContainer implements Focusable,
             SelectedTabChangeListener listener) {
         removeListener(SelectedTabChangeEvent.class, listener,
                 SELECTED_TAB_CHANGE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeSelectedTabChangeListener(SelectedTabChangeListener)}
-     **/
-    @Deprecated
-    public void removeListener(SelectedTabChangeListener listener) {
-        removeSelectedTabChangeListener(listener);
     }
 
     /**

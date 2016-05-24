@@ -47,12 +47,14 @@ public class UsingUriFragments extends UI {
         layout.addComponent(label);
 
         // React to fragment changes
-        getPage().addListener(new UriFragmentChangedListener() {
-            @Override
-            public void uriFragmentChanged(UriFragmentChangedEvent source) {
-                handleFragment(source.getUriFragment());
-            }
-        });
+        getPage().addUriFragmentChangedListener(
+                new UriFragmentChangedListener() {
+                    @Override
+                    public void uriFragmentChanged(
+                            UriFragmentChangedEvent source) {
+                        handleFragment(source.getUriFragment());
+                    }
+                });
 
         // Handle the fragment received in the initial request
         handleFragment(getPage().getUriFragment());

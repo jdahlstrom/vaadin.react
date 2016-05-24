@@ -491,7 +491,8 @@ public class Page implements Serializable {
         eventRouter.addListener(eventType, target, method);
     }
 
-    private void removeListener(Class<?> eventType, Object target, Method method) {
+    private void removeListener(Class<?> eventType, Object target,
+            Method method) {
         if (hasEventRouter()) {
             eventRouter.removeListener(eventType, target, method);
         }
@@ -517,15 +518,6 @@ public class Page implements Serializable {
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addUriFragmentChangedListener(UriFragmentChangedListener)}
-     **/
-    @Deprecated
-    public void addListener(Page.UriFragmentChangedListener listener) {
-        addUriFragmentChangedListener(listener);
-    }
-
-    /**
      * Removes a URI fragment listener that was previously added to this page.
      * 
      * @param listener
@@ -537,15 +529,6 @@ public class Page implements Serializable {
             Page.UriFragmentChangedListener listener) {
         removeListener(UriFragmentChangedEvent.class, listener,
                 URI_FRAGMENT_CHANGED_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeUriFragmentChangedListener(UriFragmentChangedListener)}
-     **/
-    @Deprecated
-    public void removeListener(Page.UriFragmentChangedListener listener) {
-        removeUriFragmentChangedListener(listener);
     }
 
     /**
@@ -757,15 +740,6 @@ public class Page implements Serializable {
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addBrowserWindowResizeListener(BrowserWindowResizeListener)}
-     **/
-    @Deprecated
-    public void addListener(BrowserWindowResizeListener resizeListener) {
-        addBrowserWindowResizeListener(resizeListener);
-    }
-
-    /**
      * Removes a {@link BrowserWindowResizeListener} from this UI. The listener
      * will no longer be notified when the browser window is resized.
      * 
@@ -778,15 +752,6 @@ public class Page implements Serializable {
                 BROWSER_RESIZE_METHOD);
         getState(true).hasResizeListeners = hasEventRouter()
                 && eventRouter.hasListeners(BrowserWindowResizeEvent.class);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeBrowserWindowResizeListener(BrowserWindowResizeListener)}
-     **/
-    @Deprecated
-    public void removeListener(BrowserWindowResizeListener resizeListener) {
-        removeBrowserWindowResizeListener(resizeListener);
     }
 
     /**
@@ -940,7 +905,8 @@ public class Page implements Serializable {
      */
     public URI getLocation() {
         if (location == null
-                && !uI.getSession().getConfiguration().isSendUrlsAsParameters()) {
+                && !uI.getSession().getConfiguration()
+                        .isSendUrlsAsParameters()) {
             throw new IllegalStateException("Location is not available as the "
                     + Constants.SERVLET_PARAMETER_SENDURLSASPARAMETERS
                     + " parameter is configured as false");

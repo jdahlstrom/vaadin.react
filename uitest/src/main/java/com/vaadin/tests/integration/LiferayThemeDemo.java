@@ -153,10 +153,11 @@ public class LiferayThemeDemo extends LegacyApplication {
         l.addComponent(b);
 
         b = new NativeButton("Native Button");
-        b.setDescription("<h2><img src=\"/html/VAADIN/themes/runo/icons/16/globe.png\"/>A richtext tooltip</h2>"
-                + "<ul>"
-                + "<li>HTML formatting</li><li>Images<br/>"
-                + "</li><li>etc...</li></ul>");
+        b.setDescription(
+                "<h2><img src=\"/html/VAADIN/themes/runo/icons/16/globe.png\"/>A richtext tooltip</h2>"
+                        + "<ul>"
+                        + "<li>HTML formatting</li><li>Images<br/>"
+                        + "</li><li>etc...</li></ul>");
         l.addComponent(b);
 
         b = new CheckBox("Checkbox");
@@ -426,18 +427,20 @@ public class LiferayThemeDemo extends LegacyApplication {
         layout2.addComponent(new Label(
                 "<code>Window.setResizable(false)</code>", ContentMode.HTML));
 
-        tabs.addListener(new TabSheet.SelectedTabChangeListener() {
-            @Override
-            public void selectedTabChange(SelectedTabChangeEvent event) {
-                if (event.getTabSheet().getSelectedTab() == l) {
-                    getMainWindow().addWindow(w);
-                    getMainWindow().addWindow(w2);
-                } else {
-                    getMainWindow().removeWindow(w);
-                    getMainWindow().removeWindow(w2);
-                }
-            }
-        });
+        tabs.addSelectedTabChangeListener(
+                new TabSheet.SelectedTabChangeListener() {
+                    @Override
+                    public void selectedTabChange(
+                            SelectedTabChangeEvent event) {
+                        if (event.getTabSheet().getSelectedTab() == l) {
+                            getMainWindow().addWindow(w);
+                            getMainWindow().addWindow(w2);
+                        } else {
+                            getMainWindow().removeWindow(w);
+                            getMainWindow().removeWindow(w2);
+                        }
+                    }
+                });
 
         return l;
     }
@@ -625,7 +628,7 @@ public class LiferayThemeDemo extends LegacyApplication {
             public void buttonClick(ClickEvent event) {
                 new Notification(title.getValue(), message.getValue(),
                         Notification.TYPE_WARNING_MESSAGE, true).show(Page
-                        .getCurrent());
+                                .getCurrent());
 
             }
         });
@@ -637,7 +640,7 @@ public class LiferayThemeDemo extends LegacyApplication {
             public void buttonClick(ClickEvent event) {
                 new Notification(title.getValue(), message.getValue(),
                         Notification.TYPE_ERROR_MESSAGE, true).show(Page
-                        .getCurrent());
+                                .getCurrent());
 
             }
         });
@@ -649,7 +652,7 @@ public class LiferayThemeDemo extends LegacyApplication {
             public void buttonClick(ClickEvent event) {
                 new Notification(title.getValue(), message.getValue(),
                         Notification.TYPE_TRAY_NOTIFICATION, true).show(Page
-                        .getCurrent());
+                                .getCurrent());
 
             }
         });

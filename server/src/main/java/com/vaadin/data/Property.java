@@ -385,27 +385,12 @@ public interface Property<T> extends Serializable {
                 Property.ReadOnlyStatusChangeListener listener);
 
         /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #addReadOnlyStatusChangeListener(ReadOnlyStatusChangeListener)}
-         **/
-        @Deprecated
-        public void addListener(Property.ReadOnlyStatusChangeListener listener);
-
-        /**
          * Removes a previously registered read-only status change listener.
          * 
          * @param listener
          *            listener to be removed
          */
         public void removeReadOnlyStatusChangeListener(
-                Property.ReadOnlyStatusChangeListener listener);
-
-        /**
-         * @deprecated As of 7.0, replaced by
-         *             {@link #removeReadOnlyStatusChangeListener(ReadOnlyStatusChangeListener)}
-         **/
-        @Deprecated
-        public void removeListener(
                 Property.ReadOnlyStatusChangeListener listener);
     }
 }

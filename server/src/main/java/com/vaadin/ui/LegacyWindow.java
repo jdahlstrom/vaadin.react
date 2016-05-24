@@ -19,8 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.vaadin.server.LegacyApplication;
-import com.vaadin.server.Page.BrowserWindowResizeEvent;
-import com.vaadin.server.Page.BrowserWindowResizeListener;
 import com.vaadin.server.Resource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.BorderStyle;
@@ -278,7 +276,7 @@ public class LegacyWindow extends UI {
      * @param tryToOpenAsPopup
      *            Whether to try to force the resource to be opened in a new
      *            window
-     * */
+     */
     public void open(Resource resource, String windowName,
             boolean tryToOpenAsPopup) {
         getPage().open(resource, windowName, tryToOpenAsPopup);
@@ -312,37 +310,6 @@ public class LegacyWindow extends UI {
     public void open(Resource resource, String windowName, int width,
             int height, BorderStyle border) {
         getPage().open(resource, windowName, width, height, border);
-    }
-
-    /**
-     * Adds a new {@link BrowserWindowResizeListener} to this UI. The listener
-     * will be notified whenever the browser window within which this UI resides
-     * is resized.
-     * 
-     * @param resizeListener
-     *            the listener to add
-     * 
-     * @see BrowserWindowResizeListener#browserWindowResized(BrowserWindowResizeEvent)
-     * @see #setResizeLazy(boolean)
-     * 
-     * @deprecated As of 7.0, use the similarly named api in Page instead
-     */
-    @Deprecated
-    public void addListener(BrowserWindowResizeListener resizeListener) {
-        getPage().addListener(resizeListener);
-    }
-
-    /**
-     * Removes a {@link BrowserWindowResizeListener} from this UI. The listener
-     * will no longer be notified when the browser window is resized.
-     * 
-     * @param resizeListener
-     *            the listener to remove
-     * @deprecated As of 7.0, use the similarly named api in Page instead
-     */
-    @Deprecated
-    public void removeListener(BrowserWindowResizeListener resizeListener) {
-        getPage().removeListener(resizeListener);
     }
 
     /**
@@ -432,7 +399,8 @@ public class LegacyWindow extends UI {
      * {@link ComponentContainer} (default {@link VerticalLayout} or explicitly
      * set).
      */
-    public void replaceComponent(Component oldComponent, Component newComponent) {
+    public void replaceComponent(Component oldComponent,
+            Component newComponent) {
         getContent().replaceComponent(oldComponent, newComponent);
     }
 

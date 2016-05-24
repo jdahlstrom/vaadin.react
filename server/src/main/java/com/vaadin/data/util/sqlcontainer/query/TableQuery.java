@@ -232,7 +232,8 @@ public class TableQuery extends AbstractTransactionalQuery implements
      * int)
      */
     @Override
-    public ResultSet getResults(int offset, int pagelength) throws SQLException {
+    public ResultSet getResults(int offset, int pagelength)
+            throws SQLException {
         StatementHelper sh;
         /*
          * If no ordering is explicitly set, results will be ordered by the
@@ -274,7 +275,8 @@ public class TableQuery extends AbstractTransactionalQuery implements
     public int storeRow(RowItem row) throws UnsupportedOperationException,
             SQLException {
         if (row == null) {
-            throw new IllegalArgumentException("Row argument must be non-null.");
+            throw new IllegalArgumentException(
+                    "Row argument must be non-null.");
         }
         StatementHelper sh;
         int result = 0;
@@ -788,7 +790,8 @@ public class TableQuery extends AbstractTransactionalQuery implements
     /**
      * Custom writeObject to call rollback() if object is serialized.
      */
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+    private void writeObject(java.io.ObjectOutputStream out)
+            throws IOException {
         try {
             rollback();
         } catch (SQLException ignored) {
@@ -833,16 +836,6 @@ public class TableQuery extends AbstractTransactionalQuery implements
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addRowIdChangeListener(com.vaadin.data.util.sqlcontainer.query.QueryDelegate.RowIdChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void addListener(RowIdChangeListener listener) {
-        addRowIdChangeListener(listener);
-    }
-
-    /**
      * Removes the given RowIdChangeListener from this query
      */
     @Override
@@ -850,16 +843,6 @@ public class TableQuery extends AbstractTransactionalQuery implements
         if (rowIdChangeListeners != null) {
             rowIdChangeListeners.remove(listener);
         }
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeRowIdChangeListener(com.vaadin.data.util.sqlcontainer.query.QueryDelegate.RowIdChangeListener)}
-     **/
-    @Override
-    @Deprecated
-    public void removeListener(RowIdChangeListener listener) {
-        removeRowIdChangeListener(listener);
     }
 
     private static final Logger getLogger() {

@@ -121,9 +121,9 @@ public abstract class AbstractFieldTest<T extends AbstractField> extends
         @Override
         public void execute(T c, Boolean value, Object data) {
             if (value) {
-                c.addListener(AbstractFieldTest.this);
+                c.addReadOnlyStatusChangeListener(AbstractFieldTest.this);
             } else {
-                c.removeListener(AbstractFieldTest.this);
+                c.removeReadOnlyStatusChangeListener(AbstractFieldTest.this);
             }
         }
     };

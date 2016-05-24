@@ -117,7 +117,7 @@ public abstract class PropertyFormatter<T> extends AbstractProperty<String>
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeListener) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
-                        .removeListener(this);
+                        .removeReadOnlyStatusChangeListener(this);
             }
             readOnly = isReadOnly();
             prevValue = getValue();
@@ -132,7 +132,7 @@ public abstract class PropertyFormatter<T> extends AbstractProperty<String>
             }
             if (dataSource instanceof Property.ReadOnlyStatusChangeListener) {
                 ((Property.ReadOnlyStatusChangeNotifier) dataSource)
-                        .addListener(this);
+                        .addReadOnlyStatusChangeListener(this);
             }
         }
 

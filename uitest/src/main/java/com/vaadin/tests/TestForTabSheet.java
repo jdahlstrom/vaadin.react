@@ -17,7 +17,7 @@ public class TestForTabSheet extends CustomComponent implements
     TestForTabSheet() {
         setCompositionRoot(tabsheet);
 
-        tabsheet.addListener(this);
+        tabsheet.addSelectedTabChangeListener(this);
 
         /* Listen for button click events. */
         tab1_root.addClickListener(this);

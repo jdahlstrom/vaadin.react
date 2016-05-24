@@ -415,15 +415,6 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addCloseListener(CloseListener)}
-     **/
-    @Deprecated
-    public void addListener(CloseListener listener) {
-        addCloseListener(listener);
-    }
-
-    /**
      * Removes the CloseListener from the window.
      * 
      * <p>
@@ -435,15 +426,6 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
      */
     public void removeCloseListener(CloseListener listener) {
         removeListener(CloseEvent.class, listener, WINDOW_CLOSE_METHOD);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeCloseListener(CloseListener)}
-     **/
-    @Deprecated
-    public void removeListener(CloseListener listener) {
-        removeCloseListener(listener);
     }
 
     protected void fireClose() {
@@ -606,30 +588,12 @@ public class Window extends Panel implements FocusNotifier, BlurNotifier,
     }
 
     /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #addResizeListener(ResizeListener)}
-     **/
-    @Deprecated
-    public void addListener(ResizeListener listener) {
-        addResizeListener(listener);
-    }
-
-    /**
      * Remove a resize listener.
      * 
      * @param listener
      */
     public void removeResizeListener(ResizeListener listener) {
         removeListener(ResizeEvent.class, listener);
-    }
-
-    /**
-     * @deprecated As of 7.0, replaced by
-     *             {@link #removeResizeListener(ResizeListener)}
-     **/
-    @Deprecated
-    public void removeListener(ResizeListener listener) {
-        removeResizeListener(listener);
     }
 
     /**
