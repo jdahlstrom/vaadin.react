@@ -9,10 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.event.FieldEvents.BlurNotifier;
-import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.event.FieldEvents.FocusNotifier;
 import com.vaadin.server.DefaultErrorHandler;
@@ -27,8 +25,7 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.BaseTheme;
 
 public abstract class AbstractComponentTest<T extends AbstractComponent>
-        extends AbstractComponentTestCase<T> implements FocusListener,
-        BlurListener {
+        extends AbstractComponentTestCase<T> {
 
     protected static final String TEXT_SHORT = "Short";
     protected static final String TEXT_MEDIUM = "This is a semi-long text that might wrap.";
@@ -227,7 +224,8 @@ public abstract class AbstractComponentTest<T extends AbstractComponent>
      * when overriding.
      */
     protected void createActions() {
-        createBooleanAction("Immediate", CATEGORY_STATE, true, immediateCommand);
+        createBooleanAction("Immediate", CATEGORY_STATE, true,
+                immediateCommand);
         createBooleanAction("Enabled", CATEGORY_STATE, true, enabledCommand);
         createBooleanAction("Readonly", CATEGORY_STATE, false, readonlyCommand);
         createBooleanAction("Visible", CATEGORY_STATE, true, visibleCommand);
@@ -248,26 +246,29 @@ public abstract class AbstractComponentTest<T extends AbstractComponent>
     }
 
     protected Command<T, Boolean> focusListenerCommand = new Command<T, Boolean>() {
+        final FocusListener listener = e -> log(e.getClass().getSimpleName());
 
         @Override
         public void execute(T c, Boolean value, Object data) {
             FocusNotifier fn = (FocusNotifier) c;
             if (value) {
-                fn.addFocusListener(AbstractComponentTest.this);
+                fn.addFocusListener(listener);
             } else {
-                fn.removeFocusListener(AbstractComponentTest.this);
+                fn.removeFocusListener(listener);
             }
         }
     };
     protected Command<T, Boolean> blurListenerCommand = new Command<T, Boolean>() {
+        final BlurListener listener = e -> log(e.getClass().getSimpleName());
 
         @Override
         public void execute(T c, Boolean value, Object data) {
             BlurNotifier bn = (BlurNotifier) c;
+
             if (value) {
-                bn.addBlurListener(AbstractComponentTest.this);
+                bn.addBlurListener(listener);
             } else {
-                bn.removeBlurListener(AbstractComponentTest.this);
+                bn.removeBlurListener(listener);
             }
         }
     };
@@ -299,7 +300,8 @@ public abstract class AbstractComponentTest<T extends AbstractComponent>
             createSelectAction("Tab index", "State", tabIndexes, "0",
                     new Command<T, Integer>() {
                         @Override
-                        public void execute(T c, Integer tabIndex, Object data) {
+                        public void execute(T c, Integer tabIndex,
+                                Object data) {
                             ((Focusable) c).setTabIndex(tabIndex);
                         }
                     });
@@ -430,7 +432,8 @@ public abstract class AbstractComponentTest<T extends AbstractComponent>
     }
 
     protected <DATATYPE> void createClickAction(String caption,
-            String category, final Command<T, DATATYPE> command, DATATYPE value) {
+            String category, final Command<T, DATATYPE> command,
+            DATATYPE value) {
         createClickAction(caption, category, command, value, null);
     }
 
@@ -511,7 +514,8 @@ public abstract class AbstractComponentTest<T extends AbstractComponent>
             @Override
             public void menuSelected(MenuItem selectedItem) {
                 boolean selected = !isSelected(selectedItem);
-                doCommand(getText(selectedItem), booleanCommand, selected, data);
+                doCommand(getText(selectedItem), booleanCommand, selected,
+                        data);
                 setSelected(selectedItem, selected);
             }
 
@@ -770,15 +774,4 @@ public abstract class AbstractComponentTest<T extends AbstractComponent>
                 + throwable.getMessage());
         throwable.printStackTrace();
     }
-
-    @Override
-    public void focus(FocusEvent event) {
-        log(event.getClass().getSimpleName());
-    }
-
-    @Override
-    public void blur(BlurEvent event) {
-        log(event.getClass().getSimpleName());
-    }
-
 }

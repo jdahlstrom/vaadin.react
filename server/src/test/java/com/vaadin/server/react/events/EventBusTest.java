@@ -5,8 +5,7 @@ import java.util.function.Consumer;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.server.react.Flow.Subscription;
 
 public class EventBusTest {
 
@@ -30,6 +29,7 @@ public class EventBusTest {
         TestEvent first = new TestEvent("first");
         TestEvent second = new TestEvent("second");
         TestEvent third = new TestEvent("third");
+        TestEvent fourth = new TestEvent("fourth");
 
         Consumer<TestEvent> sub1 = createConsumer();
         Consumer<TestEvent> sub2 = createConsumer();
@@ -37,12 +37,13 @@ public class EventBusTest {
         sub1.accept(second);
         sub1.accept(third);
         sub2.accept(third);
+        sub2.accept(fourth);
 
         EasyMock.replay(sub1, sub2);
 
         bus.fireEvent(first);
 
-        bus.events(TestEvent.class).subscribe(sub1);
+        Subscription s = bus.events(TestEvent.class).subscribe(sub1);
 
         bus.fireEvent(second);
 
@@ -50,29 +51,15 @@ public class EventBusTest {
 
         bus.fireEvent(third);
 
+        s.unsubscribe();
+
+        bus.fireEvent(fourth);
+
         EasyMock.verify(sub1, sub2);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Consumer<T> createConsumer() {
         return EasyMock.createStrictMock(Consumer.class);
-    }
-
-    @Test
-    public void testButton() throws Exception {
-        Button b = new Button();
-
-        Consumer<ClickEvent> sub1 = createConsumer();
-
-        sub1.accept(EasyMock.anyObject(ClickEvent.class));
-        sub1.accept(EasyMock.anyObject(ClickEvent.class));
-
-        EasyMock.replay(sub1);
-
-        b.clicks().subscribe(sub1);
-
-        b.click();
-        b.click();
-
-        EasyMock.verify(sub1);
     }
 }

@@ -18,6 +18,7 @@ package com.vaadin.event;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 import com.vaadin.shared.EventId;
 import com.vaadin.shared.communication.FieldRpc.FocusAndBlurServerRpc;
@@ -139,7 +140,8 @@ public interface FieldEvents {
      * @see FocusEvent
      * @since 6.2
      */
-    public interface FocusListener extends ConnectorEventListener {
+    public interface FocusListener
+            extends ConnectorEventListener, Consumer<FocusEvent> {
 
         @Deprecated
         public static final Method focusMethod = ReflectTools.findMethod(
@@ -152,6 +154,11 @@ public interface FieldEvents {
          *            Component focus event.
          */
         public void focus(FocusEvent event);
+
+        @Override
+        public default void accept(FocusEvent e) {
+            focus(e);
+        }
     }
 
     /**
@@ -182,7 +189,8 @@ public interface FieldEvents {
      * @see BlurEvent
      * @since 6.2
      */
-    public interface BlurListener extends ConnectorEventListener {
+    public interface BlurListener
+            extends ConnectorEventListener, Consumer<BlurEvent> {
 
         @Deprecated
         public static final Method blurMethod = ReflectTools.findMethod(
@@ -195,6 +203,11 @@ public interface FieldEvents {
          *            Component blur event.
          */
         public void blur(BlurEvent event);
+
+        @Override
+        public default void accept(BlurEvent e) {
+            blur(e);
+        }
     }
 
     /**

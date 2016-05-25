@@ -47,14 +47,6 @@ public interface Subscriber<T> extends Serializable {
             public void onNext(T value) {
                 onNext.accept(value);
             }
-
-            @Override
-            public void onError(Exception e) {
-            }
-
-            @Override
-            public void onEnd() {
-            }
         };
     }
 

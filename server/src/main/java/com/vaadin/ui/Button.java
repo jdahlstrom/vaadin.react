@@ -16,14 +16,15 @@
 
 package com.vaadin.ui;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 
 import com.vaadin.event.Action;
+import com.vaadin.event.ConnectorEventListener;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
@@ -288,7 +289,8 @@ public class Button extends AbstractFocusable implements
      * @author Vaadin Ltd.
      * @since 3.0
      */
-    public interface ClickListener extends Serializable {
+    public interface ClickListener
+            extends ConnectorEventListener, Consumer<ClickEvent> {
 
         @Deprecated
         public static final Method BUTTON_CLICK_METHOD = ReflectTools
@@ -304,6 +306,10 @@ public class Button extends AbstractFocusable implements
          */
         public void buttonClick(ClickEvent event);
 
+        @Override
+        public default void accept(ClickEvent e) {
+            buttonClick(e);
+        }
     }
 
     /**
@@ -313,7 +319,7 @@ public class Button extends AbstractFocusable implements
      *            the Listener to be added.
      */
     public void addClickListener(ClickListener listener) {
-        getEvents(ClickEvent.class).subscribe(listener::buttonClick);
+        getEventBus().addListener(ClickEvent.class, listener);
     }
 
     /**
@@ -323,8 +329,7 @@ public class Button extends AbstractFocusable implements
      *            the Listener to be removed.
      */
     public void removeClickListener(ClickListener listener) {
-        throw new UnsupportedOperationException(
-                "Click listeners cannot currently be removed");
+        getEventBus().removeListener(ClickEvent.class, listener);
     }
 
     /**

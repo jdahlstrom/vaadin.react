@@ -11,7 +11,7 @@ import com.vaadin.tests.util.Log;
 import com.vaadin.ui.TextField;
 
 public class TextFieldFocusAndBlurListeners extends TestBase implements
-        FocusListener, BlurListener, ValueChangeListener {
+        ValueChangeListener {
     private Log log = new Log(5).setNumberLogRows(false);
 
     @Override
@@ -30,8 +30,8 @@ public class TextFieldFocusAndBlurListeners extends TestBase implements
         TextField tf1 = new TextField("TextField 1",
                 "Has focus and blur listeners");
         tf1.setWidth("300px");
-        tf1.addFocusListener(this);
-        tf1.addBlurListener(this);
+        tf1.addFocusListener(this::focus);
+        tf1.addBlurListener(this::blur);
 
         addComponent(tf1);
 
@@ -79,13 +79,11 @@ public class TextFieldFocusAndBlurListeners extends TestBase implements
         addComponent(tf4);
     }
 
-    @Override
     public void focus(FocusEvent event) {
         log.log(event.getComponent().getCaption() + ": Focus");
 
     }
 
-    @Override
     public void blur(BlurEvent event) {
         TextField tf = (TextField) event.getComponent();
         log.log(tf.getCaption() + ": Blur. Value is: "

@@ -46,14 +46,12 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
             @Override
             public void blur() {
-                System.out.println("GOT BLUR RPC");
                 getEventBus().fireEvent(BlurEvent.class,
                         new BlurEvent(AbstractFocusable.this));
             }
 
             @Override
             public void focus() {
-                System.out.println("GOT FOCUS RPC");
                 getEventBus().fireEvent(FocusEvent.class,
                         new FocusEvent(AbstractFocusable.this));
             }
@@ -81,13 +79,12 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     @Override
     public void addBlurListener(BlurListener listener) {
-        blurs().subscribe(listener::blur);
+        eventBus.addListener(BlurEvent.class, listener);
     }
 
     @Override
     public void removeBlurListener(BlurListener listener) {
-        throw new UnsupportedOperationException(
-                "Click listeners cannot currently be removed");
+        eventBus.removeListener(BlurEvent.class, listener);
     }
 
     /**
@@ -101,13 +98,12 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     @Override
     public void addFocusListener(FocusListener listener) {
-        getEvents(FocusEvent.class).subscribe(listener::focus);
+        eventBus.addListener(FocusEvent.class, listener);
     }
 
     @Override
     public void removeFocusListener(FocusListener listener) {
-        throw new UnsupportedOperationException(
-                "Focus listeners cannot currently be removed");
+        eventBus.removeListener(FocusEvent.class, listener);
     }
 
     @Override
