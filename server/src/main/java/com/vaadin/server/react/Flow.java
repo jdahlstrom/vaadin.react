@@ -114,6 +114,10 @@ public interface Flow<T> extends Serializable {
         return from(values);
     }
 
+    /*
+     * Flow creation.
+     */
+
     /**
      * Returns a new cold flow that produces the given sequence of values and
      * then completes.
@@ -323,6 +327,10 @@ public interface Flow<T> extends Serializable {
     public abstract <U> Flow<U> createFlow(
             Consumer<Subscriber<? super U>> onSubscribe);
 
+    /*
+     * Subscribing.
+     */
+
     /**
      * Subscribes the given {@code Subscriber} to this flow. Its {@code onNext},
      * {@code onError}, and {@code onEnd} methods are invoked whenever this flow
@@ -364,6 +372,23 @@ public interface Flow<T> extends Serializable {
     public default Subscription subscribe(Consumer<? super T> onNext,
             Consumer<? super Exception> onError, Runnable onEnd) {
         return subscribe(Subscriber.from(onNext, onError, onEnd));
+    }
+
+    /*
+     * Composition.
+     */
+
+    /**
+     * Merges the given flows into a single flow. The resulting flow will emit
+     * the values from the input flows in the order they are produced.
+     * 
+     * @param flows
+     *            the flows to merge
+     * @return the merged flow
+     */
+    @SafeVarargs
+    public static <T> Flow<T> merge(Flow<? extends T>... flows) {
+        return from(flows).lift(Operator.merge());
     }
 
     /*
@@ -580,7 +605,7 @@ public interface Flow<T> extends Serializable {
      * Returns a new flow, possibly of different value type, whose subscribers
      * are adapted to this flow using the given operator. That is, any
      * subscribers to the new flow are passed to {@link Operator#apply(Object)
-     * op.apply()} and the results subscribed to this flow.
+     * op.apply()} and the result subscribed to this flow.
      * 
      * @param <U>
      *            the value type of the new flow
