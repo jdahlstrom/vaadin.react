@@ -19,6 +19,7 @@ package com.vaadin.server.react.impl;
 import java.util.function.Consumer;
 
 import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.Subscriber;
 
 /**
  * A basic concrete implementation of a Flow.
@@ -48,7 +49,16 @@ public class FlowImpl<T> implements Flow<T> {
 
     @Override
     public Subscription subscribe(Subscriber<? super T> subscriber) {
+        assert !subscriber.isSubscribed() : "subscriber cannot be already subscribed";
+
+        Subscription sub = new Subscription();
+        subscriber.onSubscribe(sub);
         onSubscribe.accept(subscriber);
-        return null;
+        return sub;
+    }
+
+    @Override
+    public <U> Flow<U> createFlow(Consumer<Subscriber<? super U>> onSubscribe) {
+        return new FlowImpl<U>(onSubscribe);
     }
 }
