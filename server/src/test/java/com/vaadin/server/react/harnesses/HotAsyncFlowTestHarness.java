@@ -1,4 +1,4 @@
-package com.vaadin.server.react;
+package com.vaadin.server.react.harnesses;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -15,15 +15,17 @@ import java.util.function.Supplier;
 
 import org.easymock.EasyMock;
 
+import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.Subscriber;
 import com.vaadin.server.react.impl.FlowImpl;
 
-public class HotAsyncFlowTest extends FlowTest {
+public class HotAsyncFlowTestHarness extends FlowTestHarness {
 
     private ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
     private Map<Runnable, Future<?>> executions = new HashMap<>();
 
     @Override
-    protected <T> void verifyFlow(Flow<T> flow, Subscriber<? super T> sub) {
+    public <T> void verifyFlow(Flow<T> flow, Subscriber<? super T> sub) {
 
         EasyMock.replay(sub);
         flow.subscribe(sub);
@@ -51,14 +53,14 @@ public class HotAsyncFlowTest extends FlowTest {
     }
 
     @Override
-    protected <T> void verifyFlow(Flow<T> flow,
+    public <T> void verifyFlow(Flow<T> flow,
             Supplier<Subscriber<? super T>> supp) {
         verifyFlow(flow, supp.get());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> Flow<T> flow(T... actual) {
+    public <T> Flow<T> flow(T... actual) {
 
         Set<Subscriber<? super T>> subs = new LinkedHashSet<>();
 

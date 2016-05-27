@@ -1,4 +1,4 @@
-package com.vaadin.server.react;
+package com.vaadin.server.react.harnesses;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -9,28 +9,25 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.easymock.EasyMock;
-
+import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.Subscriber;
 import com.vaadin.server.react.impl.FlowImpl;
 
-public class ColdAsyncFlowTest extends FlowTest {
+public class ColdAsyncFlowTestHarness extends FlowTestHarness {
 
     private ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
 
     @Override
-    protected <T> void verifyFlow(Flow<T> flow,
+    public <T> void verifyFlow(Flow<T> flow,
             Supplier<Subscriber<? super T>> subSup) {
 
         Subscriber<? super T> sub = subSup.get();
-
-        EasyMock.replay(sub);
-        flow.subscribe(sub);
-        EasyMock.verify(sub);
+        verifyFlow(flow, sub);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> Flow<T> flow(T... actual) {
+    public <T> Flow<T> flow(T... actual) {
 
         return new FlowImpl<T>(new Consumer<Subscriber<? super T>>() {
 

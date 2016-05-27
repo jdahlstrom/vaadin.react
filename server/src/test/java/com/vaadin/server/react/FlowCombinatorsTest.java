@@ -1,82 +1,44 @@
 package com.vaadin.server.react;
 
 import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
-public class FlowTest extends FlowTestBase {
+import com.vaadin.server.react.harnesses.ColdAsyncFlowTestHarness;
+import com.vaadin.server.react.harnesses.FlowTestHarness;
+import com.vaadin.server.react.harnesses.HotAsyncFlowTestHarness;
+import com.vaadin.server.react.harnesses.SyncFlowTestHarness;
 
-    protected final static int TIMEOUT_SEC = 5;
+@RunWith(Parameterized.class)
+public class FlowCombinatorsTest extends FlowTestBase {
+
+    @Parameter
+    public FlowTestHarness harness;
+
+    @Parameters(name = "{0}")
+    public static List<FlowTestHarness[]> harnesses() {
+        return Arrays
+                .asList(new FlowTestHarness[][] {
+                        { new SyncFlowTestHarness() },
+                        { new ColdAsyncFlowTestHarness() },
+                        { new HotAsyncFlowTestHarness() } });
+    }
 
     @Rule
-    public Timeout timeout = new Timeout(1000 * TIMEOUT_SEC);
+    public Timeout timeout = new Timeout(1000 * FlowTestHarness.TIMEOUT_SEC);
 
     @Test
     public void testSubscriber() {
         verifyFlow(flow(), expect());
         verifyFlow(flow(1, 2, 3, 4), expect(1, 2, 3, 4));
-        verifyFlow(flow(1, 2, 3), expectAndUnsubscribe(1));
-    }
-
-    @Test
-    public void testFromStream() {
-        Flow<Integer> flow = Flow
-                .from(Arrays.stream(new int[] { 1, 2, 3 }));
-
-        verifyFlow(flow, expect(1, 2, 3).get());
-        // Stream can only be consumed once
-        verifyFlow(flow, expect().get());
-
-        flow = Flow
-                .from(Arrays.stream(new int[] { 1, 2, 3 }));
-
-        verifyFlow(flow, expectAndUnsubscribe(1).get());
-        verifyFlow(flow, expectAndUnsubscribe().get());
-    }
-
-    @Test
-    public void testFromFuture() {
-        CompletableFuture<Integer> future = new CompletableFuture<>();
-        Flow<Integer> flow = Flow.from(future);
-        future.complete(42);
-        verifyFlow(flow, expect(42));
-        verifyFlow(flow, expectAndUnsubscribe(42));
-
-        future = new CompletableFuture<>();
-        flow = Flow.from(future);
-        Exception e = new Exception();
-        future.completeExceptionally(e);
-        verifyFlow(flow, expectError(e));
-    }
-
-    @Test
-    public void testGenerate() {
-        int[] counter = new int[] { 0 };
-        Flow<Integer> flow = Flow.generate(() -> {
-            return counter[0] < 5 ? Optional.of(counter[0]++) : Optional
-                    .empty();
-        });
-
-        verifyFlow(flow, expect(0, 1, 2, 3, 4).get());
-        verifyFlow(flow, expect().get());
-
-        flow = Flow.generate(() -> Optional.of(42));
-        verifyFlow(flow, expectAndUnsubscribe(42, 42, 42).get());
-    }
-
-    @Test
-    public void testIterate() {
-        Flow<Integer> flow = Flow.iterate(1, i -> {
-            return i < 5 ? Optional.of(2 * i) : Optional.empty();
-        });
-
-        verifyFlow(flow, expect(1, 2, 4, 8));
-
-        verifyFlow(flow, expectAndUnsubscribe(1, 2));
+        verifyFlow(flow(1, 2, 3), expectAndUnsubscribe());
     }
 
     @Test
@@ -243,5 +205,10 @@ public class FlowTest extends FlowTestBase {
         verifyFlow(flow(1, 2, 3, 4).skip(5), expect());
 
         verifyFlow(flow(1, 2, 3).skip(1), expectAndUnsubscribe(2));
+    }
+
+    @Override
+    protected FlowTestHarness getHarness() {
+        return harness;
     }
 }
