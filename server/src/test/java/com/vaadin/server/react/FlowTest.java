@@ -1,39 +1,25 @@
 package com.vaadin.server.react;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.createStrictMock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
-import org.easymock.EasyMock;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-import com.vaadin.server.react.Flow.Subscription;
+public class FlowTest extends FlowTestBase {
 
-public class FlowTest {
+    protected final static int TIMEOUT_SEC = 5;
 
     @Rule
-    public Timeout timeout = new Timeout(1000);
+    public Timeout timeout = new Timeout(1000 * TIMEOUT_SEC);
 
     @Test
     public void testSubscriber() {
         verifyFlow(flow(), expect());
         verifyFlow(flow(1, 2, 3, 4), expect(1, 2, 3, 4));
         verifyFlow(flow(1, 2, 3), expectAndUnsubscribe(1));
-    }
-
-    @Test
-    public void testSubscribers() {
-        Flow<Integer> flow = flow(1, 2, 3, 4);
-        verifyFlow(flow, expect(1, 2, 3, 4));
-        verifyFlow(flow, expect(1, 2, 3, 4));
     }
 
     @Test
@@ -94,6 +80,26 @@ public class FlowTest {
     }
 
     @Test
+    public void testMerge() {
+        verifyFlow(Flow.merge(flow()), expect());
+
+        verifyFlow(Flow.merge(flow(), flow()), expect());
+
+        verifyFlow(Flow.merge(flow(1, 2, 3), flow()), expect(1, 2, 3));
+        verifyFlow(Flow.merge(flow(), flow(1, 2, 3)), expect(1, 2, 3));
+
+        verifyFlow(Flow.merge(flow(1, 2, 3), flow(6, 5, 4)),
+                expectMerged(values(1, 2, 3),
+                        values(6, 5, 4)));
+
+        verifyFlow(Flow.merge(flow(1), flow(), flow(2)),
+                expectMerged(values(1), values(2)));
+
+        verifyFlow(Flow.merge(flow(1, 2), flow(3), flow(4, 5, 6)),
+                expectMerged(values(1, 2), values(3), values(4, 5, 6)));
+    }
+
+    @Test
     public void testMap() {
         verifyFlow(flow().map(o -> "" + o), expect());
 
@@ -126,6 +132,8 @@ public class FlowTest {
 
     @Test
     public void testFlatmap() {
+        // TODO: Test with async subflows too
+
         verifyFlow(flow().flatMap(i -> Flow.of('a', 'b')), expect());
 
         verifyFlow(flow(1, 2, 3, 4).flatMap(i -> Flow.of(i, 10 * i)),
@@ -191,12 +199,12 @@ public class FlowTest {
     public void testTakeWhile() throws Exception {
         verifyFlow(flow().takeWhile(x -> true), expect());
         verifyFlow(flow().takeWhile(x -> false), expect());
-
+        //
         verifyFlow(flow(1, 2, 3).takeWhile(x -> true), expect(1, 2, 3));
         verifyFlow(flow(1, 2, 3).takeWhile(x -> false), expect());
-
+        //
         verifyFlow(flow(1, 2, 3).takeWhile(x -> x % 2 != 0), expect(1));
-
+        //
         verifyFlow(flow(1, 2, 3).takeWhile(x -> x < 3),
                 expectAndUnsubscribe(1));
     }
@@ -235,76 +243,5 @@ public class FlowTest {
         verifyFlow(flow(1, 2, 3, 4).skip(5), expect());
 
         verifyFlow(flow(1, 2, 3).skip(1), expectAndUnsubscribe(2));
-    }
-
-    protected <T> void verifyFlow(Flow<T> flow,
-            Subscriber<? super T> sub) {
-        replay(sub);
-        flow.subscribe(sub);
-        verify(sub);
-    }
-
-    protected <T> void verifyFlow(Flow<T> flow,
-            Supplier<Subscriber<? super T>> subSup) {
-
-        for (int i = 0; i < 2; i++) {
-            verifyFlow(flow, subSup.get());
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T> Flow<T> flow(T... actual) {
-        return Flow.of(actual);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T> Supplier<Subscriber<? super T>> expect(T... expected) {
-        return () -> {
-            Subscriber<T> s = subscriber();
-            for (T t : expected) {
-                s.onNext(t);
-            }
-            s.onEnd();
-            return s;
-        };
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T> Supplier<Subscriber<? super T>> expectAndUnsubscribe(
-            T... expected) {
-        return () -> {
-            Subscriber<T> s = subscriber();
-            for (T t : expected) {
-                s.onNext(t);
-            }
-            // Unsubscribe, verify no subsequent calls are made
-            EasyMock.expect(s.isSubscribed()).andReturn(false).atLeastOnce();
-            return s;
-        };
-    }
-
-    /**
-     * @return a mock Subscriber
-     */
-    protected <T> Subscriber<T> subscriber() {
-        @SuppressWarnings("unchecked")
-        Subscriber<T> s = createStrictMock(Subscriber.class);
-        EasyMock.expect(s.isSubscribed()).andReturn(false).anyTimes();
-        s.onSubscribe(anyObject(Subscription.class));
-        EasyMock.expect(s.isSubscribed()).andStubReturn(true);
-        return s;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T> Supplier<Subscriber<? super T>> expectError(Exception e) {
-        return () -> {
-            Subscriber<T> s = createStrictMock(Subscriber.class);
-            EasyMock.expect(s.isSubscribed()).andReturn(false).anyTimes();
-            s.onSubscribe(anyObject(Subscription.class));
-            EasyMock.expect(s.isSubscribed()).andStubReturn(true);
-            s.onError(e);
-            s.onEnd();
-            return s;
-        };
     }
 }
