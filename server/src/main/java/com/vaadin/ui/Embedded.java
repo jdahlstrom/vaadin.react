@@ -25,7 +25,6 @@ import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.server.PaintException;
 import com.vaadin.server.PaintTarget;
 import com.vaadin.server.Resource;
-import com.vaadin.shared.EventId;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.ui.embedded.EmbeddedConstants;
 import com.vaadin.shared.ui.embedded.EmbeddedServerRpc;
@@ -106,7 +105,8 @@ public class Embedded extends AbstractComponent implements LegacyComponent {
     private EmbeddedServerRpc rpc = new EmbeddedServerRpc() {
         @Override
         public void click(MouseEventDetails mouseDetails) {
-            fireEvent(new ClickEvent(Embedded.this, mouseDetails));
+            getEventBus()
+                    .fireEvent(new ClickEvent(Embedded.this, mouseDetails));
         }
     };
 
@@ -530,8 +530,7 @@ public class Embedded extends AbstractComponent implements LegacyComponent {
      *            The listener to add
      */
     public void addClickListener(ClickListener listener) {
-        addListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class, listener,
-                ClickListener.clickMethod);
+        getEventBus().addListener(ClickEvent.class, listener, listener::click);
     }
 
     /**
@@ -542,13 +541,11 @@ public class Embedded extends AbstractComponent implements LegacyComponent {
      *            The listener to remove
      */
     public void removeClickListener(ClickListener listener) {
-        removeListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class,
-                listener);
+        getEventBus().removeListener(ClickEvent.class, listener);
     }
 
     @Override
     public void changeVariables(Object source, Map<String, Object> variables) {
         // TODO Remove once LegacyComponent is no longer implemented
     }
-
 }

@@ -57,6 +57,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.VaadinSession.State;
 import com.vaadin.server.communication.PushConnection;
+import com.vaadin.server.react.Flow;
 import com.vaadin.shared.Connector;
 import com.vaadin.shared.EventId;
 import com.vaadin.shared.MouseEventDetails;
@@ -159,7 +160,7 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     private UIServerRpc rpc = new UIServerRpc() {
         @Override
         public void click(MouseEventDetails mouseDetails) {
-            fireEvent(new ClickEvent(UI.this, mouseDetails));
+            getEventBus().fireEvent(new ClickEvent(UI.this, mouseDetails));
         }
 
         @Override
@@ -177,7 +178,7 @@ public abstract class UI extends AbstractSingleComponentContainer implements
 
         @Override
         public void poll() {
-            fireEvent(new PollEvent(UI.this));
+            getEventBus().fireEvent(new PollEvent(UI.this));
         }
 
         @Override
@@ -386,7 +387,7 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     private void fireClick(Map<String, Object> parameters) {
         MouseEventDetails mouseDetails = MouseEventDetails
                 .deSerialize((String) parameters.get("mouseDetails"));
-        fireEvent(new ClickEvent(this, mouseDetails));
+        getEventBus().fireEvent(new ClickEvent(this, mouseDetails));
     }
 
     @Override
@@ -907,7 +908,7 @@ public abstract class UI extends AbstractSingleComponentContainer implements
     }
 
     /**
-     * Add a click listener to the UI. The listener is called whenever the user
+     * Adds a click listener to the UI. The listener is called whenever the user
      * clicks inside the UI. Also when the click targets a component inside the
      * UI, provided the targeted component does not prevent the click event from
      * propagating.
@@ -918,20 +919,27 @@ public abstract class UI extends AbstractSingleComponentContainer implements
      *            The listener to add
      */
     public void addClickListener(ClickListener listener) {
-        addListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class, listener,
-                ClickListener.clickMethod);
+        getEventBus().addListener(ClickEvent.class, listener, listener::click);
     }
 
     /**
-     * Remove a click listener from the UI. The listener should earlier have
+     * Removes a click listener from the UI. The listener should earlier have
      * been added using {@link #addListener(ClickListener)}.
      * 
      * @param listener
      *            The listener to remove
      */
     public void removeClickListener(ClickListener listener) {
-        removeListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class,
-                listener);
+        getEventBus().removeListener(ClickEvent.class, listener);
+    }
+
+    /**
+     * Returns the flow of click events occurring inside this UI.
+     * 
+     * @return the flow of clicks
+     */
+    public Flow<ClickEvent> clicks() {
+        return getEvents(ClickEvent.class);
     }
 
     @Override
@@ -1617,13 +1625,16 @@ public abstract class UI extends AbstractSingleComponentContainer implements
 
     @Override
     public void addPollListener(PollListener listener) {
-        addListener(EventId.POLL, PollEvent.class, listener,
-                PollListener.POLL_METHOD);
+        getEventBus().addListener(PollEvent.class, listener, listener::poll);
     }
 
     @Override
     public void removePollListener(PollListener listener) {
-        removeListener(EventId.POLL, PollEvent.class, listener);
+        getEventBus().removeListener(PollEvent.class, listener);
+    }
+
+    public Flow<PollEvent> polls() {
+        return getEvents(PollEvent.class);
     }
 
     /**

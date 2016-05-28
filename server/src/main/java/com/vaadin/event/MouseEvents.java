@@ -16,12 +16,9 @@
 
 package com.vaadin.event;
 
-import java.lang.reflect.Method;
-
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.ui.Component;
-import com.vaadin.util.ReflectTools;
 
 /**
  * Interface that serves as a wrapper for mouse related events.
@@ -45,24 +42,11 @@ public interface MouseEvents {
      * @since 6.2
      */
     public static class ClickEvent extends Component.Event {
-        /**
-         * @deprecated As of 7.0, use {@link Button#LEFT} instead.
-         */
-        @Deprecated
-        public static final MouseButton BUTTON_LEFT = MouseButton.LEFT;
-        /**
-         * @deprecated As of 7.0, use {@link Button#MIDDLE} instead.
-         */
-        @Deprecated
-        public static final MouseButton BUTTON_MIDDLE = MouseButton.MIDDLE;
-        /**
-         * @deprecated As of 7.0, use {@link Button#RIGHT} instead.
-         */
-        @Deprecated
-        public static final MouseButton BUTTON_RIGHT = MouseButton.RIGHT;
+
         private MouseEventDetails details;
 
-        public ClickEvent(Component source, MouseEventDetails mouseEventDetails) {
+        public ClickEvent(Component source,
+                MouseEventDetails mouseEventDetails) {
             super(source);
             details = mouseEventDetails;
         }
@@ -193,9 +177,6 @@ public interface MouseEvents {
      */
     public interface ClickListener extends ConnectorEventListener {
 
-        public static final Method clickMethod = ReflectTools.findMethod(
-                ClickListener.class, "click", ClickEvent.class);
-
         /**
          * Called when a {@link Component} has been clicked. A reference to the
          * component is given by {@link ClickEvent#getComponent()}.
@@ -205,44 +186,4 @@ public interface MouseEvents {
          */
         public void click(ClickEvent event);
     }
-
-    /**
-     * Class for holding additional event information for DoubleClick events.
-     * Fired when the user double-clicks on a <code>Component</code>.
-     * 
-     * @see ClickEvent
-     * @author Vaadin Ltd.
-     * @since 6.2
-     */
-    public static class DoubleClickEvent extends Component.Event {
-
-        public DoubleClickEvent(Component source) {
-            super(source);
-        }
-    }
-
-    /**
-     * Interface for listening for a {@link DoubleClickEvent} fired by a
-     * {@link Component}.
-     * 
-     * @see DoubleClickEvent
-     * @author Vaadin Ltd.
-     * @since 6.2
-     */
-    public interface DoubleClickListener extends ConnectorEventListener {
-
-        public static final Method doubleClickMethod = ReflectTools.findMethod(
-                DoubleClickListener.class, "doubleClick",
-                DoubleClickEvent.class);
-
-        /**
-         * Called when a {@link Component} has been double clicked. A reference
-         * to the component is given by {@link DoubleClickEvent#getComponent()}.
-         * 
-         * @param event
-         *            An event containing information about the double click.
-         */
-        public void doubleClick(DoubleClickEvent event);
-    }
-
 }

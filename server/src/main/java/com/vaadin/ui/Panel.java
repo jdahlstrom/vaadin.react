@@ -29,7 +29,7 @@ import com.vaadin.event.MouseEvents.ClickListener;
 import com.vaadin.server.PaintException;
 import com.vaadin.server.PaintTarget;
 import com.vaadin.server.Scrollable;
-import com.vaadin.shared.EventId;
+import com.vaadin.server.react.Flow;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.ui.panel.PanelServerRpc;
 import com.vaadin.shared.ui.panel.PanelState;
@@ -55,7 +55,7 @@ public class Panel extends AbstractSingleComponentContainer implements
     private PanelServerRpc rpc = new PanelServerRpc() {
         @Override
         public void click(MouseEventDetails mouseDetails) {
-            fireEvent(new ClickEvent(Panel.this, mouseDetails));
+            getEventBus().fireEvent(new ClickEvent(Panel.this, mouseDetails));
         }
     };
 
@@ -263,7 +263,7 @@ public class Panel extends AbstractSingleComponentContainer implements
     }
 
     /**
-     * Add a click listener to the Panel. The listener is called whenever the
+     * Add a click listener to this Panel. The listener is called whenever the
      * user clicks inside the Panel. Also when the click targets a component
      * inside the Panel, provided the targeted component does not prevent the
      * click event from propagating.
@@ -274,20 +274,27 @@ public class Panel extends AbstractSingleComponentContainer implements
      *            The listener to add
      */
     public void addClickListener(ClickListener listener) {
-        addListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class, listener,
-                ClickListener.clickMethod);
+        getEventBus().addListener(ClickEvent.class, listener, listener::click);
     }
 
     /**
-     * Remove a click listener from the Panel. The listener should earlier have
+     * Removes a click listener from the Panel. The listener should earlier have
      * been added using {@link #addListener(ClickListener)}.
      * 
      * @param listener
      *            The listener to remove
      */
     public void removeClickListener(ClickListener listener) {
-        removeListener(EventId.CLICK_EVENT_IDENTIFIER, ClickEvent.class,
-                listener);
+        getEventBus().removeListener(ClickEvent.class, listener);
+    }
+
+    /**
+     * Returns the flow of click events occurring inside this Panel.
+     * 
+     * @return the flow of clicks
+     */
+    public Flow<ClickEvent> clicks() {
+        return getEvents(ClickEvent.class);
     }
 
     /**
