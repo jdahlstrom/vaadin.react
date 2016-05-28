@@ -35,6 +35,8 @@ import java.util.logging.Logger;
 
 import com.vaadin.event.EventRouter;
 import com.vaadin.event.MethodEventSource;
+import com.vaadin.server.react.Flow;
+import com.vaadin.server.react.events.EventBus;
 import com.vaadin.shared.communication.ClientRpc;
 import com.vaadin.shared.communication.ServerRpc;
 import com.vaadin.shared.communication.SharedState;
@@ -86,8 +88,14 @@ public abstract class AbstractClientConnector implements ClientConnector,
     private ArrayList<Extension> extensions = new ArrayList<Extension>();
 
     /**
+     * The event bus for dispatching React-based events
+     */
+    private EventBus eventBus = new EventBus();
+
+    /**
      * The EventRouter used for the event model.
      */
+    @Deprecated
     private EventRouter eventRouter = null;
 
     private ErrorHandler errorHandler = null;
@@ -96,26 +104,32 @@ public abstract class AbstractClientConnector implements ClientConnector,
 
     @Override
     public void addAttachListener(AttachListener listener) {
-        addListener(AttachEvent.ATTACH_EVENT_IDENTIFIER, AttachEvent.class,
-                listener, AttachListener.attachMethod);
+        getEventBus().addListener(AttachEvent.class, listener,
+                listener::attach);
     }
 
     @Override
     public void removeAttachListener(AttachListener listener) {
-        removeListener(AttachEvent.ATTACH_EVENT_IDENTIFIER, AttachEvent.class,
-                listener);
+        getEventBus().removeListener(AttachEvent.class, listener);
+    }
+
+    public Flow<AttachEvent> attachEvents() {
+        return getEvents(AttachEvent.class);
     }
 
     @Override
     public void addDetachListener(DetachListener listener) {
-        addListener(DetachEvent.DETACH_EVENT_IDENTIFIER, DetachEvent.class,
-                listener, DetachListener.detachMethod);
+        getEventBus().addListener(DetachEvent.class, listener,
+                listener::detach);
     }
 
     @Override
     public void removeDetachListener(DetachListener listener) {
-        removeListener(DetachEvent.DETACH_EVENT_IDENTIFIER, DetachEvent.class,
-                listener);
+        getEventBus().removeListener(DetachEvent.class, listener);
+    }
+
+    public Flow<DetachEvent> detachEvents() {
+        return getEvents(DetachEvent.class);
     }
 
     /**
@@ -135,7 +149,9 @@ public abstract class AbstractClientConnector implements ClientConnector,
     /* Documentation copied from interface */
     @Override
     public void markAsDirty() {
-        assert getSession() == null || getSession().hasLock() : buildLockAssertMessage("markAsDirty()");
+        assert getSession() == null
+                || getSession().hasLock() : buildLockAssertMessage(
+                        "markAsDirty()");
         UI uI = getUI();
         if (uI != null) {
             uI.getConnectorTracker().markDirty(this);
@@ -202,7 +218,8 @@ public abstract class AbstractClientConnector implements ClientConnector,
     }
 
     @SuppressWarnings("unchecked")
-    private Class<ServerRpc> getServerRpcInterface(Class<?> implementationClass) {
+    private Class<ServerRpc> getServerRpcInterface(
+            Class<?> implementationClass) {
         Class<ServerRpc> serverRpcClass = null;
         if (implementationClass != null) {
             for (Class<?> candidateInterface : implementationClass
@@ -247,7 +264,9 @@ public abstract class AbstractClientConnector implements ClientConnector,
      * @see #getState()
      */
     protected SharedState getState(boolean markAsDirty) {
-        assert getSession() == null || getSession().hasLock() : buildLockAssertMessage("getState()");
+        assert getSession() == null
+                || getSession().hasLock() : buildLockAssertMessage(
+                        "getState()");
 
         if (null == sharedState) {
             sharedState = createState();
@@ -290,7 +309,8 @@ public abstract class AbstractClientConnector implements ClientConnector,
         } catch (Exception e) {
             throw new RuntimeException(
                     "Error creating state of type " + getStateType().getName()
-                            + " for " + getClass().getName(), e);
+                            + " for " + getClass().getName(),
+                    e);
         }
     }
 
@@ -619,7 +639,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
             connector.attach();
         }
 
-        fireEvent(new AttachEvent(this));
+        getEventBus().fireEvent(new AttachEvent(this));
     }
 
     /**
@@ -636,7 +656,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
             connector.detach();
         }
 
-        fireEvent(new DetachEvent(this));
+        getEventBus().fireEvent(new DetachEvent(this));
 
         getUI().getConnectorTracker().unregisterConnector(this);
     }
@@ -750,6 +770,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
      * 
      * @since 6.2
      */
+    @Deprecated
     protected void addListener(String eventIdentifier, Class<?> eventType,
             Object target, Method method) {
         if (eventRouter == null) {
@@ -771,6 +792,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
      *            the event type to be checked
      * @return true if a listener is registered for the given event type
      */
+    @Deprecated
     protected boolean hasListeners(Class<?> eventType) {
         return eventRouter != null && eventRouter.hasListeners(eventType);
     }
@@ -803,6 +825,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
      * 
      * @since 6.2
      */
+    @Deprecated
     protected void removeListener(String eventIdentifier, Class<?> eventType,
             Object target) {
         if (eventRouter != null) {
@@ -836,6 +859,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
      *            the activation method.
      * 
      */
+    @Deprecated
     @Override
     public void addListener(Class<?> eventType, Object target, Method method) {
         if (eventRouter == null) {
@@ -863,6 +887,7 @@ public abstract class AbstractClientConnector implements ClientConnector,
      *            type <code>eventType</code> with one or more methods.
      */
     @Override
+    @Deprecated
     public void removeListener(Class<?> eventType, Object target) {
         if (eventRouter != null) {
             eventRouter.removeListener(eventType, target);
@@ -906,12 +931,16 @@ public abstract class AbstractClientConnector implements ClientConnector,
      * @return A collection with all registered listeners. Empty if no listeners
      *         are found.
      */
+    @Deprecated
     public Collection<?> getListeners(Class<?> eventType) {
-        if (eventRouter == null) {
+
+        if (eventRouter != null) {
+            return eventRouter.getListeners(eventType);
+        } else if (Event.class.isAssignableFrom(eventType)) {
+            return getEventBus().getListeners((Class<Event>) eventType);
+        } else {
             return Collections.EMPTY_LIST;
         }
-
-        return eventRouter.getListeners(eventType);
     }
 
     /**
@@ -920,10 +949,39 @@ public abstract class AbstractClientConnector implements ClientConnector,
      * @param event
      *            the Event to be sent to all listeners.
      */
+    @Deprecated
     protected void fireEvent(EventObject event) {
         if (eventRouter != null) {
             eventRouter.fireEvent(event);
         }
+    }
+
+    /*
+     * New-style (React) event handling
+     * 
+     */
+
+    /**
+     * Returns the event bus used by this component.
+     * 
+     * @return the event bus
+     */
+    protected EventBus getEventBus() {
+        return eventBus;
+    }
+
+    /**
+     * Returns the flow of events of the given type.
+     * 
+     * @param <E>
+     *            the event type
+     * @param klass
+     *            the event class instance
+     * @return the event flow
+     */
+    protected <E extends com.vaadin.server.react.events.Event> Flow<E> getEvents(
+            Class<E> klass) {
+        return getEventBus().events(klass);
     }
 
     /*

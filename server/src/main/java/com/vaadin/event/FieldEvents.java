@@ -119,8 +119,7 @@ public interface FieldEvents {
      * @since 6.2
      */
     @SuppressWarnings("serial")
-    public static class FocusEvent extends Component.Event implements
-            com.vaadin.server.react.events.Event {
+    public static class FocusEvent extends Component.Event {
 
         /**
          * Identifier for event that can be used in {@link EventRouter}
@@ -168,8 +167,7 @@ public interface FieldEvents {
      * @since 6.2
      */
     @SuppressWarnings("serial")
-    public static class BlurEvent extends Component.Event implements
-            com.vaadin.server.react.events.Event {
+    public static class BlurEvent extends Component.Event {
 
         /**
          * Identifier for event that can be used in {@link EventRouter}

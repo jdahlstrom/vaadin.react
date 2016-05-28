@@ -16,7 +16,6 @@
 
 package com.vaadin.ui;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.function.Consumer;
 
@@ -37,7 +36,6 @@ import com.vaadin.shared.ui.button.ButtonState;
 import com.vaadin.ui.declarative.DesignAttributeHandler;
 import com.vaadin.ui.declarative.DesignContext;
 import com.vaadin.ui.declarative.DesignFormatter;
-import com.vaadin.util.ReflectTools;
 
 /**
  * A generic button component.
@@ -129,8 +127,7 @@ public class Button extends AbstractFocusable implements
      * @author Vaadin Ltd.
      * @since 3.0
      */
-    public static class ClickEvent extends Component.Event implements
-            com.vaadin.server.react.events.Event {
+    public static class ClickEvent extends Component.Event {
 
         private final MouseEventDetails details;
 
@@ -291,11 +288,6 @@ public class Button extends AbstractFocusable implements
      */
     public interface ClickListener
             extends ConnectorEventListener, Consumer<ClickEvent> {
-
-        @Deprecated
-        public static final Method BUTTON_CLICK_METHOD = ReflectTools
-                .findMethod(ClickListener.class, "buttonClick",
-                        ClickEvent.class);
 
         /**
          * Called when a {@link Button} has been clicked. A reference to the

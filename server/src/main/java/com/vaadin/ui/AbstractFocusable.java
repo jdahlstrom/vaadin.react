@@ -22,7 +22,6 @@ import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.event.FieldEvents.FocusNotifier;
 import com.vaadin.server.react.Flow;
-import com.vaadin.server.react.events.EventBus;
 import com.vaadin.shared.EventId;
 import com.vaadin.shared.communication.FieldRpc.FocusAndBlurServerRpc;
 import com.vaadin.shared.ui.ComponentStateUtil;
@@ -38,8 +37,6 @@ import com.vaadin.ui.Component.Focusable;
  */
 public abstract class AbstractFocusable extends AbstractComponent implements
         Focusable, FocusNotifier, BlurNotifier {
-
-    private EventBus eventBus = new EventBus();
 
     protected AbstractFocusable() {
         registerRpc(new FocusAndBlurServerRpc() {
@@ -57,12 +54,12 @@ public abstract class AbstractFocusable extends AbstractComponent implements
             }
         });
 
-        eventBus.onSubscribe(BlurEvent.class, sub -> {
+        getEventBus().onSubscribe(BlurEvent.class, sub -> {
             ComponentStateUtil.addRegisteredEventListener(getState(),
                     EventId.BLUR);
         });
 
-        eventBus.onSubscribe(FocusEvent.class, sub -> {
+        getEventBus().onSubscribe(FocusEvent.class, sub -> {
             ComponentStateUtil.addRegisteredEventListener(getState(),
                     EventId.FOCUS);
         });
@@ -79,12 +76,12 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     @Override
     public void addBlurListener(BlurListener listener) {
-        eventBus.addListener(BlurEvent.class, listener);
+        getEventBus().addListener(BlurEvent.class, listener);
     }
 
     @Override
     public void removeBlurListener(BlurListener listener) {
-        eventBus.removeListener(BlurEvent.class, listener);
+        getEventBus().removeListener(BlurEvent.class, listener);
     }
 
     /**
@@ -98,12 +95,12 @@ public abstract class AbstractFocusable extends AbstractComponent implements
 
     @Override
     public void addFocusListener(FocusListener listener) {
-        eventBus.addListener(FocusEvent.class, listener);
+        getEventBus().addListener(FocusEvent.class, listener);
     }
 
     @Override
     public void removeFocusListener(FocusListener listener) {
-        eventBus.removeListener(FocusEvent.class, listener);
+        getEventBus().removeListener(FocusEvent.class, listener);
     }
 
     @Override
@@ -119,29 +116,6 @@ public abstract class AbstractFocusable extends AbstractComponent implements
     @Override
     public void setTabIndex(int tabIndex) {
         getState().tabIndex = tabIndex;
-    }
-
-    /**
-     * Returns the event bus used by this component.
-     * 
-     * @return the event bus
-     */
-    protected EventBus getEventBus() {
-        return eventBus;
-    }
-
-    /**
-     * Returns the flow of events of the given type.
-     * 
-     * @param <E>
-     *            the event type
-     * @param klass
-     *            the event class instance
-     * @return the event flow
-     */
-    protected <E extends com.vaadin.server.react.events.Event> Flow<E> getEvents(
-            Class<E> klass) {
-        return getEventBus().events(klass);
     }
 
     @Override

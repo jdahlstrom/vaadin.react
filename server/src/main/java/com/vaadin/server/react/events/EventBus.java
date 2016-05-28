@@ -16,8 +16,8 @@
 
 package com.vaadin.server.react.events;
 
+import java.io.Serializable;
 import java.util.EventListener;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -36,11 +36,11 @@ import com.vaadin.server.react.impl.FlowImpl;
  *
  * @see Flow
  */
-public class EventBus {
+public class EventBus implements Serializable {
 
     private class EventFlow<T> extends FlowImpl<T> {
 
-        private Map<EventListener, Subscription> legacyListeners = new HashMap<>();
+        private Map<EventListener, Subscription> legacyListeners = new LinkedHashMap<>();
 
         private Set<Subscriber<? super T>> subscribers = new LinkedHashSet<>();
 
@@ -75,7 +75,7 @@ public class EventBus {
         }
     }
 
-    private Map<Class<?>, EventFlow<?>> flows = new LinkedHashMap<>();
+    private Map<Class<? extends Event>, EventFlow<? extends Event>> flows = new LinkedHashMap<>();
 
     public <E extends Event> void onSubscribe(Class<E> eventType,
             Consumer<Subscriber<? super E>> onSubscribe) {
@@ -119,6 +119,11 @@ public class EventBus {
                     s.unsubscribe();
                     return null;
                 });
+    }
+
+    public Set<? extends EventListener> getListeners(
+            Class<? extends Event> eventType) {
+        return eventFlow(eventType).legacyListeners.keySet();
     }
 
     /**

@@ -19,8 +19,9 @@ package com.vaadin.event;
 import java.util.EventObject;
 
 import com.vaadin.server.ClientConnector;
+import com.vaadin.server.react.events.Event;
 
-public abstract class ConnectorEvent extends EventObject {
+public abstract class ConnectorEvent extends EventObject implements Event {
     public ConnectorEvent(ClientConnector source) {
         super(source);
     }
