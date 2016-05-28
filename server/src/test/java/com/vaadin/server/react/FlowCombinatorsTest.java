@@ -2,6 +2,7 @@ package com.vaadin.server.react;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -90,6 +91,14 @@ public class FlowCombinatorsTest extends FlowTestBase {
 
         verifyFlow(flow(1, 2, 3).reduce((i, j) -> i + j, 0),
                 expectAndUnsubscribe(6));
+    }
+
+    @Test
+    public void testCollect() {
+        verifyFlow(flow().collect(Collectors.counting()), expect(0L));
+
+        verifyFlow(flow(1, 2, 3, 4).collect(Collectors.averagingInt(i -> i)),
+                expect(10.0 / 4));
     }
 
     @Test

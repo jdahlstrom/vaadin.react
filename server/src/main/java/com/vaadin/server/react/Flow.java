@@ -26,6 +26,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.vaadin.server.react.impl.FlowImpl;
@@ -455,6 +457,26 @@ public interface Flow<T> extends Serializable {
      */
     public default <U> Flow<U> reduce(BiFunction<U, T, U> reducer, U initial) {
         return lift(Operator.reduce(reducer, initial));
+    }
+
+    /**
+     * Returns a new flow containing at most a single value: the result of
+     * performing a <i>mutable reduction</i> to every value in this flow using
+     * the given {@link Collector}. The returned flow provides the result, and
+     * an {@link Subscriber#onEnd() onEnd} signal, if and only if this flow also
+     * eventually signals {@code onEnd}.
+     * 
+     * @see Collectors
+     * 
+     * @param <U>
+     *            the output value type
+     * @param collector
+     *            the collector
+     * @return a flow yielding the result of the collect operation
+     */
+    public default <U> Flow<U> collect(
+            Collector<? super T, ?, U> collector) {
+        return lift(Operator.collect(collector));
     }
 
     /**

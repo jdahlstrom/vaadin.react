@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.vaadin.server.react.Flow;
 import com.vaadin.server.react.Subscriber;
@@ -42,9 +44,10 @@ public interface Operator<T, U> extends
         Function<Subscriber<? super U>, Subscriber<T>>, Serializable {
 
     /**
+     * 
      * @param <T>
-     * @param numFlows
-     * @return
+     *            the value type
+     * @return a merging operator
      */
     public static <T> Operator<Flow<? extends T>, T> merge() {
 
@@ -169,6 +172,45 @@ public interface Operator<T, U> extends
             @Override
             protected void doEnd() {
                 to.onNext(accum);
+                if (to.isSubscribed()) {
+                    to.onEnd();
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns an operator that transforms a subscriber into one that performs a
+     * <i>mutable reduction</i>, using the given {@link Collector}, to the
+     * values it receives, and yields the resulting value.
+     * 
+     * @see Collectors
+     * 
+     * @param <T>
+     *            the output value type
+     * @param <A>
+     *            the intermediate type used by the collector
+     * @param <U>
+     *            the input value type
+     * 
+     * @param collector
+     *            the collector used
+     * @return a collector operation
+     */
+    public static <T, A, U> Operator<T, U> collect(
+            Collector<? super T, A, U> collector) {
+        return to -> new Sub<T, U>(to) {
+            private A accum = collector.supplier().get();
+
+            @Override
+            protected void doNext(T value) {
+                collector.accumulator().accept(accum, value);
+            }
+
+            @Override
+            protected void doEnd() {
+                U result = collector.finisher().apply(accum);
+                to.onNext(result);
                 if (to.isSubscribed()) {
                     to.onEnd();
                 }
