@@ -26,6 +26,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.vaadin.server.react.impl.FlowImpl;
@@ -439,22 +441,57 @@ public interface Flow<T> extends Serializable {
     }
 
     /**
+     * Returns a new flow containing at most a single {@code Optional} value:
+     * the result of passing each value in this flow through the given reduction
+     * function, or an empty optional if this flow is empty. The returned flow
+     * produces the result, and an {@link Subscriber#onEnd() onEnd} signal, if
+     * and only if this flow also eventually signals {@code onEnd}.
+     * 
+     * @param reducer
+     *            the reduction function
+     * @return a flow yielding the result of the reduction
+     */
+    public default Flow<Optional<T>> reduce(BiFunction<T, T, T> reducer) {
+        return lift(Operator.reduce(reducer));
+    }
+
+    /**
      * Returns a new flow containing at most a single value: the result of
      * passing each value in this flow through the given reduction function. The
-     * returned flow provides the result, and an {@link Subscriber#onEnd()
+     * returned flow produces the result, and an {@link Subscriber#onEnd()
      * onEnd} signal, if and only if this flow also eventually signals
      * {@code onEnd}.
      * 
      * @param <U>
      *            the output value type
-     * @param reducer
-     *            the reduction function
      * @param initial
      *            the initial value for reduction
+     * @param reducer
+     *            the reduction function
      * @return a flow yielding the result of the reduction
      */
-    public default <U> Flow<U> reduce(BiFunction<U, T, U> reducer, U initial) {
-        return lift(Operator.reduce(reducer, initial));
+    public default <U> Flow<U> reduce(U initial, BiFunction<U, T, U> reducer) {
+        return lift(Operator.reduce(initial, reducer));
+    }
+
+    /**
+     * Returns a new flow containing at most a single value: the result of
+     * performing a <i>mutable reduction</i> to every value in this flow using
+     * the given {@link Collector}. The returned flow provides the result, and
+     * an {@link Subscriber#onEnd() onEnd} signal, if and only if this flow also
+     * eventually signals {@code onEnd}.
+     * 
+     * @see Collectors
+     * 
+     * @param <U>
+     *            the output value type
+     * @param collector
+     *            the collector
+     * @return a flow yielding the result of the collect operation
+     */
+    public default <U> Flow<U> collect(
+            Collector<? super T, ?, U> collector) {
+        return lift(Operator.collect(collector));
     }
 
     /**
@@ -592,7 +629,7 @@ public interface Flow<T> extends Serializable {
      * @return a flow with the number of values in this flow, if finite
      */
     public default Flow<Long> count() {
-        return reduce((count, x) -> count + 1L, 0L);
+        return reduce(0L, (count, x) -> count + 1L);
     }
 
     /*

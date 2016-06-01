@@ -17,9 +17,12 @@
 package com.vaadin.server.react.impl;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.vaadin.server.react.Flow;
 import com.vaadin.server.react.Subscriber;
@@ -42,56 +45,50 @@ public interface Operator<T, U> extends
         Function<Subscriber<? super U>, Subscriber<T>>, Serializable {
 
     /**
+     * 
      * @param <T>
-     * @param numFlows
-     * @return
+     *            the value type
+     * @return a merging operator
      */
     public static <T> Operator<Flow<? extends T>, T> merge() {
 
-        return new Operator<Flow<? extends T>, T>() {
+        return to -> new Sub<Flow<? extends T>, T>(to) {
+            int flows = 0;
+            boolean end = false;
 
             @Override
-            public Subscriber<Flow<? extends T>> apply(
-                    Subscriber<? super T> to) {
-                return new Sub<Flow<? extends T>, T>(to) {
-                    int flows = 0;
-                    boolean end = false;
+            protected void doNext(Flow<? extends T> flow) {
+                flows++;
+                flow.subscribe(new Sub<T, T>(to) {
 
                     @Override
-                    protected void doNext(Flow<? extends T> flow) {
-                        flows++;
-                        flow.subscribe(new Sub<T, T>(to) {
-
-                            @Override
-                            protected void doNext(T value) {
-                                to.onNext(value);
-                            }
-
-                            @Override
-                            protected void doEnd() {
-                                flows--;
-                                if (flows == 0 && end) {
-                                    to.onEnd();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    protected void doError(Exception e) {
-                        to.onError(e);
-                        end = true;
-                        flows = 0;
+                    protected void doNext(T value) {
+                        to.onNext(value);
                     }
 
                     @Override
                     protected void doEnd() {
-                        end = true;
-                        if (flows == 0) {
+                        flows--;
+                        if (flows == 0 && end) {
                             to.onEnd();
                         }
                     }
-                };
+                });
+            }
+
+            @Override
+            protected void doError(Exception e) {
+                to.onError(e);
+                end = true;
+                flows = 0;
+            }
+
+            @Override
+            protected void doEnd() {
+                end = true;
+                if (flows == 0) {
+                    to.onEnd();
+                }
             }
         };
     }
@@ -143,20 +140,52 @@ public interface Operator<T, U> extends
 
     /**
      * Returns an operator that transforms a subscriber into one that reduces
-     * the values it receives into a single value.
+     * the values it receives into a single {@code Optional} that either
+     * contains the result or is empty if no values were received.
+     * 
+     * @param <T>
+     *            the value type
+     * @param reducer
+     *            the reducing function
+     * @return a reduction operator
+     */
+    public static <T> Operator<T, Optional<T>> reduce(
+            BiFunction<T, T, T> reducer) {
+        return to -> new Sub<T, Optional<T>>(to) {
+            private Optional<T> accum = Optional.empty();
+
+            @Override
+            protected void doNext(T value) {
+                accum = Optional.of(
+                        accum.map(a -> reducer.apply(a, value)).orElse(value));
+            }
+
+            @Override
+            protected void doEnd() {
+                to.onNext(accum);
+                if (to.isSubscribed()) {
+                    to.onEnd();
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns an operator that transforms a subscriber into one that reduces
+     * the values it receives into a single value, given an initial value.
      * 
      * @param <T>
      *            the output value type
      * @param <U>
      *            the input value type
-     * @param reducer
-     *            the reducing function
      * @param initial
      *            the initial value
+     * @param reducer
+     *            the reducing function
      * @return a reduction operator
      */
-    public static <T, U> Operator<T, U> reduce(BiFunction<U, T, U> reducer,
-            U initial) {
+    public static <T, U> Operator<T, U> reduce(U initial,
+            BiFunction<U, T, U> reducer) {
 
         return to -> new Sub<T, U>(to) {
             private U accum = initial;
@@ -169,6 +198,45 @@ public interface Operator<T, U> extends
             @Override
             protected void doEnd() {
                 to.onNext(accum);
+                if (to.isSubscribed()) {
+                    to.onEnd();
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns an operator that transforms a subscriber into one that performs a
+     * <i>mutable reduction</i>, using the given {@link Collector}, to the
+     * values it receives, and yields the resulting value.
+     * 
+     * @see Collectors
+     * 
+     * @param <T>
+     *            the output value type
+     * @param <A>
+     *            the intermediate type used by the collector
+     * @param <U>
+     *            the input value type
+     * 
+     * @param collector
+     *            the collector used
+     * @return a collector operation
+     */
+    public static <T, A, U> Operator<T, U> collect(
+            Collector<? super T, A, U> collector) {
+        return to -> new Sub<T, U>(to) {
+            private A accum = collector.supplier().get();
+
+            @Override
+            protected void doNext(T value) {
+                collector.accumulator().accept(accum, value);
+            }
+
+            @Override
+            protected void doEnd() {
+                U result = collector.finisher().apply(accum);
+                to.onNext(result);
                 if (to.isSubscribed()) {
                     to.onEnd();
                 }
