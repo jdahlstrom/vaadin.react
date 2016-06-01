@@ -52,50 +52,43 @@ public interface Operator<T, U> extends
      */
     public static <T> Operator<Flow<? extends T>, T> merge() {
 
-        return new Operator<Flow<? extends T>, T>() {
+        return to -> new Sub<Flow<? extends T>, T>(to) {
+            int flows = 0;
+            boolean end = false;
 
             @Override
-            public Subscriber<Flow<? extends T>> apply(
-                    Subscriber<? super T> to) {
-                return new Sub<Flow<? extends T>, T>(to) {
-                    int flows = 0;
-                    boolean end = false;
+            protected void doNext(Flow<? extends T> flow) {
+                flows++;
+                flow.subscribe(new Sub<T, T>(to) {
 
                     @Override
-                    protected void doNext(Flow<? extends T> flow) {
-                        flows++;
-                        flow.subscribe(new Sub<T, T>(to) {
-
-                            @Override
-                            protected void doNext(T value) {
-                                to.onNext(value);
-                            }
-
-                            @Override
-                            protected void doEnd() {
-                                flows--;
-                                if (flows == 0 && end) {
-                                    to.onEnd();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    protected void doError(Exception e) {
-                        to.onError(e);
-                        end = true;
-                        flows = 0;
+                    protected void doNext(T value) {
+                        to.onNext(value);
                     }
 
                     @Override
                     protected void doEnd() {
-                        end = true;
-                        if (flows == 0) {
+                        flows--;
+                        if (flows == 0 && end) {
                             to.onEnd();
                         }
                     }
-                };
+                });
+            }
+
+            @Override
+            protected void doError(Exception e) {
+                to.onError(e);
+                end = true;
+                flows = 0;
+            }
+
+            @Override
+            protected void doEnd() {
+                end = true;
+                if (flows == 0) {
+                    to.onEnd();
+                }
             }
         };
     }
