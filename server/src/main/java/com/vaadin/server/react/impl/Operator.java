@@ -17,6 +17,7 @@
 package com.vaadin.server.react.impl;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -146,20 +147,52 @@ public interface Operator<T, U> extends
 
     /**
      * Returns an operator that transforms a subscriber into one that reduces
-     * the values it receives into a single value.
+     * the values it receives into a single {@code Optional} that either
+     * contains the result or is empty if no values were received.
+     * 
+     * @param <T>
+     *            the value type
+     * @param reducer
+     *            the reducing function
+     * @return a reduction operator
+     */
+    public static <T> Operator<T, Optional<T>> reduce(
+            BiFunction<T, T, T> reducer) {
+        return to -> new Sub<T, Optional<T>>(to) {
+            private Optional<T> accum = Optional.empty();
+
+            @Override
+            protected void doNext(T value) {
+                accum = Optional.of(
+                        accum.map(a -> reducer.apply(a, value)).orElse(value));
+            }
+
+            @Override
+            protected void doEnd() {
+                to.onNext(accum);
+                if (to.isSubscribed()) {
+                    to.onEnd();
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns an operator that transforms a subscriber into one that reduces
+     * the values it receives into a single value, given an initial value.
      * 
      * @param <T>
      *            the output value type
      * @param <U>
      *            the input value type
-     * @param reducer
-     *            the reducing function
      * @param initial
      *            the initial value
+     * @param reducer
+     *            the reducing function
      * @return a reduction operator
      */
-    public static <T, U> Operator<T, U> reduce(BiFunction<U, T, U> reducer,
-            U initial) {
+    public static <T, U> Operator<T, U> reduce(U initial,
+            BiFunction<U, T, U> reducer) {
 
         return to -> new Sub<T, U>(to) {
             private U accum = initial;

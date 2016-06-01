@@ -2,6 +2,7 @@ package com.vaadin.server.react;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.Rule;
@@ -84,12 +85,23 @@ public class FlowCombinatorsTest extends FlowTestBase {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void testReduce1() {
+        verifyFlow(flow().reduce((a, b) -> a),
+                expect(Optional.empty()));
+
+        verifyFlow(flow(1).reduce((a, b) -> a + b), expect(Optional.of(1)));
+
+        verifyFlow(flow(1, 2).reduce((a, b) -> a + b), expect(Optional.of(3)));
+    }
+
+    @Test
     public void testReduce() {
-        verifyFlow(flow().reduce((a, b) -> "" + a + b, ""), expect(""));
+        verifyFlow(flow().reduce("", (a, b) -> "" + a + b), expect(""));
 
-        verifyFlow(flow(1, 2, 3, 4).reduce((i, j) -> i + j, 0), expect(10));
+        verifyFlow(flow(1, 2, 3, 4).reduce(0, (i, j) -> i + j), expect(10));
 
-        verifyFlow(flow(1, 2, 3).reduce((i, j) -> i + j, 0),
+        verifyFlow(flow(1, 2, 3).reduce(0, (i, j) -> i + j),
                 expectAndUnsubscribe(6));
     }
 
