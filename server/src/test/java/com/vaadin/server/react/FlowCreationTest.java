@@ -25,8 +25,7 @@ public class FlowCreationTest extends FlowTestBase {
         // Stream can only be consumed once
         verifyFlow(flow, expect().get());
 
-        flow = Flow
-                .from(Arrays.stream(new int[] { 1, 2, 3 }));
+        flow = Flow.from(Arrays.stream(new int[] { 1, 2, 3 }));
 
         verifyFlow(flow, expectAndUnsubscribe(1).get());
         verifyFlow(flow, expectAndUnsubscribe().get());
@@ -37,6 +36,7 @@ public class FlowCreationTest extends FlowTestBase {
         CompletableFuture<Integer> future = new CompletableFuture<>();
         Flow<Integer> flow = Flow.from(future);
         future.complete(42);
+
         verifyFlow(flow, expect(42));
         verifyFlow(flow, expectAndUnsubscribe(42));
 
@@ -44,7 +44,14 @@ public class FlowCreationTest extends FlowTestBase {
         flow = Flow.from(future);
         Exception e = new Exception();
         future.completeExceptionally(e);
+
         verifyFlow(flow, expectError(e));
+    }
+
+    @Test
+    public void testFromOptional() {
+        verifyFlow(Flow.from(Optional.empty()), expect());
+        verifyFlow(Flow.from(Optional.of(42)), expect(42));
     }
 
     @Test

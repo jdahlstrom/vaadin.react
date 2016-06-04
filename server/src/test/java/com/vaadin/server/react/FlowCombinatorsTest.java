@@ -93,6 +93,10 @@ public class FlowCombinatorsTest extends FlowTestBase {
         verifyFlow(flow(1).reduce((a, b) -> a + b), expect(Optional.of(1)));
 
         verifyFlow(flow(1, 2).reduce((a, b) -> a + b), expect(Optional.of(3)));
+
+        verifyFlow(flow(1, 2)
+                .reduce((Object a, Object b) -> Integer.valueOf(a + "" + b)),
+                expect(Optional.of(12)));
     }
 
     @Test
@@ -100,6 +104,9 @@ public class FlowCombinatorsTest extends FlowTestBase {
         verifyFlow(flow().reduce("", (a, b) -> "" + a + b), expect(""));
 
         verifyFlow(flow(1, 2, 3, 4).reduce(0, (i, j) -> i + j), expect(10));
+
+        verifyFlow(flow(1, 2).reduce("", (Object a, Object b) -> "" + a + b),
+                expect("12"));
 
         verifyFlow(flow(1, 2, 3).reduce(0, (i, j) -> i + j),
                 expectAndUnsubscribe(6));

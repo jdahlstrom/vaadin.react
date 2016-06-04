@@ -241,6 +241,15 @@ public interface Flow<T> extends Serializable {
         });
     }
 
+    public static <T> Flow<T> from(Optional<T> optional) {
+        return new FlowImpl<>(sub -> {
+            optional.ifPresent(sub::onNext);
+            if (sub.isSubscribed()) {
+                sub.onEnd();
+            }
+        });
+    }
+
     /**
      * Returns a new flow drawing values from the given supplier. The supplier
      * is invoked until it returns an empty {@code Optional}; at that point the
@@ -451,7 +460,8 @@ public interface Flow<T> extends Serializable {
      *            the reduction function
      * @return a flow yielding the result of the reduction
      */
-    public default Flow<Optional<T>> reduce(BiFunction<T, T, T> reducer) {
+    public default Flow<Optional<T>> reduce(
+            BiFunction<? super T, ? super T, T> reducer) {
         return lift(Operator.reduce(reducer));
     }
 
@@ -470,7 +480,8 @@ public interface Flow<T> extends Serializable {
      *            the reduction function
      * @return a flow yielding the result of the reduction
      */
-    public default <U> Flow<U> reduce(U initial, BiFunction<U, T, U> reducer) {
+    public default <U> Flow<U> reduce(U initial,
+            BiFunction<? super U, ? super T, U> reducer) {
         return lift(Operator.reduce(initial, reducer));
     }
 

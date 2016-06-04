@@ -150,7 +150,7 @@ public interface Operator<T, U> extends
      * @return a reduction operator
      */
     public static <T> Operator<T, Optional<T>> reduce(
-            BiFunction<T, T, T> reducer) {
+            BiFunction<? super T, ? super T, T> reducer) {
         return to -> new Sub<T, Optional<T>>(to) {
             private Optional<T> accum = Optional.empty();
 
@@ -185,7 +185,7 @@ public interface Operator<T, U> extends
      * @return a reduction operator
      */
     public static <T, U> Operator<T, U> reduce(U initial,
-            BiFunction<U, T, U> reducer) {
+            BiFunction<? super U, ? super T, U> reducer) {
 
         return to -> new Sub<T, U>(to) {
             private U accum = initial;
