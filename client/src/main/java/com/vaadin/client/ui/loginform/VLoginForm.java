@@ -14,16 +14,14 @@
  * the License.
  */
 
-package com.vaadin.themes.valoutil;
+package com.vaadin.client.ui.loginform;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Document;
+import com.google.gwt.user.client.ui.FormPanel;
 
-public class BodyStyleName implements EntryPoint {
+public class VLoginForm extends FormPanel {
 
-    @Override
-    public void onModuleLoad() {
-        Document.get().getBody().addClassName("valo");
+    public VLoginForm() {
+        getElement().setId("loginForm");
+        setMethod(METHOD_POST);
     }
-
 }

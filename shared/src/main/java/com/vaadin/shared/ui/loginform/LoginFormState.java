@@ -14,16 +14,15 @@
  * the License.
  */
 
-package com.vaadin.themes.valoutil;
+package com.vaadin.shared.ui.loginform;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Document;
+import com.vaadin.shared.AbstractComponentState;
+import com.vaadin.shared.Connector;
+import com.vaadin.shared.communication.URLReference;
 
-public class BodyStyleName implements EntryPoint {
-
-    @Override
-    public void onModuleLoad() {
-        Document.get().getBody().addClassName("valo");
-    }
-
+public class LoginFormState extends AbstractComponentState {
+    public Connector userNameFieldConnector;
+    public Connector passwordFieldConnector;
+    public Connector loginButtonConnector;
+    public URLReference loginResource;
 }

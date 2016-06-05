@@ -13,17 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.vaadin.shared.ui.loginform;
 
-package com.vaadin.themes.valoutil;
+import java.io.Serializable;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Document;
+/**
+ * Constants for LoginForm
+ * 
+ * @since 7.7
+ * @author Vaadin Ltd
+ */
+public class LoginFormConstants implements Serializable {
 
-public class BodyStyleName implements EntryPoint {
-
-    @Override
-    public void onModuleLoad() {
-        Document.get().getBody().addClassName("valo");
-    }
+    public static final String LOGIN_RESOURCE_NAME = "loginForm";
 
 }
+

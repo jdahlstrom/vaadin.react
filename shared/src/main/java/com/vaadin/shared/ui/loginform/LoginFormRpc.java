@@ -14,16 +14,10 @@
  * the License.
  */
 
-package com.vaadin.themes.valoutil;
+package com.vaadin.shared.ui.loginform;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Document;
+import com.vaadin.shared.communication.ServerRpc;
 
-public class BodyStyleName implements EntryPoint {
-
-    @Override
-    public void onModuleLoad() {
-        Document.get().getBody().addClassName("valo");
-    }
-
+public interface LoginFormRpc extends ServerRpc {
+    void submitCompleted();
 }
